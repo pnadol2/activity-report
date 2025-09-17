@@ -3,14 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>تقرير النشاط - الكتابة داخل القالب</title>
-<meta name="description" content="كتابة فوق قالب A4 كصورة واحدة، بدون جداول إضافية.">
+<title>تقرير النشاط - الكتابة فوق القالب</title>
+<meta name="description" content="الكتابة مباشرة فوق قالب A4 كصورة واحدة.">
 
 <style>
 :root{
-  /* مقاس A4 بالنِّسَب (نستخدم نسب٪ على الصورة) */
-  /* عدّل الإحداثيات أدناه حتى تركب الحقول داخل مربعات القالب عندك */
-  /* مثال: --x-الحقل: قيمة من 0 إلى 100 (٪ من عرض الصفحة) */
+  /* عدّل هذه القيم (٪) لتطابق مربعات القالب لديك */
   --x-program: 22;  --y-program: 18;  --w-program: 56;  --h-program: 3.6;
 
   --x-teacher: 64;  --y-teacher: 27.5; --w-teacher: 27; --h-teacher: 3;
@@ -34,7 +32,6 @@
   --x-goals:   16;  --y-goals: 52.2; --w-goals:   68; --h-goals:   6.2;
   --x-out:     16;  --y-out:   62.2; --w-out:     68; --h-out:     6.2;
 
-  /* مربعات الشواهد الأربع (أسفل) */
   --x-ev1: 16;  --y-ev1:  72.8; --w-ev1: 32; --h-ev1: 14;
   --x-ev2: 52;  --y-ev2:  72.8; --w-ev2: 32; --h-ev2: 14;
   --x-ev3: 16;  --y-ev3:  88.0; --w-ev3: 32; --h-ev3: 14;
@@ -42,10 +39,8 @@
 
   --font:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Arial,sans-serif;
 }
-
 *{box-sizing:border-box}
 html,body{margin:0;background:#f5f7fb;color:#111;font-family:var(--font)}
-
 .container{max-width:1100px;margin:14px auto;padding:0 12px}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:10px 0}
 h1{margin:.4rem 0}
@@ -57,20 +52,19 @@ textarea{resize:vertical}
 button,.btn{background:#0ea5e9;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
 button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
 
-/* A4 stage */
+/* مسرح A4 */
 .print-area{display:none}
 .a4{position:relative;width:210mm;height:297mm;margin:0 auto;color:#000;overflow:hidden}
 .a4 img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
-/* overlay fields */
+/* صناديق الكتابة فوق الصورة */
 .ov{position:absolute;display:flex;align-items:center;justify-content:flex-start;
     padding:2mm 3mm; white-space:pre-wrap; line-height:1.25; color:#111; font-size:12pt}
 .ov.small{font-size:11pt}
 .ov.center{justify-content:center;text-align:center}
 .ov img{width:100%;height:100%;object-fit:cover;border-radius:3px}
 
-/* helper to position with CSS variables (percentages) */
-[data-pos]{}
+/* التموضع بالنِّسب (٪) */
 [data-pos="program"]{left:calc(var(--x-program)*1%); top:calc(var(--y-program)*1%); width:calc(var(--w-program)*1%); height:calc(var(--h-program)*1%);}
 [data-pos="teacher"]{left:calc(var(--x-teacher)*1%); top:calc(var(--y-teacher)*1%); width:calc(var(--w-teacher)*1%); height:calc(var(--h-teacher)*1%);}
 [data-pos="major"]  {left:calc(var(--x-major)*1%);   top:calc(var(--y-major)*1%);   width:calc(var(--w-major)*1%);   height:calc(var(--h-major)*1%);}
@@ -126,11 +120,9 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
 
   <div class="card">
     <h3>أهداف البرنامج</h3>
-    <textarea id="goals" rows="3" placeholder="- هدف ١
-- هدف ٢"></textarea>
+    <textarea id="goals" rows="3" placeholder="- هدف ١&#10;- هدف ٢"></textarea>
     <h3 style="margin-top:10px">الأثر الإيجابي للبرنامج</h3>
-    <textarea id="out" rows="3" placeholder="- أثر ١
-- أثر ٢"></textarea>
+    <textarea id="out" rows="3" placeholder="- أثر ١&#10;- أثر ٢"></textarea>
   </div>
 
   <div class="card">
@@ -144,15 +136,15 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
   </div>
 
   <div class="card">
-    <strong>معلومة مهمة:</strong> إن لم تركب النصوص تمامًا داخل المربعات،
-    عدّل القيم في أعلى الملف تحت قسم <code>:root</code> (المتغيرات مثل <code>--x-teacher</code>، <code>--y-teacher</code>) حتى تضبط 100%.
+    <strong>ملاحظة:</strong> لو ما ركبت النصوص تمامًا داخل المربعات،
+    عدّل القيم في أعلى الملف عند <code>:root</code> (مثل <code>--x-teacher</code>, <code>--y-teacher</code>) حتى تضبط 100%.
   </div>
 </div>
 
 <!-- مسرح الطباعة -->
 <section id="printArea" class="print-area">
   <div class="a4" id="stage">
-    <!-- صورة القالب A4 -->
+    <!-- صورة القالب A4 فقط -->
     <img id="tplImg" class="bg" src="assets/culture-report-page1.png" alt="قالب" />
 
     <!-- حقول نصية فوق الصورة -->
@@ -187,70 +179,67 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
   const $ = id => document.getElementById(id);
 
   // حمّل صورة القالب قبل الطباعة
-  function ensureTemplateLoaded() {
-    return new Promise((resolve,reject)=>{
-      const img = $("tplImg");
-      if (!img) return resolve();
-      if (img.complete && img.naturalWidth>0) return resolve();
-      img.onload = ()=> resolve();
-      img.onerror = ()=> reject();
-      // كسر كاش لمرة أولى:
-      img.src = img.src.split("?")[0] + "?v=" + Date.now();
+  async function ensureTemplateLoaded() {
+    const img = $("tplImg");
+    if (!img) return;
+    if (img.complete && img.naturalWidth>0) return;
+    await new Promise((res,rej)=>{
+      img.onload = ()=> res();
+      img.onerror = ()=> res(); // لا توقف الطباعة لو فشلت
+      img.src = img.src.split("?")[0] + "?t=" + Date.now(); // كسر كاش
     });
   }
 
   // ضع القيم داخل الحقول المتموضعة
   function fillOverlay(){
-    const nl2br = t => (t||"").split(/\n/).map(x=>x.replace(/^[-•]\s*/,"• ")).join("\n");
-    const val = id => ($(id) && $(id).value) ? $(id).value : "";
+    const nl = t => (t||"").split(/\n/).map(s=>s.replace(/^[-•]\s*/,"• ")).join("\n");
+    const v = id => ($(id)&&$(id).value)||"";
 
-    $("p-program").textContent = val("program");
+    $("p-program").textContent = v("program");
+    $("p-teacher").textContent = v("teacher");
+    $("p-major").textContent   = v("major");
+    $("p-class").textContent   = v("class");
+    $("p-term").textContent    = v("term");
+    $("p-day").textContent     = v("day");
+    $("p-date").textContent    = v("date");
+    $("p-period").textContent  = v("period");
+    $("p-place").textContent   = v("place");
+    $("p-att").textContent     = v("att");
+    $("p-abs").textContent     = v("abs");
+    $("p-aud").textContent     = v("aud");
+    $("p-owner").textContent   = v("owner");
 
-    $("p-teacher").textContent = val("teacher");
-    $("p-major").textContent   = val("major");
-    $("p-class").textContent   = val("class");
-    $("p-term").textContent    = val("term");
-    $("p-day").textContent     = val("day");
-    $("p-date").textContent    = val("date");
-    $("p-period").textContent  = val("period");
-    $("p-place").textContent   = val("place");
-    $("p-att").textContent     = val("att");
-    $("p-abs").textContent     = val("abs");
-    $("p-aud").textContent     = val("aud");
-    $("p-owner").textContent   = val("owner");
-
-    $("p-goals").textContent = nl2br(val("goals"));
-    $("p-out").textContent   = nl2br(val("out"));
+    $("p-goals").textContent = nl(v("goals"));
+    $("p-out").textContent   = nl(v("out"));
   }
 
   // الشواهد (٤ صور)
   const evInput = $("ev");
-  let evData = [null,null,null,null];
   evInput.addEventListener("change", e=>{
     const files = Array.from(e.target.files||[]).slice(0,4);
     files.forEach((f,idx)=>{
-      const r = new FileReader();
-      r.onload = ()=>{ evData[idx] = r.result; $("p-ev"+(idx+1)).src = r.result; };
+      const r=new FileReader();
+      r.onload = ()=>{ $("p-ev"+(idx+1)).src = r.result; };
       r.readAsDataURL(f);
     });
-    e.target.value = "";
+    e.target.value="";
   });
 
   // زر الطباعة
   $("btnPrint").onclick = async ()=>{
-    await ensureTemplateLoaded().catch(()=>{});
+    await ensureTemplateLoaded();
     fillOverlay();
     window.print();
   };
 
   // حتى لو طبع من قائمة المتصفح
   window.addEventListener("beforeprint", async ()=>{
-    await ensureTemplateLoaded().catch(()=>{});
+    await ensureTemplateLoaded();
     fillOverlay();
   });
 
-  // تاريخ افتراضي اليوم
-  const d = new Date(); if ($("date")) $("date").value = d.toISOString().slice(0,10);
+  // تاريخ افتراضي = اليوم
+  const d = new Date(); const df = $("date"); if (df) df.value = d.toISOString().slice(0,10);
 })();
 </script>
 </body>
