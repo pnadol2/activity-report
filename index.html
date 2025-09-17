@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>برامج الأنشطة الطلابية - تقرير</title>
-<meta name="description" content="قالب تقرير نشاط (RTL) مع الشواهد، جاهز للطباعة وWord">
+<meta name="description" content="قالب تقرير نشاط عربي مع شواهد، طباعة PDF و Word">
 
 <style>
 :root{
@@ -22,43 +22,32 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:va
 }
 .header .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .header .badge{background:#fff;color:#0f172a;padding:8px 16px;border-radius:999px;font-weight:800}
-.header .logo-wrap{display:flex;align-items:center;gap:10px}
-.header img.logo{height:40px;object-fit:contain}
-.header .logo-fallback{font-weight:800;opacity:.95}
-.header .icons{display:flex;gap:12px;align-items:center;margin:12px 0 2px}
-.header .ic{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px}
-
 .container{max-width:1100px;margin:16px auto 24px;padding:0 14px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
+button,.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
+.small{font-size:.92rem;color:var(--muted)}
+
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin:12px 0}
 .card h2{margin:.25rem 0 1rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
 label{display:flex;flex-direction:column;gap:6px;font-weight:600}
 input,textarea{padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}
 textarea{resize:vertical}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
-button,.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
-.small{font-size:.92rem;color:var(--muted)}
-.flex{display:flex;gap:8px;align-items:center}
-.flex input[type="text"]{flex:1}
 
-/* Evidence (exactly 4 slots) */
+/* Evidence - 4 slots */
 .evd-4{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .slot{border:1px dashed var(--border);border-radius:12px;background:#fff;overflow:hidden;position:relative;min-height:160px}
 .slot img{width:100%;height:160px;object-fit:cover;display:block}
 .slot .cap{padding:6px 8px;font-size:.9rem;border-top:1px solid var(--border)}
 .slot .remove{position:absolute;top:6px;left:6px;background:#fff;color:#b91c1c;border:1px solid #fecaca;border-radius:8px;padding:4px 8px;cursor:pointer}
 
-/* Print area */
+/* PRINT */
 .print-area{display:none}
-.report{padding:18mm 16mm;color:var(--print-fg)}
-.report .r-head{text-align:center;margin-bottom:8mm}
-.r-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6mm}
-.r-top .r-logos{display:flex;gap:12px;align-items:center}
-.r-top img.logo{height:34px}
-.r-top .v2030{font-weight:800;color:#0f766e}
-.report h1{margin:0}
-.meta{color:#374151;margin:2mm 0 6mm}
+.report{padding:12mm 12mm;color:var(--print-fg)}
+/* صورة القالب A4 */
+.report .tpl{width:100%;display:block;margin:0 0 8mm}
+/* جداول ونصوص */
 .info-table{width:100%;border-collapse:collapse;margin:8px 0 12px}
 .info-table th,.info-table td{border:1px solid #999;padding:6px 8px;text-align:right;vertical-align:top}
 .para{min-height:18px;border:1px solid #bbb;padding:8px;border-radius:6px;margin:4px 0 10px;white-space:pre-wrap}
@@ -67,11 +56,10 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
 .ev4-print img{width:100%;height:180px;object-fit:cover;display:block}
 .sign-table{width:100%;border-collapse:collapse;margin-top:8px}
 .sign-table th,.sign-table td{border:1px solid #999;padding:6px 8px;text-align:right}
-.footer-line{display:flex;justify-content:space-between;margin-top:10mm;font-size:.95rem;color:#111}
+.footer-line{display:flex;justify-content:space-between;margin-top:8mm;font-size:.95rem;color:#111}
 
-/* Print rules */
 @media print{
-  @page { size: A4; margin: 12mm }
+  @page { size: A4; margin: 10mm }
   .no-print{display:none !important}
   body{background:#fff}
   .print-area{display:block}
@@ -80,20 +68,11 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
 </head>
 <body>
 
-<!-- HEADER (on-screen only) -->
+<!-- HEADER -->
 <header class="header no-print">
   <div class="top">
     <div class="badge">برامج الأنشطة الطلابية</div>
-    <div class="logo-wrap">
-      <img id="moeLogo" class="logo" alt="شعار وزارة التعليم" />
-      <div class="logo-fallback" id="moeLogoFallback">وزارة التعليم</div>
-      <label class="btn ghost" style="margin-inline-start:8px">رفع الشعار
-        <input id="logoInput" type="file" accept="image/*" style="display:none">
-      </label>
-    </div>
-  </div>
-  <div class="icons">
-    <div class="ic">💻</div><div class="ic">🤝</div><div class="ic">⚗️</div><div class="ic">🏃</div><div class="ic">🎨</div>
+    <div>وزارة التعليم</div>
   </div>
   <div class="container">
     <h1 id="docTitle" contenteditable="true" spellcheck="false" style="margin:8px 0 0">تعزيز الثقة بالنفس والشعور بالمسؤولية</h1>
@@ -115,9 +94,9 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
   <section class="card">
     <h2 contenteditable="true" id="titleBasic">البيانات الأساسية</h2>
     <div class="grid">
-      <label>إدارة التعليم<input id="eduDir" placeholder="تعليم المدينة المنورة"></label>
-      <label>اسم المدرسة<input id="school" placeholder="..."></label>
-      <label>القسم<input id="dept" placeholder="النشاط الطلابي / الإرشاد ..."></label>
+      <label>إدارة التعليم<input id="eduDir" placeholder="تعليم ..."></label>
+      <label>اسم المدرسة<input id="school"></label>
+      <label>القسم<input id="dept" placeholder="النشاط الطلابي / ..."></label>
       <label>اسم المعلم/ـة<input id="teacher"></label>
       <label>التخصص<input id="major"></label>
       <label>الصف<input id="class"></label>
@@ -148,10 +127,10 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
 - غرس قيمة العطاء وتنمية روح المسؤولية"></textarea>
   </section>
 
-  <!-- الشواهد (٤ صور بالضبط) -->
+  <!-- الشواهد (٤ صور) -->
   <section class="card">
     <h2 id="titleEvidence" contenteditable="true">الشواهد (٤ صور)</h2>
-    <div class="small">ارفع ٤ صور (يتجاهل أي صور إضافية).</div>
+    <div class="small">ارفع ٤ صور (سيتم الاحتفاظ بأول أربع صور فقط).</div>
     <div class="actions">
       <label class="btn">رفع الصور (حتى 4)
         <input id="evImages" type="file" accept="image/*" multiple style="display:none">
@@ -179,23 +158,12 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
 <section id="printArea" class="print-area">
   <div class="report">
 
-    <!-- هيدر الطباعة بصورة ثابتة بعرض الصفحة -->
-    <div class="r-top-img" style="margin-bottom:8mm;">
-      <img src="assets/print-header.png" alt="هيدر الطباعة" style="width:100%; display:block;">
-    </div>
+    <!-- صورة القالب A4 (ملفك في assets/culture-report-page1.png) -->
+    <img class="tpl" src="assets/culture-report-page1.png" alt="قالب الطباعة">
 
-    <!-- صف لوجو الوزارة (في حال رفعت شعار) + رؤية 2030 -->
-    <div class="r-top">
-      <div class="r-logos">
-        <img id="pMoeLogo" class="logo" alt="شعار وزارة التعليم">
-        <span class="v2030">رؤية 2030</span>
-      </div>
-      <div></div>
-    </div>
-
-    <h1 id="pDocTitle">تعزيز الثقة بالنفس والشعور بالمسؤولية</h1>
-    <div class="meta" id="pSub">مجال المواطنة والحياة</div>
-    <div class="meta"><span id="pEduDir"></span> — <span id="pSchool"></span> — <span id="pDept"></span></div>
+    <!-- عنوان ومعلومات عامة -->
+    <h1 id="pDocTitle" style="margin:0 0 4px">تعزيز الثقة بالنفس والشعور بالمسؤولية</h1>
+    <div class="small" id="pSub" style="margin:0 0 6px">مجال المواطنة والحياة</div>
 
     <table class="info-table">
       <tr><th>اسم المعلم/ـة</th><td id="pTeacher"></td><th>التخصص</th><td id="pMajor"></td></tr>
@@ -227,11 +195,6 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
       <tr><th>رائد/ة النشاط</th><td id="pSignLeader"></td></tr>
     </table>
 
-    <!-- (اختياري) فوتر الطباعة -->
-    <div id="printFooterWrap" style="margin:8mm 0 0; display:none;">
-      <img id="printFooterImg" src="assets/print-footer.png" alt="فوتر الطباعة" style="width:100%; display:block;">
-    </div>
-
     <div class="footer-line">
       <div>أُعد بواسطة: <span id="pOwner2"></span></div>
       <div>تاريخ الطباعة: <span id="pPrintDate"></span></div>
@@ -243,26 +206,17 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
 (function(){
   const $ = id => document.getElementById(id);
 
-  // شعار الوزارة: رفع صورة → تعرض في الهيدر والطباعة
-  const logoImg = $("moeLogo"), logoFallback = $("moeLogoFallback"), pLogo = $("pMoeLogo");
-  $("logoInput").addEventListener("change", ev=>{
-    const f = ev.target.files[0]; if(!f) return;
-    const r = new FileReader();
-    r.onload = ()=>{ logoImg.src = r.result; pLogo.src = r.result; logoFallback.style.display="none"; };
-    r.readAsDataURL(f);
-  });
+  // تعبئة تاريخ اليوم تلقائياً
+  (function(){ const d = new Date(); const el=$("date_g"); if(el) el.value = d.toISOString().slice(0,10); })();
 
-  // تاريخ اليوم
-  (function(){ const d = new Date(); $("date_g").value = d.toISOString().slice(0,10); })();
-
-  // الحقول
+  // حقول الإدخال
   const F = ["eduDir","school","dept","teacher","major","class","term","day","date_g","period","program","place","attendance","absence","audience","owner","signPrincipal","signLeader"];
-  const get = id => ($(id).value || "");
+  const get = id => ($(id)?.value || "");
   const set = (id,val)=>{ const el=$(id); if(el) el.textContent = (val||""); };
 
-  // الشواهد: ٤ صور بالضبط
+  // الشواهد: 4 صور
   const slots = Array.from(document.querySelectorAll(".slot"));
-  const imgs = [null,null,null,null]; // dataURL
+  const imgs = [null,null,null,null];
   function putImageInSlot(url, i){
     if(i>3) return;
     const s = slots[i]; s.innerHTML = "";
@@ -333,7 +287,6 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
   function fillPrint(){
     set("pDocTitle", $("docTitle").textContent);
     set("pSub", $("docSub").textContent);
-    set("pEduDir", get("eduDir")); set("pSchool", get("school")); set("pDept", get("dept"));
     set("pTeacher", get("teacher")); set("pMajor", get("major"));
     set("pClass", get("class")); set("pTerm", get("term"));
     set("pDay", get("day")); set("pDateG", get("date_g"));
@@ -347,7 +300,14 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
     set("pTitleEvidence", $("titleEvidence").textContent);
     set("pTitleSign", $("titleSign").textContent);
 
-    $("pPrintDate").textContent = new Date().toLocaleDateString("ar-SA");
+    // نصوص الفقرات
+    const nl2ul = t => {
+      const items = (t||"").split(/\n+/).map(s=>s.trim()).filter(Boolean);
+      if(items.length<=1) return t;
+      return items.map(x=> x.replace(/^[-•]\s*/,"")).map(x=>"• "+x).join("\n");
+    };
+    $("pGoals").textContent = nl2ul(get("goals"));
+    $("pOutcomes").textContent = nl2ul(get("outcomes"));
 
     // صور الشواهد الأربعة
     [0,1,2,3].forEach(i=>{
@@ -358,19 +318,11 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
       else { imgEl.removeAttribute("src"); imgEl.alt=""; }
     });
 
-    // شعار الوزارة في نسخة الطباعة (إن وُجد)
-    if($("moeLogo").src) { $("pMoeLogo").src = $("moeLogo").src; }
-
-    // إظهار الفوتر إذا كان موجودًا بالملف
-    const foot = document.getElementById("printFooterImg");
-    const wrap = document.getElementById("printFooterWrap");
-    if (foot) { wrap.style.display = "block"; }
+    $("pPrintDate").textContent = new Date().toLocaleDateString("ar-SA");
   }
 
-  // زر المعاينة
+  // المعاينة + Word + تجهيز تلقائي للطباعة
   $("btnPreview").onclick = ()=>{ fillPrint(); window.print(); };
-
-  // تصدير Word
   $("btnWord").onclick = ()=>{
     fillPrint();
     const content = document.querySelector("#printArea").innerHTML;
@@ -380,10 +332,7 @@ button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
     a.href=url; a.download="تقرير-نشاط.doc"; a.click();
     setTimeout(()=>URL.revokeObjectURL(url),4000);
   };
-
-  // تجهيز تلقائي حتى لو طبع من قائمة المتصفح
   window.addEventListener('beforeprint', ()=> { try{ fillPrint(); }catch(e){} });
-
 })();
 </script>
 </body>
