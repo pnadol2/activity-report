@@ -1,219 +1,405 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>تقرير النشاط - الكتابة فوق القالب</title>
-<meta name="description" content="الكتابة مباشرة فوق قالب A4 كصورة واحدة.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام تقارير أداء المعلم</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 <style>
-:root{
-  --x-program: 22;  --y-program: 18;  --w-program: 56;  --h-program: 3.6;
-  --x-teacher: 64;  --y-teacher: 27.5; --w-teacher: 27; --h-teacher: 3;
-  --x-major:   33;  --y-major: 27.5; --w-major:   27; --h-major:   3;
-  --x-class:   64;  --y-class: 31;   --w-class:   27; --h-class:   3;
-  --x-term:    33;  --y-term:  31;   --w-term:    27; --h-term:    3;
-  --x-day:     64;  --y-day:  34.4;  --w-day:     27; --h-day:     3;
-  --x-date:    33;  --y-date: 34.4;  --w-date:    27; --h-date:    3;
-  --x-period:  64;  --y-period:37.8; --w-period:  27; --h-period:  3;
-  --x-place:   33;  --y-place: 37.8; --w-place:   27; --h-place:   3;
-  --x-att:     64;  --y-att:  41.2;  --w-att:     27; --h-att:     3;
-  --x-abs:     33;  --y-abs:  41.2;  --w-abs:     27; --h-abs:     3;
-  --x-aud:     64;  --y-aud:  44.6;  --w-aud:     27; --h-aud:     3;
-  --x-owner:   33;  --y-owner:44.6;  --w-owner:   27; --h-owner:   3;
-  --x-goals:   16;  --y-goals: 52.2; --w-goals:   68; --h-goals:   6.2;
-  --x-out:     16;  --y-out:   62.2; --w-out:     68; --h-out:     6.2;
-  --x-ev1: 16;  --y-ev1:  72.8; --w-ev1: 32; --h-ev1: 14;
-  --x-ev2: 52;  --y-ev2:  72.8; --w-ev2: 32; --h-ev2: 14;
-  --x-ev3: 16;  --y-ev3:  88.0; --w-ev3: 32; --h-ev3: 14;
-  --x-ev4: 52;  --y-ev4:  88.0; --w-ev4: 32; --h-ev4: 14;
-  --font:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Arial,sans-serif;
+@font-face {
+  font-family: 'HelveticaNeueW23';
+  src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
-*{box-sizing:border-box}
-html,body{margin:0;background:#f5f7fb;color:#111;font-family:var(--font)}
-.container{max-width:1100px;margin:14px auto;padding:0 12px}
-.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:10px 0}
-h1{margin:.4rem 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
-label{display:flex;flex-direction:column;gap:6px;font-weight:600}
-input,textarea{padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font:inherit}
-textarea{resize:vertical}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-button,.btn{background:#0ea5e9;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
 
-/* مسرح A4 */
-.print-area{display:none}
-.a4{position:relative;width:210mm;height:297mm;margin:0 auto;color:#000;overflow:hidden}
-.a4 img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+body, input, textarea, label, button, header, footer, .tab-content {
+  font-family: 'HelveticaNeueW23', Arial, sans-serif;
+  margin:0;
+  padding:0;
+  background:#f5f5f5;
+}
 
-/* صناديق الكتابة فوق الصورة */
-.ov{position:absolute;display:flex;align-items:center;justify-content:flex-start;
-    padding:2mm 3mm; white-space:pre-wrap; line-height:1.25; color:#111; font-size:12pt}
-.ov.small{font-size:11pt}
-.ov.center{justify-content:center;text-align:center}
-.ov img{width:100%;height:100%;object-fit:cover;border-radius:3px}
+header { background:#15445a; color:white; text-align:center; padding:10px; }
+header h1, header h2 { margin:3px 0; font-size:16px; }
 
-/* التموضع بالنِّسب (٪) */
-[data-pos="program"]{left:calc(var(--x-program)*1%); top:calc(var(--y-program)*1%); width:calc(var(--w-program)*1%); height:calc(var(--h-program)*1%);}
-[data-pos="teacher"]{left:calc(var(--x-teacher)*1%); top:calc(var(--y-teacher)*1%); width:calc(var(--w-teacher)*1%); height:calc(var(--h-teacher)*1%);}
-[data-pos="major"]  {left:calc(var(--x-major)*1%);   top:calc(var(--y-major)*1%);   width:calc(var(--w-major)*1%);   height:calc(var(--h-major)*1%);}
-[data-pos="class"]  {left:calc(var(--x-class)*1%);   top:calc(var(--y-class)*1%);   width:calc(var(--w-class)*1%);   height:calc(var(--h-class)*1%);}
-[data-pos="term"]   {left:calc(var(--x-term)*1%);    top:calc(var(--y-term)*1%);    width:calc(var(--w-term)*1%);    height:calc(var(--h-term)*1%);}
-[data-pos="day"]    {left:calc(var(--x-day)*1%);     top:calc(var(--y-day)*1%);     width:calc(var(--w-day)*1%);     height:calc(var(--h-day)*1%);}
-[data-pos="date"]   {left:calc(var(--x-date)*1%);    top:calc(var(--y-date)*1%);    width:calc(var(--w-date)*1%);    height:calc(var(--h-date)*1%);}
-[data-pos="period"] {left:calc(var(--x-period)*1%);  top:calc(var(--y-period)*1%);  width:calc(var(--w-period)*1%);  height:calc(var(--h-period)*1%);}
-[data-pos="place"]  {left:calc(var(--x-place)*1%);   top:calc(var(--y-place)*1%);   width:calc(var(--w-place)*1%);   height:calc(var(--h-place)*1%);}
-[data-pos="att"]    {left:calc(var(--x-att)*1%);     top:calc(var(--y-att)*1%);     width:calc(var(--w-att)*1%);     height:calc(var(--h-att)*1%);}
-[data-pos="abs"]    {left:calc(var(--x-abs)*1%);     top:calc(var(--y-abs)*1%);     width:calc(var(--w-abs)*1%);     height:calc(var(--h-abs)*1%);}
-[data-pos="aud"]    {left:calc(var(--x-aud)*1%);     top:calc(var(--y-aud)*1%);     width:calc(var(--w-aud)*1%);     height:calc(var(--h-aud)*1%);}
-[data-pos="owner"]  {left:calc(var(--x-owner)*1%);   top:calc(var(--y-owner)*1%);   width:calc(var(--w-owner)*1%);   height:calc(var(--h-owner)*1%);}
-[data-pos="goals"]  {left:calc(var(--x-goals)*1%);   top:calc(var(--y-goals)*1%);   width:calc(var(--w-goals)*1%);   min-height:calc(var(--h-goals)*1%);}
-[data-pos="out"]    {left:calc(var(--x-out)*1%);     top:calc(var(--y-out)*1%);     width:calc(var(--w-out)*1%);     min-height:calc(var(--h-out)*1%);}
-[data-pos="ev1"]    {left:calc(var(--x-ev1)*1%);     top:calc(var(--y-ev1)*1%);     width:calc(var(--w-ev1)*1%);     height:calc(var(--h-ev1)*1%);}
-[data-pos="ev2"]    {left:calc(var(--x-ev2)*1%);     top:calc(var(--y-ev2)*1%);     width:calc(var(--w-ev2)*1%);     height:calc(var(--h-ev2)*1%);}
-[data-pos="ev3"]    {left:calc(var(--x-ev3)*1%);     top:calc(var(--y-ev3)*1%);     width:calc(var(--w-ev3)*1%);     height:calc(var(--h-ev3)*1%);}
-[data-pos="ev4"]    {left:calc(var(--x-ev4)*1%);     top:calc(var(--y-ev4)*1%);     width:calc(var(--w-ev4)*1%);     height:calc(var(--h-ev4)*1%);}
+.tabs { display:flex; justify-content:center; background:#3d7eb9; flex-wrap:wrap; }
+.tab-button { flex:1; padding:10px; cursor:pointer; text-align:center; background:#3d7eb9; color:white; border:none; font-size:14px; font-weight:bold; }
+.tab-button.active { background:#0da9a6; }
 
-/* طباعة صارمة */
-@media print{
-  body * { visibility: hidden !important; }
-  #printArea, #printArea * { visibility: visible !important; }
-  #printArea { position: fixed !important; inset: 0 !important; margin: 0 !important; }
-  @page { size: A4; margin: 0 }
+.tab-content { display:none; padding:10px; background:white; border-radius:8px; margin:5px; }
+.tab-content.active { display:block; }
+
+/* ✅ محاذاة جميع الليبلات وخانات الإدخال في المنتصف لجميع التبويبات */
+.tab-content div,
+.tab-content label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* وسط أفقي */
+  justify-content: center; /* وسط عمودي */
+  text-align: center;
+  width: 100%;
+}
+
+label {
+  text-align: center !important;
+  font-weight: bold;
+  font-size: 12px;
+  background: transparent;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #c2c1c2;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+  font-size: 12px;
+  text-align: center; /* النص داخل الخانة في المنتصف */
+}
+textarea { min-height:40px; }
+
+button { 
+  background:#07a869; 
+  color:white; 
+  border:none; 
+  padding:8px 10px; 
+  margin:5px 0; 
+  cursor:pointer; 
+  border-radius:6px; 
+  width:100%; 
+  font-size:14px; 
+  font-weight:bold; 
+}
+
+footer { 
+  text-align:center; 
+  padding:10px; 
+  color:black; 
+  font-weight:bold; 
+  font-size:12px; 
+}
+
+@media print {
+  body { background:none !important; }
+  .tab-content { background:transparent !important; }
+  input, textarea, label { background:transparent !important; color:black; border-color:#c2c1c2; }
+  body, input, textarea, label, button, header, footer, .tab-content {
+    font-family: 'HelveticaNeueW23', Arial, sans-serif;
+  }
 }
 </style>
 </head>
 <body>
 
-<div class="container no-print">
-  <h1>إدخال بيانات التقرير</h1>
-  <div class="card">
-    <div class="grid">
-      <label>اسم البرنامج<input id="program"></label>
-      <label>اسم المعلم/ـة<input id="teacher"></label>
-      <label>التخصص<input id="major"></label>
-      <label>الصف<input id="class"></label>
-      <label>الفصل الدراسي<input id="term"></label>
-      <label>اليوم<input id="day"></label>
-      <label>التاريخ<input id="date" type="date"></label>
-      <label>الحصة<input id="period"></label>
-      <label>مكان التنفيذ<input id="place"></label>
-      <label>الحضور<input id="att"></label>
-      <label>الغياب<input id="abs"></label>
-      <label>الفئة المستهدفة<input id="aud"></label>
-      <label>المسؤول/ـة<input id="owner"></label>
-    </div>
-  </div>
+<header>
+<h1>إدارة تعليم منطقة المدينة المنورة</h1>
+<h2>متوسطة أبي بكر الصديق رضي الله عنه</h2>
+</header>
 
-  <div class="card">
-    <h3>أهداف البرنامج</h3>
-    <textarea id="goals" rows="3" placeholder="- هدف ١&#10;- هدف ٢"></textarea>
-    <h3 style="margin-top:10px">الأثر الإيجابي للبرنامج</h3>
-    <textarea id="out" rows="3" placeholder="- أثر ١&#10;- أثر ٢"></textarea>
-  </div>
-
-  <div class="card">
-    <h3>الشواهد (٤ صور)</h3>
-    <div class="actions">
-      <label class="btn">رفع الصور
-        <input id="ev" type="file" accept="image/*" multiple style="display:none">
-      </label>
-      <button id="btnPrint">معاينة/طباعة</button>
-    </div>
-  </div>
+<div class="tabs">
+<button class="tab-button active" onclick="openTab('daily')">نموذج التقرير اليومي</button>
+<button class="tab-button" onclick="openTab('weekly')">نموذج التقرير الأسبوعي</button>
+<button class="tab-button" onclick="openTab('monthly')">نموذج التقرير الشهري</button>
 </div>
 
-<section id="printArea" class="print-area">
-  <div class="a4" id="stage">
-    <img id="tplImg" class="bg" src="assets/culture-report-page1.png" alt="قالب" />
+<!-- التقرير اليومي -->
+<div id="daily" class="tab-content active">
+<label><h2>التقرير اليومي</h2></label>
+<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+  <div><label>اسم المعلم</label><input type="text"></div>
+  <div><label>التخصص</label><input type="text"></div>
+  <div><label>الفصل الدراسي</label><input type="text"></div>
+  <div><label>الصف</label><input type="text"></div>
+  <div><label>الوحدة الدراسية</label><input type="text"></div>
+  <div><label>عنوان الدرس</label><input type="text"></div>
+  <div><label>التاريخ</label><input type="text" id="dailyDate" placeholder="DD-MM-YYYY"></div>
+  <div><label>الحصة</label><input type="text"></div>
+</div>
 
-    <div class="ov center" data-pos="program" id="p-program"></div>
+<label>أهداف الدرس</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+  <input type="text"><input type="text"><input type="text">
+</div>
 
-    <div class="ov" data-pos="teacher" id="p-teacher"></div>
-    <div class="ov" data-pos="major"   id="p-major"></div>
-    <div class="ov" data-pos="class"   id="p-class"></div>
-    <div class="ov" data-pos="term"    id="p-term"></div>
-    <div class="ov" data-pos="day"     id="p-day"></div>
-    <div class="ov" data-pos="date"    id="p-date"></div>
-    <div class="ov" data-pos="period"  id="p-period"></div>
-    <div class="ov" data-pos="place"   id="p-place"></div>
-    <div class="ov" data-pos="att"     id="p-att"></div>
-    <div class="ov" data-pos="abs"     id="p-abs"></div>
-    <div class="ov" data-pos="aud"     id="p-aud"></div>
-    <div class="ov" data-pos="owner"   id="p-owner"></div>
+<label>نسبة تحقق أهداف الدرس</label><input type="text">
 
-    <div class="ov" data-pos="goals" id="p-goals"></div>
-    <div class="ov" data-pos="out"   id="p-out"></div>
+<label>ملاحظات حول تفاعل الطلاب</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
 
-    <div class="ov" data-pos="ev1"><img id="p-ev1" alt=""></div>
-    <div class="ov" data-pos="ev2"><img id="p-ev2" alt=""></div>
-    <div class="ov" data-pos="ev3"><img id="p-ev3" alt=""></div>
-    <div class="ov" data-pos="ev4"><img id="p-ev4" alt=""></div>
-  </div>
-</section>
+<label>التحديات الصفية</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>رفع الشواهد (صور)</label>
+<input type="file" multiple accept="image/*" onchange="storeImages(event,'daily')">
+<div id="daily-counter" style="font-size:12px; color:#15445a; font-weight:bold;">عدد الصور المرفوعة: 0 / 4</div>
+<div id="daily-preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
+
+<button onclick="printPDF('daily')">طباعة التقرير اليومي</button>
+</div>
+
+<!-- التقرير الأسبوعي -->
+<div id="weekly" class="tab-content">
+<label><h2>التقرير الأسبوعي</h2></label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <div><label>اسم المعلم</label><input type="text"></div>
+  <div><label>التخصص</label><input type="text"></div>
+  <div><label>الفصل الدراسي</label><input type="text"></div>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <div><label>الصف</label><input type="text"></div>
+  <div><label>الأسبوع</label><input type="text"></div>
+  <div><label>التاريخ</label><input type="text" id="weeklyDate" placeholder="DD-MM-YYYY"></div>
+</div>
+
+<label>أهم الدروس المنفذة</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>أبرز نقاط القوة لدى الطلاب</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>أبرز نقاط الضعف لدى الطلاب</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>أبرز التحديات التعليمية</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>الإجراءات العلاجية</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>أثر الإجراءات على تقدم الطلاب</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>توصيات الأسبوع القادم</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>رفع الشواهد (صور)</label>
+<input type="file" multiple accept="image/*" onchange="storeImages(event,'weekly')">
+<div id="weekly-counter" style="font-size:12px; color:#15445a; font-weight:bold;">عدد الصور المرفوعة: 0 / 4</div>
+<div id="weekly-preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
+
+<button onclick="printPDF('weekly')">طباعة التقرير الأسبوعي</button>
+</div>
+
+<!-- التقرير الشهري -->
+<div id="monthly" class="tab-content">
+<label><h2>التقرير الشهري</h2></label>
+<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+  <div><label>اسم المعلم</label><input type="text"></div>
+  <div><label>التخصص</label><input type="text"></div>
+  <div><label>الفصل الدراسي</label><input type="text"></div>
+  <div><label>الصف</label><input type="text"></div>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <div><label>الشهر</label><input type="text"></div>
+  <div><label>التاريخ</label><input type="text" id="monthlyDate" placeholder="DD-MM-YYYY"></div>
+  <div><label>نسبة إنجاز الخطة</label><input type="text"></div>
+</div>
+
+<label>أبرز التحسينات في أداء الطلاب</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>القضايا المستمرة التي تحتاج متابعة</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>خطط المعالجة المقترحة</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>الطلاب المتميزون</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>الخطة الإثرائية للطلاب المتميزين</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>الطلاب المخفقون</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>الخطة العلاجية للطلاب المخفقين</label>
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+  <input type="text"><input type="text"><input type="text">
+</div>
+
+<label>رفع الشواهد (صور)</label>
+<input type="file" multiple accept="image/*" onchange="storeImages(event,'monthly')">
+<div id="monthly-counter" style="font-size:12px; color:#15445a; font-weight:bold;">عدد الصور المرفوعة: 0 / 4</div>
+<div id="monthly-preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
+
+<button onclick="printPDF('monthly')">طباعة التقرير الشهري</button>
+</div>
+
+<footer>تصميم : أ.ضيف الله الطويرقي   0543559220 </footer>
 
 <script>
-(function(){
-  const $ = id => document.getElementById(id);
+let uploadedImages = {};
 
-  async function ensureTemplateLoaded() {
-    const img = $("tplImg");
-    if (!img) return;
-    if (img.complete && img.naturalWidth>0) return;
-    await new Promise((res)=>{
-      img.onload = ()=> res();
-      img.onerror = ()=> res();
-      img.src = img.src.split("?")[0] + "?t=" + Date.now();
-    });
+function openTab(tabId){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-button').forEach(el=>el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function storeImages(event, tabId){
+  const files = event.target.files;
+
+  if(!uploadedImages[tabId]) uploadedImages[tabId] = [];
+
+  if(uploadedImages[tabId].length + files.length > 4){
+    alert("مسموح برفع 4 صور فقط لكل تقرير.");
+    event.target.value = "";
+    return;
   }
 
-  function fillOverlay(){
-    const nl = t => (t||"").split(/\n/).map(s=>s.replace(/^[-•]\s*/,"• ")).join("\n");
-    const v = id => ($(id)&&$(id).value)||"";
+  for(let i=0;i<files.length;i++){
+    const reader = new FileReader();
+    reader.onload = function(e){ 
+      uploadedImages[tabId].push(e.target.result); 
+      updateCounter(tabId); 
+      renderPreview(tabId);
+    }
+    reader.readAsDataURL(files[i]);
+  }
+}
 
-    $("p-program").textContent = v("program");
-    $("p-teacher").textContent = v("teacher");
-    $("p-major").textContent   = v("major");
-    $("p-class").textContent   = v("class");
-    $("p-term").textContent    = v("term");
-    $("p-day").textContent     = v("day");
-    $("p-date").textContent    = v("date");
-    $("p-period").textContent  = v("period");
-    $("p-place").textContent   = v("place");
-    $("p-att").textContent     = v("att");
-    $("p-abs").textContent     = v("abs");
-    $("p-aud").textContent     = v("aud");
-    $("p-owner").textContent   = v("owner");
+function updateCounter(tabId){
+  const counter = document.getElementById(tabId+"-counter");
+  if(counter){
+    const count = uploadedImages[tabId].length;
+    counter.textContent = "عدد الصور المرفوعة: " + count + " / 4";
+    counter.style.color = (count >= 4) ? "red" : "#15445a";
+  }
+}
 
-    $("p-goals").textContent = nl(v("goals"));
-    $("p-out").textContent   = nl(v("out"));
+function renderPreview(tabId){
+  const preview = document.getElementById(tabId+"-preview");
+  preview.innerHTML = "";
+
+  uploadedImages[tabId].forEach((src, index)=>{
+    const container = document.createElement("div");
+    container.style.position = "relative";
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.style.width = "70px";
+    img.style.height = "70px";
+    img.style.objectFit = "cover";
+    img.style.border = "1px solid #ccc";
+    img.style.borderRadius = "4px";
+
+    const btn = document.createElement("button");
+    btn.textContent = "❌";
+    btn.style.position = "absolute";
+    btn.style.top = "-5px";
+    btn.style.right = "-5px";
+    btn.style.background="red";
+    btn.style.color="white";
+    btn.style.border="none";
+    btn.style.borderRadius="50%";
+    btn.style.cursor="pointer";
+    btn.style.fontSize="10px";
+    btn.onclick = ()=>{
+      uploadedImages[tabId].splice(index,1);
+      updateCounter(tabId);
+      renderPreview(tabId);
+    };
+
+    container.appendChild(img);
+    container.appendChild(btn);
+    preview.appendChild(container);
+  });
+}
+
+flatpickr("#dailyDate",{ locale:'ar', dateFormat:"d-m-Y", altInput:true, altFormat:"d-m-Y" });
+flatpickr("#weeklyDate",{ locale:'ar', dateFormat:"d-m-Y", altInput:true, altFormat:"d-m-Y" });
+flatpickr("#monthlyDate",{ locale:'ar', dateFormat:"d-m-Y", altInput:true, altFormat:"d-m-Y" });
+
+function printPDF(tabId){
+  const content = document.getElementById(tabId).cloneNode(true);
+  
+  content.querySelectorAll('button,input[type="file"],#'+tabId+'-counter,#'+tabId+'-preview').forEach(el=>el.remove());
+  content.querySelectorAll('input[type="text"]').forEach(input=>{
+    if(input.placeholder==="DD-MM-YYYY") input.placeholder = '';
+  });
+
+  const wrapper = document.createElement('div');
+  wrapper.style.position='relative';
+  wrapper.style.width='210mm';
+  wrapper.style.height='296.5mm';
+  wrapper.style.padding='35mm 10mm 20mm 10mm';
+  wrapper.style.boxSizing='border-box';
+  wrapper.style.overflow='hidden';
+  wrapper.style.backgroundImage = 'url("images/background.png")';
+  wrapper.style.backgroundSize = 'cover';
+  wrapper.style.backgroundRepeat = 'no-repeat';
+  wrapper.style.backgroundPosition = 'center';
+  wrapper.appendChild(content);
+
+  const tabImages = uploadedImages[tabId] || [];
+  if(tabImages.length>0){
+    const imagesWrapper = document.createElement('div');
+    imagesWrapper.style.display='flex';
+    imagesWrapper.style.justifyContent='center';
+    imagesWrapper.style.marginTop='5px';
+    imagesWrapper.style.gap='5px';
+    tabImages.forEach(src=>{
+      const img = document.createElement('img');
+      img.src = src;
+      img.style.width='160px';  
+      img.style.height='160px';
+      img.style.objectFit='cover';
+      imagesWrapper.appendChild(img);
+    });
+    wrapper.appendChild(imagesWrapper);
   }
 
-  const evInput = $("ev");
-  evInput.addEventListener("change", e=>{
-    const files = Array.from(e.target.files||[]).slice(0,4);
-    files.forEach((f,idx)=>{
-      const r=new FileReader();
-      r.onload = ()=>{ $("p-ev"+(idx+1)).src = r.result; };
-      r.readAsDataURL(f);
-    });
-    e.target.value="";
-  });
-
-  $("btnPrint").onclick = async ()=>{
-    await ensureTemplateLoaded();
-    fillOverlay();
-    window.print();
-  };
-
-  window.addEventListener("beforeprint", async ()=>{
-    await ensureTemplateLoaded();
-    fillOverlay();
-  });
-
-  const d = new Date(); const df = $("date"); if (df) df.value = d.toISOString().slice(0,10);
-})();
+  html2pdf().set({
+    margin:0,
+    filename: tabId+'-report.pdf',
+    image:{type:'jpeg',quality:0.95},
+    html2canvas:{scale:3, useCORS:true, backgroundColor:null, scrollY:0},
+    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+  }).from(wrapper).save();
+}
 </script>
 </body>
 </html>
