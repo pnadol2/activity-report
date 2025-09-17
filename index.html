@@ -3,60 +3,100 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>برامج الأنشطة الطلابية - تقرير</title>
-<meta name="description" content="قالب تقرير نشاط عربي مع شواهد، طباعة PDF و Word">
+<title>تقرير النشاط - الكتابة داخل القالب</title>
+<meta name="description" content="كتابة فوق قالب A4 كصورة واحدة، بدون جداول إضافية.">
 
 <style>
 :root{
-  --bg:#f7f7f9; --fg:#111; --muted:#6b7280; --card:#fff; --border:#e5e7eb;
-  --accent:#0ea5e9; --print-fg:#000;
-  --font:"Tajawal","Cairo",system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans Arabic",Arial,sans-serif;
+  /* مقاس A4 بالنِّسَب (نستخدم نسب٪ على الصورة) */
+  /* عدّل الإحداثيات أدناه حتى تركب الحقول داخل مربعات القالب عندك */
+  /* مثال: --x-الحقل: قيمة من 0 إلى 100 (٪ من عرض الصفحة) */
+  --x-program: 22;  --y-program: 18;  --w-program: 56;  --h-program: 3.6;
+
+  --x-teacher: 64;  --y-teacher: 27.5; --w-teacher: 27; --h-teacher: 3;
+  --x-major:   33;  --y-major: 27.5; --w-major:   27; --h-major:   3;
+
+  --x-class:   64;  --y-class: 31;   --w-class:   27; --h-class:   3;
+  --x-term:    33;  --y-term:  31;   --w-term:    27; --h-term:    3;
+
+  --x-day:     64;  --y-day:  34.4;  --w-day:     27; --h-day:     3;
+  --x-date:    33;  --y-date: 34.4;  --w-date:    27; --h-date:    3;
+
+  --x-period:  64;  --y-period:37.8; --w-period:  27; --h-period:  3;
+  --x-place:   33;  --y-place: 37.8; --w-place:   27; --h-place:   3;
+
+  --x-att:     64;  --y-att:  41.2;  --w-att:     27; --h-att:     3;
+  --x-abs:     33;  --y-abs:  41.2;  --w-abs:     27; --h-abs:     3;
+
+  --x-aud:     64;  --y-aud:  44.6;  --w-aud:     27; --h-aud:     3;
+  --x-owner:   33;  --y-owner:44.6;  --w-owner:   27; --h-owner:   3;
+
+  --x-goals:   16;  --y-goals: 52.2; --w-goals:   68; --h-goals:   6.2;
+  --x-out:     16;  --y-out:   62.2; --w-out:     68; --h-out:     6.2;
+
+  /* مربعات الشواهد الأربع (أسفل) */
+  --x-ev1: 16;  --y-ev1:  72.8; --w-ev1: 32; --h-ev1: 14;
+  --x-ev2: 52;  --y-ev2:  72.8; --w-ev2: 32; --h-ev2: 14;
+  --x-ev3: 16;  --y-ev3:  88.0; --w-ev3: 32; --h-ev3: 14;
+  --x-ev4: 52;  --y-ev4:  88.0; --w-ev4: 32; --h-ev4: 14;
+
+  --font:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Arial,sans-serif;
 }
+
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:var(--font)}
+html,body{margin:0;background:#f5f7fb;color:#111;font-family:var(--font)}
 
-/* Header (on-screen only) */
-.header{background:linear-gradient(90deg,#0f766e,#198754);color:#fff;padding:16px 12px 10px;border-bottom:4px solid rgba(255,255,255,.15)}
-.header .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.header .badge{background:#fff;color:#0f172a;padding:8px 16px;border-radius:999px;font-weight:800}
-.container{max-width:1100px;margin:16px auto 24px;padding:0 14px}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
-button,.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
-button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
-.small{font-size:.92rem;color:var(--muted)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin:12px 0}
-.card h2{margin:.25rem 0 1rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.container{max-width:1100px;margin:14px auto;padding:0 12px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:10px 0}
+h1{margin:.4rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
 label{display:flex;flex-direction:column;gap:6px;font-weight:600}
-input,textarea{padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff;font:inherit}
+input,textarea{padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font:inherit}
 textarea{resize:vertical}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+button,.btn{background:#0ea5e9;color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
 
-/* Evidence - 4 slots */
-.evd-4{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.slot{border:1px dashed var(--border);border-radius:12px;background:#fff;overflow:hidden;position:relative;min-height:160px}
-.slot img{width:100%;height:160px;object-fit:cover;display:block}
-.slot .cap{padding:6px 8px;font-size:.9rem;border-top:1px solid var(--border)}
-.slot .remove{position:absolute;top:6px;left:6px;background:#fff;color:#b91c1c;border:1px solid #fecaca;border-radius:8px;padding:4px 8px;cursor:pointer}
-
-/* PRINT */
+/* A4 stage */
 .print-area{display:none}
-.report{padding:10mm 10mm;color:var(--print-fg)}
-/* صورة القالب A4 */
-.report .tpl{width:100%;display:block;margin:0 0 8mm}
-/* جداول ونصوص */
-.info-table{width:100%;border-collapse:collapse;margin:8px 0 12px}
-.info-table th,.info-table td{border:1px solid #999;padding:6px 8px;text-align:right;vertical-align:top}
-.para{min-height:18px;border:1px solid #bbb;padding:8px;border-radius:6px;margin:4px 0 10px;white-space:pre-wrap}
-.ev4-print{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.ev4-print .box{border:1px solid #bbb;border-radius:6px;overflow:hidden;background:#fff}
-.ev4-print img{width:100%;height:180px;object-fit:cover;display:block}
-.sign-table{width:100%;border-collapse:collapse;margin-top:8px}
-.sign-table th,.sign-table td{border:1px solid #999;padding:6px 8px;text-align:right}
-.footer-line{display:flex;justify-content:space-between;margin-top:8mm;font-size:.95rem;color:#111}
+.a4{position:relative;width:210mm;height:297mm;margin:0 auto;color:#000;overflow:hidden}
+.a4 img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 
+/* overlay fields */
+.ov{position:absolute;display:flex;align-items:center;justify-content:flex-start;
+    padding:2mm 3mm; white-space:pre-wrap; line-height:1.25; color:#111; font-size:12pt}
+.ov.small{font-size:11pt}
+.ov.center{justify-content:center;text-align:center}
+.ov img{width:100%;height:100%;object-fit:cover;border-radius:3px}
+
+/* helper to position with CSS variables (percentages) */
+[data-pos]{}
+[data-pos="program"]{left:calc(var(--x-program)*1%); top:calc(var(--y-program)*1%); width:calc(var(--w-program)*1%); height:calc(var(--h-program)*1%);}
+[data-pos="teacher"]{left:calc(var(--x-teacher)*1%); top:calc(var(--y-teacher)*1%); width:calc(var(--w-teacher)*1%); height:calc(var(--h-teacher)*1%);}
+[data-pos="major"]  {left:calc(var(--x-major)*1%);   top:calc(var(--y-major)*1%);   width:calc(var(--w-major)*1%);   height:calc(var(--h-major)*1%);}
+[data-pos="class"]  {left:calc(var(--x-class)*1%);   top:calc(var(--y-class)*1%);   width:calc(var(--w-class)*1%);   height:calc(var(--h-class)*1%);}
+[data-pos="term"]   {left:calc(var(--x-term)*1%);    top:calc(var(--y-term)*1%);    width:calc(var(--w-term)*1%);    height:calc(var(--h-term)*1%);}
+[data-pos="day"]    {left:calc(var(--x-day)*1%);     top:calc(var(--y-day)*1%);     width:calc(var(--w-day)*1%);     height:calc(var(--h-day)*1%);}
+[data-pos="date"]   {left:calc(var(--x-date)*1%);    top:calc(var(--y-date)*1%);    width:calc(var(--w-date)*1%);    height:calc(var(--h-date)*1%);}
+[data-pos="period"] {left:calc(var(--x-period)*1%);  top:calc(var(--y-period)*1%);  width:calc(var(--w-period)*1%);  height:calc(var(--h-period)*1%);}
+[data-pos="place"]  {left:calc(var(--x-place)*1%);   top:calc(var(--y-place)*1%);   width:calc(var(--w-place)*1%);   height:calc(var(--h-place)*1%);}
+[data-pos="att"]    {left:calc(var(--x-att)*1%);     top:calc(var(--y-att)*1%);     width:calc(var(--w-att)*1%);     height:calc(var(--h-att)*1%);}
+[data-pos="abs"]    {left:calc(var(--x-abs)*1%);     top:calc(var(--y-abs)*1%);     width:calc(var(--w-abs)*1%);     height:calc(var(--h-abs)*1%);}
+[data-pos="aud"]    {left:calc(var(--x-aud)*1%);     top:calc(var(--y-aud)*1%);     width:calc(var(--w-aud)*1%);     height:calc(var(--h-aud)*1%);}
+[data-pos="owner"]  {left:calc(var(--x-owner)*1%);   top:calc(var(--y-owner)*1%);   width:calc(var(--w-owner)*1%);   height:calc(var(--h-owner)*1%);}
+
+[data-pos="goals"]  {left:calc(var(--x-goals)*1%);   top:calc(var(--y-goals)*1%);   width:calc(var(--w-goals)*1%);   min-height:calc(var(--h-goals)*1%);}
+[data-pos="out"]    {left:calc(var(--x-out)*1%);     top:calc(var(--y-out)*1%);     width:calc(var(--w-out)*1%);     min-height:calc(var(--h-out)*1%);}
+
+[data-pos="ev1"]    {left:calc(var(--x-ev1)*1%);     top:calc(var(--y-ev1)*1%);     width:calc(var(--w-ev1)*1%);     height:calc(var(--h-ev1)*1%);}
+[data-pos="ev2"]    {left:calc(var(--x-ev2)*1%);     top:calc(var(--y-ev2)*1%);     width:calc(var(--w-ev2)*1%);     height:calc(var(--h-ev2)*1%);}
+[data-pos="ev3"]    {left:calc(var(--x-ev3)*1%);     top:calc(var(--y-ev3)*1%);     width:calc(var(--w-ev3)*1%);     height:calc(var(--h-ev3)*1%);}
+[data-pos="ev4"]    {left:calc(var(--x-ev4)*1%);     top:calc(var(--y-ev4)*1%);     width:calc(var(--w-ev4)*1%);     height:calc(var(--h-ev4)*1%);}
+
+/* الطباعة */
 @media print{
-  @page { size: A4; margin: 8mm }
-  .no-print{display:none !important}
+  @page { size: A4; margin: 0 }
+  .no-print{display:none!important}
   body{background:#fff}
   .print-area{display:block}
 }
@@ -64,140 +104,81 @@ textarea{resize:vertical}
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="header no-print">
-  <div class="top">
-    <div class="badge">برامج الأنشطة الطلابية</div>
-    <div>وزارة التعليم</div>
-  </div>
-  <div class="container">
-    <h1 id="docTitle" contenteditable="true" spellcheck="false" style="margin:8px 0 0">تعزيز الثقة بالنفس والشعور بالمسؤولية</h1>
-    <p id="docSub" contenteditable="true" class="small" style="margin:6px 0 0">مجال المواطنة والحياة</p>
-    <div class="actions">
-      <button id="btnPreview">معاينة للطباعة / PDF</button>
-      <button id="btnWord">تصدير Word</button>
-      <label class="btn ghost">
-        فتح بيانات JSON
-        <input id="openJson" type="file" accept="application/json" style="display:none">
-      </label>
-      <a id="btnSave" class="btn" href="#" download="report.json">حفظ البيانات</a>
-    </div>
-  </div>
-</header>
-
-<main class="container no-print">
-  <!-- البيانات -->
-  <section class="card">
-    <h2 contenteditable="true" id="titleBasic">البيانات الأساسية</h2>
+<div class="container no-print">
+  <h1>إدخال بيانات التقرير</h1>
+  <div class="card">
     <div class="grid">
-      <label>إدارة التعليم<input id="eduDir" placeholder="تعليم ..."></label>
-      <label>اسم المدرسة<input id="school"></label>
-      <label>القسم<input id="dept" placeholder="النشاط الطلابي / ..."></label>
+      <label>اسم البرنامج<input id="program"></label>
       <label>اسم المعلم/ـة<input id="teacher"></label>
       <label>التخصص<input id="major"></label>
       <label>الصف<input id="class"></label>
       <label>الفصل الدراسي<input id="term"></label>
-      <label>اليوم<input id="day" placeholder="الثلاثاء"></label>
-      <label>التاريخ<input id="date_g" type="date"></label>
-      <label>الحصة<input id="period" placeholder="الثانية"></label>
-      <label>اسم البرنامج<input id="program"></label>
+      <label>اليوم<input id="day"></label>
+      <label>التاريخ<input id="date" type="date"></label>
+      <label>الحصة<input id="period"></label>
       <label>مكان التنفيذ<input id="place"></label>
-      <label>الحضور<input id="attendance" placeholder="34"></label>
-      <label>الغياب<input id="absence" placeholder="1"></label>
-      <label>الفئة المستهدفة<input id="audience"></label>
+      <label>الحضور<input id="att"></label>
+      <label>الغياب<input id="abs"></label>
+      <label>الفئة المستهدفة<input id="aud"></label>
       <label>المسؤول/ـة<input id="owner"></label>
     </div>
-  </section>
+  </div>
 
-  <!-- الأهداف -->
-  <section class="card">
-    <h2 id="titleGoals" contenteditable="true">أهداف البرنامج</h2>
-    <textarea id="goals" rows="3" placeholder="- تنمية المسؤولية لدى الطلبة
-- تعزيز التعاون والتقدير والاحترام"></textarea>
-  </section>
+  <div class="card">
+    <h3>أهداف البرنامج</h3>
+    <textarea id="goals" rows="3" placeholder="- هدف ١
+- هدف ٢"></textarea>
+    <h3 style="margin-top:10px">الأثر الإيجابي للبرنامج</h3>
+    <textarea id="out" rows="3" placeholder="- أثر ١
+- أثر ٢"></textarea>
+  </div>
 
-  <!-- الأثر الإيجابي -->
-  <section class="card">
-    <h2 id="titleOutcomes" contenteditable="true">الأثر الإيجابي للبرنامج</h2>
-    <textarea id="outcomes" rows="3" placeholder="- تنمية مهارات القيادة والعمل الجماعي
-- غرس قيمة العطاء وتنمية روح المسؤولية"></textarea>
-  </section>
-
-  <!-- الشواهد (٤ صور) -->
-  <section class="card">
-    <h2 id="titleEvidence" contenteditable="true">الشواهد (٤ صور)</h2>
-    <div class="small">ارفع ٤ صور (نحتفظ بأول أربع صور فقط).</div>
+  <div class="card">
+    <h3>الشواهد (٤ صور)</h3>
     <div class="actions">
-      <label class="btn">رفع الصور (حتى 4)
-        <input id="evImages" type="file" accept="image/*" multiple style="display:none">
+      <label class="btn">رفع الصور
+        <input id="ev" type="file" accept="image/*" multiple style="display:none">
       </label>
+      <button id="btnPrint">معاينة/طباعة</button>
     </div>
-    <div id="slots" class="evd-4" style="margin-top:10px">
-      <div class="slot" data-i="0"><div class="cap">الصورة 1</div></div>
-      <div class="slot" data-i="1"><div class="cap">الصورة 2</div></div>
-      <div class="slot" data-i="2"><div class="cap">الصورة 3</div></div>
-      <div class="slot" data-i="3"><div class="cap">الصورة 4</div></div>
-    </div>
-  </section>
+  </div>
 
-  <!-- التوقيعات -->
-  <section class="card">
-    <h2 id="titleSign" contenteditable="true">التوقيعات</h2>
-    <div class="grid">
-      <label>مدير/ة المدرسة<input id="signPrincipal" placeholder="اسم المدير/ة"></label>
-      <label>رائد/ة النشاط<input id="signLeader" placeholder="اسم رائد/ة النشاط"></label>
-    </div>
-  </section>
-</main>
+  <div class="card">
+    <strong>معلومة مهمة:</strong> إن لم تركب النصوص تمامًا داخل المربعات،
+    عدّل القيم في أعلى الملف تحت قسم <code>:root</code> (المتغيرات مثل <code>--x-teacher</code>، <code>--y-teacher</code>) حتى تضبط 100%.
+  </div>
+</div>
 
-<!-- PRINT -->
+<!-- مسرح الطباعة -->
 <section id="printArea" class="print-area">
-  <div class="report">
+  <div class="a4" id="stage">
+    <!-- صورة القالب A4 -->
+    <img id="tplImg" class="bg" src="assets/culture-report-page1.png" alt="قالب" />
 
-    <!-- صورة القالب A4 (تأكد من وجودها في assets/) -->
-    <img class="tpl"
-         src="assets/culture-report-page1.png?v=2"
-         alt="قالب الطباعة"
-         onerror="this.insertAdjacentHTML('afterend','<div style=&quot;padding:8px;border:1px solid #f00;color:#b91c1c;margin:6px 0&quot;>تعذّر تحميل صورة القالب: تأكّد من المسار/الاسم</div>'); this.remove();">
+    <!-- حقول نصية فوق الصورة -->
+    <div class="ov center" data-pos="program" id="p-program"></div>
 
-    <!-- عنوان ومعلومات عامة (تظهر أسفل القالب) -->
-    <h1 id="pDocTitle" style="margin:0 0 4px">تعزيز الثقة بالنفس والشعور بالمسؤولية</h1>
-    <div class="small" id="pSub" style="margin:0 0 6px">مجال المواطنة والحياة</div>
+    <div class="ov" data-pos="teacher" id="p-teacher"></div>
+    <div class="ov" data-pos="major"   id="p-major"></div>
+    <div class="ov" data-pos="class"   id="p-class"></div>
+    <div class="ov" data-pos="term"    id="p-term"></div>
+    <div class="ov" data-pos="day"     id="p-day"></div>
+    <div class="ov" data-pos="date"    id="p-date"></div>
+    <div class="ov" data-pos="period"  id="p-period"></div>
+    <div class="ov" data-pos="place"   id="p-place"></div>
+    <div class="ov" data-pos="att"     id="p-att"></div>
+    <div class="ov" data-pos="abs"     id="p-abs"></div>
+    <div class="ov" data-pos="aud"     id="p-aud"></div>
+    <div class="ov" data-pos="owner"   id="p-owner"></div>
 
-    <table class="info-table">
-      <tr><th>اسم المعلم/ـة</th><td id="pTeacher"></td><th>التخصص</th><td id="pMajor"></td></tr>
-      <tr><th>الصف</th><td id="pClass"></td><th>الفصل الدراسي</th><td id="pTerm"></td></tr>
-      <tr><th>اليوم</th><td id="pDay"></td><th>التاريخ</th><td id="pDateG"></td></tr>
-      <tr><th>الحصة</th><td id="pPeriod"></td><th>مكان التنفيذ</th><td id="pPlace"></td></tr>
-      <tr><th>الحضور</th><td id="pAttendance"></td><th>الغياب</th><td id="pAbsence"></td></tr>
-      <tr><th>الفئة المستهدفة</th><td id="pAudience"></td><th>المسؤول/ـة</th><td id="pOwner"></td></tr>
-      <tr><th>اسم البرنامج</th><td id="pProgram" colspan="3"></td></tr>
-    </table>
+    <div class="ov" data-pos="goals" id="p-goals"></div>
+    <div class="ov" data-pos="out"   id="p-out"></div>
 
-    <h2 id="pTitleGoals">أهداف البرنامج</h2>
-    <div id="pGoals" class="para"></div>
-
-    <h2 id="pTitleOutcomes">الأثر الإيجابي للبرنامج</h2>
-    <div id="pOutcomes" class="para"></div>
-
-    <h2 id="pTitleEvidence">الشواهد</h2>
-    <div id="pEvGrid" class="ev4-print">
-      <div class="box"><img id="pImg0" alt=""></div>
-      <div class="box"><img id="pImg1" alt=""></div>
-      <div class="box"><img id="pImg2" alt=""></div>
-      <div class="box"><img id="pImg3" alt=""></div>
-    </div>
-
-    <h2 id="pTitleSign">التوقيعات</h2>
-    <table class="sign-table">
-      <tr><th>مدير/ة المدرسة</th><td id="pSignPrincipal"></td></tr>
-      <tr><th>رائد/ة النشاط</th><td id="pSignLeader"></td></tr>
-    </table>
-
-    <div class="footer-line">
-      <div>أُعد بواسطة: <span id="pOwner2"></span></div>
-      <div>تاريخ الطباعة: <span id="pPrintDate"></span></div>
-    </div>
+    <!-- الشواهد (صور) -->
+    <div class="ov" data-pos="ev1"><img id="p-ev1" alt=""></div>
+    <div class="ov" data-pos="ev2"><img id="p-ev2" alt=""></div>
+    <div class="ov" data-pos="ev3"><img id="p-ev3" alt=""></div>
+    <div class="ov" data-pos="ev4"><img id="p-ev4" alt=""></div>
   </div>
 </section>
 
@@ -205,99 +186,71 @@ textarea{resize:vertical}
 (function(){
   const $ = id => document.getElementById(id);
 
-  // تاريخ اليوم
-  (function(){ const d=new Date(); const el=$("date_g"); if(el) el.value=d.toISOString().slice(0,10); })();
+  // حمّل صورة القالب قبل الطباعة
+  function ensureTemplateLoaded() {
+    return new Promise((resolve,reject)=>{
+      const img = $("tplImg");
+      if (!img) return resolve();
+      if (img.complete && img.naturalWidth>0) return resolve();
+      img.onload = ()=> resolve();
+      img.onerror = ()=> reject();
+      // كسر كاش لمرة أولى:
+      img.src = img.src.split("?")[0] + "?v=" + Date.now();
+    });
+  }
 
-  // الحقول
-  const F=["eduDir","school","dept","teacher","major","class","term","day","date_g","period","program","place","attendance","absence","audience","owner","signPrincipal","signLeader"];
-  const get=id=>($(id)?.value||""); const set=(id,val)=>{const el=$(id); if(el) el.textContent=(val||"");};
+  // ضع القيم داخل الحقول المتموضعة
+  function fillOverlay(){
+    const nl2br = t => (t||"").split(/\n/).map(x=>x.replace(/^[-•]\s*/,"• ")).join("\n");
+    const val = id => ($(id) && $(id).value) ? $(id).value : "";
+
+    $("p-program").textContent = val("program");
+
+    $("p-teacher").textContent = val("teacher");
+    $("p-major").textContent   = val("major");
+    $("p-class").textContent   = val("class");
+    $("p-term").textContent    = val("term");
+    $("p-day").textContent     = val("day");
+    $("p-date").textContent    = val("date");
+    $("p-period").textContent  = val("period");
+    $("p-place").textContent   = val("place");
+    $("p-att").textContent     = val("att");
+    $("p-abs").textContent     = val("abs");
+    $("p-aud").textContent     = val("aud");
+    $("p-owner").textContent   = val("owner");
+
+    $("p-goals").textContent = nl2br(val("goals"));
+    $("p-out").textContent   = nl2br(val("out"));
+  }
 
   // الشواهد (٤ صور)
-  const slots=[...document.querySelectorAll(".slot")];
-  const imgs=[null,null,null,null];
-  function putImageInSlot(url,i){
-    if(i>3) return;
-    const s=slots[i]; s.innerHTML="";
-    const img=document.createElement("img"); img.src=url; s.appendChild(img);
-    const cap=document.createElement("div"); cap.className="cap"; cap.contentEditable=true; cap.textContent="وصف الشاهد (اختياري)";
-    cap.oninput=()=> s.dataset.cap=cap.textContent; s.appendChild(cap);
-    const rm=document.createElement("button"); rm.className="remove"; rm.textContent="حذف";
-    rm.onclick=()=>{ imgs[i]=null; s.innerHTML='<div class="cap">الصورة '+(i+1)+'</div>'; delete s.dataset.cap; }; s.appendChild(rm);
-    imgs[i]=url;
-  }
-  $("evImages").addEventListener("change",e=>{
-    const files=[...e.target.files||[]].slice(0,4);
-    files.forEach((f,idx)=>{ const r=new FileReader(); r.onload=()=>putImageInSlot(r.result,idx); r.readAsDataURL(f); });
-    e.target.value="";
+  const evInput = $("ev");
+  let evData = [null,null,null,null];
+  evInput.addEventListener("change", e=>{
+    const files = Array.from(e.target.files||[]).slice(0,4);
+    files.forEach((f,idx)=>{
+      const r = new FileReader();
+      r.onload = ()=>{ evData[idx] = r.result; $("p-ev"+(idx+1)).src = r.result; };
+      r.readAsDataURL(f);
+    });
+    e.target.value = "";
   });
 
-  // حفظ JSON
-  $("btnSave").onclick=e=>{
-    const data={}; F.forEach(f=>data[f]=get(f));
-    data.headings={docTitle:$("docTitle").textContent,docSub:$("docSub").textContent,
-                   goals:$("titleGoals").textContent,outcomes:$("titleOutcomes").textContent,
-                   evidence:$("titleEvidence").textContent,sign:$("titleSign").textContent};
-    data.evidence4=imgs.map((u,i)=>({url:u,cap:(slots[i]&&slots[i].dataset.cap)||""}));
-    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-    const url=URL.createObjectURL(blob); e.currentTarget.href=url; e.currentTarget.download="report.json";
-    setTimeout(()=>URL.revokeObjectURL(url),4000);
+  // زر الطباعة
+  $("btnPrint").onclick = async ()=>{
+    await ensureTemplateLoaded().catch(()=>{});
+    fillOverlay();
+    window.print();
   };
 
-  // فتح JSON
-  $("openJson").addEventListener("change",ev=>{
-    const f=ev.target.files[0]; if(!f) return;
-    const r=new FileReader();
-    r.onload=()=>{ try{
-      const d=JSON.parse(r.result); F.forEach(k=>{ if(d[k]!==undefined) $(k).value=d[k]; });
-      if(d.headings){ $("docTitle").textContent=d.headings.docTitle||$("docTitle").textContent;
-        $("docSub").textContent=d.headings.docSub||$("docSub").textContent;
-        $("titleGoals").textContent=d.headings.goals||$("titleGoals").textContent;
-        $("titleOutcomes").textContent=d.headings.outcomes||$("titleOutcomes").textContent;
-        $("titleEvidence").textContent=d.headings.evidence||$("titleEvidence").textContent;
-        $("titleSign").textContent=d.headings.sign||$("titleSign").textContent; }
-      (d.evidence4||[]).slice(0,4).forEach((it,idx)=>{ if(it&&it.url){ putImageInSlot(it.url,idx); if(slots[idx]) slots[idx].dataset.cap=it.cap||""; }});
-    }catch(e){ alert("ملف غير صالح"); }};
-    r.readAsText(f);
+  // حتى لو طبع من قائمة المتصفح
+  window.addEventListener("beforeprint", async ()=>{
+    await ensureTemplateLoaded().catch(()=>{});
+    fillOverlay();
   });
 
-  // تهيئة نسخة الطباعة
-  function fillPrint(){
-    set("pDocTitle",$("docTitle").textContent); set("pSub",$("docSub").textContent);
-    set("pTeacher",get("teacher")); set("pMajor",get("major"));
-    set("pClass",get("class")); set("pTerm",get("term"));
-    set("pDay",get("day")); set("pDateG",get("date_g"));
-    set("pPeriod",get("period")); set("pPlace",get("place"));
-    set("pAttendance",get("attendance")); set("pAbsence",get("absence"));
-    set("pAudience",get("audience")); set("pOwner",get("owner")); set("pOwner2",get("owner"));
-    set("pProgram",get("program"));
-
-    set("pTitleGoals",$("titleGoals").textContent);
-    set("pTitleOutcomes",$("titleOutcomes").textContent);
-    set("pTitleEvidence",$("titleEvidence").textContent);
-    set("pTitleSign",$("titleSign").textContent);
-
-    const nl2ul=t=>{const a=(t||"").split(/\n+/).map(s=>s.trim()).filter(Boolean);return a.length<=1?t:a.map(x=>x.replace(/^[-•]\s*/,"")).map(x=>"• "+x).join("\n");};
-    $("pGoals").textContent=nl2ul(get("goals"));
-    $("pOutcomes").textContent=nl2ul(get("outcomes"));
-
-    [0,1,2,3].forEach(i=>{ const u=imgs[i]; const cap=(slots[i]&&slots[i].dataset.cap)||""; const el=$("pImg"+i);
-      if(u){ el.src=u; el.alt=cap; } else { el.removeAttribute("src"); el.alt=""; } });
-
-    $("pPrintDate").textContent=new Date().toLocaleDateString("ar-SA");
-  }
-
-  // أزرار
-  $("btnPreview").onclick=()=>{ fillPrint(); window.print(); };
-  $("btnWord").onclick=()=>{ fillPrint();
-    const content=document.querySelector("#printArea").innerHTML;
-    const html='<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"></head><body>'+content+'</body></html>';
-    const blob=new Blob([html],{type:"application/msword"}); const url=URL.createObjectURL(blob);
-    const a=document.createElement("a"); a.href=url; a.download="تقرير-نشاط.doc"; a.click();
-    setTimeout(()=>URL.revokeObjectURL(url),4000);
-  };
-
-  // تجهيز تلقائي حتى لو طبع من قائمة المتصفح
-  window.addEventListener('beforeprint',()=>{ try{ fillPrint(); }catch(e){} });
+  // تاريخ افتراضي اليوم
+  const d = new Date(); if ($("date")) $("date").value = d.toISOString().slice(0,10);
 })();
 </script>
 </body>
