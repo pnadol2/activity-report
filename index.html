@@ -15,11 +15,8 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:var(--font)}
 
-/* Header (on-screen) */
-.header{
-  background:linear-gradient(90deg,#0f766e,#198754);
-  color:#fff; padding:16px 12px 10px; border-bottom:4px solid rgba(255,255,255,.15);
-}
+/* Header (on-screen only) */
+.header{background:linear-gradient(90deg,#0f766e,#198754);color:#fff;padding:16px 12px 10px;border-bottom:4px solid rgba(255,255,255,.15)}
 .header .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .header .badge{background:#fff;color:#0f172a;padding:8px 16px;border-radius:999px;font-weight:800}
 .container{max-width:1100px;margin:16px auto 24px;padding:0 14px}
@@ -27,7 +24,6 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:va
 button,.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
 button.ghost{background:#fff;color:var(--fg);border:1px solid var(--border)}
 .small{font-size:.92rem;color:var(--muted)}
-
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin:12px 0}
 .card h2{margin:.25rem 0 1rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
@@ -44,7 +40,7 @@ textarea{resize:vertical}
 
 /* PRINT */
 .print-area{display:none}
-.report{padding:12mm 12mm;color:var(--print-fg)}
+.report{padding:10mm 10mm;color:var(--print-fg)}
 /* صورة القالب A4 */
 .report .tpl{width:100%;display:block;margin:0 0 8mm}
 /* جداول ونصوص */
@@ -59,7 +55,7 @@ textarea{resize:vertical}
 .footer-line{display:flex;justify-content:space-between;margin-top:8mm;font-size:.95rem;color:#111}
 
 @media print{
-  @page { size: A4; margin: 10mm }
+  @page { size: A4; margin: 8mm }
   .no-print{display:none !important}
   body{background:#fff}
   .print-area{display:block}
@@ -130,7 +126,7 @@ textarea{resize:vertical}
   <!-- الشواهد (٤ صور) -->
   <section class="card">
     <h2 id="titleEvidence" contenteditable="true">الشواهد (٤ صور)</h2>
-    <div class="small">ارفع ٤ صور (سيتم الاحتفاظ بأول أربع صور فقط).</div>
+    <div class="small">ارفع ٤ صور (نحتفظ بأول أربع صور فقط).</div>
     <div class="actions">
       <label class="btn">رفع الصور (حتى 4)
         <input id="evImages" type="file" accept="image/*" multiple style="display:none">
@@ -158,10 +154,13 @@ textarea{resize:vertical}
 <section id="printArea" class="print-area">
   <div class="report">
 
-    <!-- صورة القالب A4 (ملفك في assets/culture-report-page1.png) -->
-    <img class="tpl" src="assets/culture-report-page1.png" alt="قالب الطباعة">
+    <!-- صورة القالب A4 (تأكد من وجودها في assets/) -->
+    <img class="tpl"
+         src="assets/culture-report-page1.png?v=2"
+         alt="قالب الطباعة"
+         onerror="this.insertAdjacentHTML('afterend','<div style=&quot;padding:8px;border:1px solid #f00;color:#b91c1c;margin:6px 0&quot;>تعذّر تحميل صورة القالب: تأكّد من المسار/الاسم</div>'); this.remove();">
 
-    <!-- عنوان ومعلومات عامة -->
+    <!-- عنوان ومعلومات عامة (تظهر أسفل القالب) -->
     <h1 id="pDocTitle" style="margin:0 0 4px">تعزيز الثقة بالنفس والشعور بالمسؤولية</h1>
     <div class="small" id="pSub" style="margin:0 0 6px">مجال المواطنة والحياة</div>
 
@@ -206,133 +205,99 @@ textarea{resize:vertical}
 (function(){
   const $ = id => document.getElementById(id);
 
-  // تعبئة تاريخ اليوم تلقائياً
-  (function(){ const d = new Date(); const el=$("date_g"); if(el) el.value = d.toISOString().slice(0,10); })();
+  // تاريخ اليوم
+  (function(){ const d=new Date(); const el=$("date_g"); if(el) el.value=d.toISOString().slice(0,10); })();
 
-  // حقول الإدخال
-  const F = ["eduDir","school","dept","teacher","major","class","term","day","date_g","period","program","place","attendance","absence","audience","owner","signPrincipal","signLeader"];
-  const get = id => ($(id)?.value || "");
-  const set = (id,val)=>{ const el=$(id); if(el) el.textContent = (val||""); };
+  // الحقول
+  const F=["eduDir","school","dept","teacher","major","class","term","day","date_g","period","program","place","attendance","absence","audience","owner","signPrincipal","signLeader"];
+  const get=id=>($(id)?.value||""); const set=(id,val)=>{const el=$(id); if(el) el.textContent=(val||"");};
 
-  // الشواهد: 4 صور
-  const slots = Array.from(document.querySelectorAll(".slot"));
-  const imgs = [null,null,null,null];
-  function putImageInSlot(url, i){
+  // الشواهد (٤ صور)
+  const slots=[...document.querySelectorAll(".slot")];
+  const imgs=[null,null,null,null];
+  function putImageInSlot(url,i){
     if(i>3) return;
-    const s = slots[i]; s.innerHTML = "";
-    const img = document.createElement("img"); img.src = url; s.appendChild(img);
-    const cap = document.createElement("div"); cap.className="cap"; cap.contentEditable=true; cap.textContent="وصف الشاهد (اختياري)";
-    cap.oninput = ()=> s.dataset.cap = cap.textContent;
-    s.appendChild(cap);
-    const rm = document.createElement("button"); rm.className="remove"; rm.textContent="حذف";
-    rm.onclick = ()=>{ imgs[i]=null; s.innerHTML='<div class="cap">الصورة '+(i+1)+'</div>'; delete s.dataset.cap; };
-    s.appendChild(rm);
+    const s=slots[i]; s.innerHTML="";
+    const img=document.createElement("img"); img.src=url; s.appendChild(img);
+    const cap=document.createElement("div"); cap.className="cap"; cap.contentEditable=true; cap.textContent="وصف الشاهد (اختياري)";
+    cap.oninput=()=> s.dataset.cap=cap.textContent; s.appendChild(cap);
+    const rm=document.createElement("button"); rm.className="remove"; rm.textContent="حذف";
+    rm.onclick=()=>{ imgs[i]=null; s.innerHTML='<div class="cap">الصورة '+(i+1)+'</div>'; delete s.dataset.cap; }; s.appendChild(rm);
     imgs[i]=url;
   }
-  $("evImages").addEventListener("change", e=>{
-    const files = Array.from(e.target.files||[]).slice(0,4);
-    files.forEach((f,idx)=>{
-      const r = new FileReader();
-      r.onload = ()=> putImageInSlot(r.result, idx);
-      r.readAsDataURL(f);
-    });
+  $("evImages").addEventListener("change",e=>{
+    const files=[...e.target.files||[]].slice(0,4);
+    files.forEach((f,idx)=>{ const r=new FileReader(); r.onload=()=>putImageInSlot(r.result,idx); r.readAsDataURL(f); });
     e.target.value="";
   });
 
   // حفظ JSON
-  $("btnSave").onclick = (e)=>{
-    const data = {};
-    F.forEach(f=> data[f]=get(f));
-    data.headings = {
-      docTitle: $("docTitle").textContent,
-      docSub: $("docSub").textContent,
-      goals: $("titleGoals").textContent,
-      outcomes: $("titleOutcomes").textContent,
-      evidence: $("titleEvidence").textContent,
-      sign: $("titleSign").textContent
-    };
-    data.evidence4 = imgs.map((u,i)=> ({url:u, cap: (slots[i] && slots[i].dataset.cap)||""}));
-    const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
-    const url = URL.createObjectURL(blob); e.currentTarget.href=url; e.currentTarget.download="report.json";
+  $("btnSave").onclick=e=>{
+    const data={}; F.forEach(f=>data[f]=get(f));
+    data.headings={docTitle:$("docTitle").textContent,docSub:$("docSub").textContent,
+                   goals:$("titleGoals").textContent,outcomes:$("titleOutcomes").textContent,
+                   evidence:$("titleEvidence").textContent,sign:$("titleSign").textContent};
+    data.evidence4=imgs.map((u,i)=>({url:u,cap:(slots[i]&&slots[i].dataset.cap)||""}));
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob); e.currentTarget.href=url; e.currentTarget.download="report.json";
     setTimeout(()=>URL.revokeObjectURL(url),4000);
   };
 
   // فتح JSON
-  $("openJson").addEventListener("change", ev=>{
+  $("openJson").addEventListener("change",ev=>{
     const f=ev.target.files[0]; if(!f) return;
     const r=new FileReader();
-    r.onload=()=>{
-      try{
-        const d=JSON.parse(r.result);
-        F.forEach(k=> { if(d[k]!==undefined) $(k).value=d[k]; });
-        if(d.headings){
-          $("docTitle").textContent=d.headings.docTitle||$("docTitle").textContent;
-          $("docSub").textContent=d.headings.docSub||$("docSub").textContent;
-          $("titleGoals").textContent=d.headings.goals||$("titleGoals").textContent;
-          $("titleOutcomes").textContent=d.headings.outcomes||$("titleOutcomes").textContent;
-          $("titleEvidence").textContent=d.headings.evidence||$("titleEvidence").textContent;
-          $("titleSign").textContent=d.headings.sign||$("titleSign").textContent;
-        }
-        if(Array.isArray(d.evidence4)){
-          d.evidence4.slice(0,4).forEach((it,idx)=>{
-            if(it && it.url){ putImageInSlot(it.url, idx); if(slots[idx]) slots[idx].dataset.cap=it.cap||""; }
-          });
-        }
-      }catch(e){ alert("ملف غير صالح"); }
-    };
+    r.onload=()=>{ try{
+      const d=JSON.parse(r.result); F.forEach(k=>{ if(d[k]!==undefined) $(k).value=d[k]; });
+      if(d.headings){ $("docTitle").textContent=d.headings.docTitle||$("docTitle").textContent;
+        $("docSub").textContent=d.headings.docSub||$("docSub").textContent;
+        $("titleGoals").textContent=d.headings.goals||$("titleGoals").textContent;
+        $("titleOutcomes").textContent=d.headings.outcomes||$("titleOutcomes").textContent;
+        $("titleEvidence").textContent=d.headings.evidence||$("titleEvidence").textContent;
+        $("titleSign").textContent=d.headings.sign||$("titleSign").textContent; }
+      (d.evidence4||[]).slice(0,4).forEach((it,idx)=>{ if(it&&it.url){ putImageInSlot(it.url,idx); if(slots[idx]) slots[idx].dataset.cap=it.cap||""; }});
+    }catch(e){ alert("ملف غير صالح"); }};
     r.readAsText(f);
   });
 
-  // تجهيز نسخة الطباعة
+  // تهيئة نسخة الطباعة
   function fillPrint(){
-    set("pDocTitle", $("docTitle").textContent);
-    set("pSub", $("docSub").textContent);
-    set("pTeacher", get("teacher")); set("pMajor", get("major"));
-    set("pClass", get("class")); set("pTerm", get("term"));
-    set("pDay", get("day")); set("pDateG", get("date_g"));
-    set("pPeriod", get("period")); set("pPlace", get("place"));
-    set("pAttendance", get("attendance")); set("pAbsence", get("absence"));
-    set("pAudience", get("audience")); set("pOwner", get("owner")); set("pOwner2", get("owner"));
-    set("pProgram", get("program"));
+    set("pDocTitle",$("docTitle").textContent); set("pSub",$("docSub").textContent);
+    set("pTeacher",get("teacher")); set("pMajor",get("major"));
+    set("pClass",get("class")); set("pTerm",get("term"));
+    set("pDay",get("day")); set("pDateG",get("date_g"));
+    set("pPeriod",get("period")); set("pPlace",get("place"));
+    set("pAttendance",get("attendance")); set("pAbsence",get("absence"));
+    set("pAudience",get("audience")); set("pOwner",get("owner")); set("pOwner2",get("owner"));
+    set("pProgram",get("program"));
 
-    set("pTitleGoals", $("titleGoals").textContent);
-    set("pTitleOutcomes", $("titleOutcomes").textContent);
-    set("pTitleEvidence", $("titleEvidence").textContent);
-    set("pTitleSign", $("titleSign").textContent);
+    set("pTitleGoals",$("titleGoals").textContent);
+    set("pTitleOutcomes",$("titleOutcomes").textContent);
+    set("pTitleEvidence",$("titleEvidence").textContent);
+    set("pTitleSign",$("titleSign").textContent);
 
-    // نصوص الفقرات
-    const nl2ul = t => {
-      const items = (t||"").split(/\n+/).map(s=>s.trim()).filter(Boolean);
-      if(items.length<=1) return t;
-      return items.map(x=> x.replace(/^[-•]\s*/,"")).map(x=>"• "+x).join("\n");
-    };
-    $("pGoals").textContent = nl2ul(get("goals"));
-    $("pOutcomes").textContent = nl2ul(get("outcomes"));
+    const nl2ul=t=>{const a=(t||"").split(/\n+/).map(s=>s.trim()).filter(Boolean);return a.length<=1?t:a.map(x=>x.replace(/^[-•]\s*/,"")).map(x=>"• "+x).join("\n");};
+    $("pGoals").textContent=nl2ul(get("goals"));
+    $("pOutcomes").textContent=nl2ul(get("outcomes"));
 
-    // صور الشواهد الأربعة
-    [0,1,2,3].forEach(i=>{
-      const u = imgs[i];
-      const cap = (slots[i] && slots[i].dataset.cap) || "";
-      const imgEl = $("pImg"+i);
-      if(u){ imgEl.src = u; imgEl.alt = cap; }
-      else { imgEl.removeAttribute("src"); imgEl.alt=""; }
-    });
+    [0,1,2,3].forEach(i=>{ const u=imgs[i]; const cap=(slots[i]&&slots[i].dataset.cap)||""; const el=$("pImg"+i);
+      if(u){ el.src=u; el.alt=cap; } else { el.removeAttribute("src"); el.alt=""; } });
 
-    $("pPrintDate").textContent = new Date().toLocaleDateString("ar-SA");
+    $("pPrintDate").textContent=new Date().toLocaleDateString("ar-SA");
   }
 
-  // المعاينة + Word + تجهيز تلقائي للطباعة
-  $("btnPreview").onclick = ()=>{ fillPrint(); window.print(); };
-  $("btnWord").onclick = ()=>{
-    fillPrint();
-    const content = document.querySelector("#printArea").innerHTML;
-    const html = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"></head><body>${content}</body></html>`;
-    const blob = new Blob([html], {type:"application/msword"});
-    const url = URL.createObjectURL(blob); const a=document.createElement("a");
-    a.href=url; a.download="تقرير-نشاط.doc"; a.click();
+  // أزرار
+  $("btnPreview").onclick=()=>{ fillPrint(); window.print(); };
+  $("btnWord").onclick=()=>{ fillPrint();
+    const content=document.querySelector("#printArea").innerHTML;
+    const html='<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"></head><body>'+content+'</body></html>';
+    const blob=new Blob([html],{type:"application/msword"}); const url=URL.createObjectURL(blob);
+    const a=document.createElement("a"); a.href=url; a.download="تقرير-نشاط.doc"; a.click();
     setTimeout(()=>URL.revokeObjectURL(url),4000);
   };
-  window.addEventListener('beforeprint', ()=> { try{ fillPrint(); }catch(e){} });
+
+  // تجهيز تلقائي حتى لو طبع من قائمة المتصفح
+  window.addEventListener('beforeprint',()=>{ try{ fillPrint(); }catch(e){} });
 })();
 </script>
 </body>
