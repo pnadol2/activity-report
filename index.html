@@ -8,35 +8,25 @@
 
 <style>
 :root{
-  /* عدّل هذه القيم (٪) لتطابق مربعات القالب لديك */
   --x-program: 22;  --y-program: 18;  --w-program: 56;  --h-program: 3.6;
-
   --x-teacher: 64;  --y-teacher: 27.5; --w-teacher: 27; --h-teacher: 3;
   --x-major:   33;  --y-major: 27.5; --w-major:   27; --h-major:   3;
-
   --x-class:   64;  --y-class: 31;   --w-class:   27; --h-class:   3;
   --x-term:    33;  --y-term:  31;   --w-term:    27; --h-term:    3;
-
   --x-day:     64;  --y-day:  34.4;  --w-day:     27; --h-day:     3;
   --x-date:    33;  --y-date: 34.4;  --w-date:    27; --h-date:    3;
-
   --x-period:  64;  --y-period:37.8; --w-period:  27; --h-period:  3;
   --x-place:   33;  --y-place: 37.8; --w-place:   27; --h-place:   3;
-
   --x-att:     64;  --y-att:  41.2;  --w-att:     27; --h-att:     3;
   --x-abs:     33;  --y-abs:  41.2;  --w-abs:     27; --h-abs:     3;
-
   --x-aud:     64;  --y-aud:  44.6;  --w-aud:     27; --h-aud:     3;
   --x-owner:   33;  --y-owner:44.6;  --w-owner:   27; --h-owner:   3;
-
   --x-goals:   16;  --y-goals: 52.2; --w-goals:   68; --h-goals:   6.2;
   --x-out:     16;  --y-out:   62.2; --w-out:     68; --h-out:     6.2;
-
   --x-ev1: 16;  --y-ev1:  72.8; --w-ev1: 32; --h-ev1: 14;
   --x-ev2: 52;  --y-ev2:  72.8; --w-ev2: 32; --h-ev2: 14;
   --x-ev3: 16;  --y-ev3:  88.0; --w-ev3: 32; --h-ev3: 14;
   --x-ev4: 52;  --y-ev4:  88.0; --w-ev4: 32; --h-ev4: 14;
-
   --font:"Tajawal","Cairo",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Arabic",Arial,sans-serif;
 }
 *{box-sizing:border-box}
@@ -78,21 +68,19 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
 [data-pos="abs"]    {left:calc(var(--x-abs)*1%);     top:calc(var(--y-abs)*1%);     width:calc(var(--w-abs)*1%);     height:calc(var(--h-abs)*1%);}
 [data-pos="aud"]    {left:calc(var(--x-aud)*1%);     top:calc(var(--y-aud)*1%);     width:calc(var(--w-aud)*1%);     height:calc(var(--h-aud)*1%);}
 [data-pos="owner"]  {left:calc(var(--x-owner)*1%);   top:calc(var(--y-owner)*1%);   width:calc(var(--w-owner)*1%);   height:calc(var(--h-owner)*1%);}
-
 [data-pos="goals"]  {left:calc(var(--x-goals)*1%);   top:calc(var(--y-goals)*1%);   width:calc(var(--w-goals)*1%);   min-height:calc(var(--h-goals)*1%);}
 [data-pos="out"]    {left:calc(var(--x-out)*1%);     top:calc(var(--y-out)*1%);     width:calc(var(--w-out)*1%);     min-height:calc(var(--h-out)*1%);}
-
 [data-pos="ev1"]    {left:calc(var(--x-ev1)*1%);     top:calc(var(--y-ev1)*1%);     width:calc(var(--w-ev1)*1%);     height:calc(var(--h-ev1)*1%);}
 [data-pos="ev2"]    {left:calc(var(--x-ev2)*1%);     top:calc(var(--y-ev2)*1%);     width:calc(var(--w-ev2)*1%);     height:calc(var(--h-ev2)*1%);}
 [data-pos="ev3"]    {left:calc(var(--x-ev3)*1%);     top:calc(var(--y-ev3)*1%);     width:calc(var(--w-ev3)*1%);     height:calc(var(--h-ev3)*1%);}
 [data-pos="ev4"]    {left:calc(var(--x-ev4)*1%);     top:calc(var(--y-ev4)*1%);     width:calc(var(--w-ev4)*1%);     height:calc(var(--h-ev4)*1%);}
 
-/* الطباعة */
+/* طباعة صارمة */
 @media print{
+  body * { visibility: hidden !important; }
+  #printArea, #printArea * { visibility: visible !important; }
+  #printArea { position: fixed !important; inset: 0 !important; margin: 0 !important; }
   @page { size: A4; margin: 0 }
-  .no-print{display:none!important}
-  body{background:#fff}
-  .print-area{display:block}
 }
 </style>
 </head>
@@ -134,20 +122,12 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
       <button id="btnPrint">معاينة/طباعة</button>
     </div>
   </div>
-
-  <div class="card">
-    <strong>ملاحظة:</strong> لو ما ركبت النصوص تمامًا داخل المربعات،
-    عدّل القيم في أعلى الملف عند <code>:root</code> (مثل <code>--x-teacher</code>, <code>--y-teacher</code>) حتى تضبط 100%.
-  </div>
 </div>
 
-<!-- مسرح الطباعة -->
 <section id="printArea" class="print-area">
   <div class="a4" id="stage">
-    <!-- صورة القالب A4 فقط -->
     <img id="tplImg" class="bg" src="assets/culture-report-page1.png" alt="قالب" />
 
-    <!-- حقول نصية فوق الصورة -->
     <div class="ov center" data-pos="program" id="p-program"></div>
 
     <div class="ov" data-pos="teacher" id="p-teacher"></div>
@@ -166,7 +146,6 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
     <div class="ov" data-pos="goals" id="p-goals"></div>
     <div class="ov" data-pos="out"   id="p-out"></div>
 
-    <!-- الشواهد (صور) -->
     <div class="ov" data-pos="ev1"><img id="p-ev1" alt=""></div>
     <div class="ov" data-pos="ev2"><img id="p-ev2" alt=""></div>
     <div class="ov" data-pos="ev3"><img id="p-ev3" alt=""></div>
@@ -178,19 +157,17 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
 (function(){
   const $ = id => document.getElementById(id);
 
-  // حمّل صورة القالب قبل الطباعة
   async function ensureTemplateLoaded() {
     const img = $("tplImg");
     if (!img) return;
     if (img.complete && img.naturalWidth>0) return;
-    await new Promise((res,rej)=>{
+    await new Promise((res)=>{
       img.onload = ()=> res();
-      img.onerror = ()=> res(); // لا توقف الطباعة لو فشلت
-      img.src = img.src.split("?")[0] + "?t=" + Date.now(); // كسر كاش
+      img.onerror = ()=> res();
+      img.src = img.src.split("?")[0] + "?t=" + Date.now();
     });
   }
 
-  // ضع القيم داخل الحقول المتموضعة
   function fillOverlay(){
     const nl = t => (t||"").split(/\n/).map(s=>s.replace(/^[-•]\s*/,"• ")).join("\n");
     const v = id => ($(id)&&$(id).value)||"";
@@ -213,7 +190,6 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
     $("p-out").textContent   = nl(v("out"));
   }
 
-  // الشواهد (٤ صور)
   const evInput = $("ev");
   evInput.addEventListener("change", e=>{
     const files = Array.from(e.target.files||[]).slice(0,4);
@@ -225,20 +201,17 @@ button.ghost{background:#fff;color:#111;border:1px solid #e5e7eb}
     e.target.value="";
   });
 
-  // زر الطباعة
   $("btnPrint").onclick = async ()=>{
     await ensureTemplateLoaded();
     fillOverlay();
     window.print();
   };
 
-  // حتى لو طبع من قائمة المتصفح
   window.addEventListener("beforeprint", async ()=>{
     await ensureTemplateLoaded();
     fillOverlay();
   });
 
-  // تاريخ افتراضي = اليوم
   const d = new Date(); const df = $("date"); if (df) df.value = d.toISOString().slice(0,10);
 })();
 </script>
