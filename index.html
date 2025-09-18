@@ -192,10 +192,6 @@ footer {
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
 
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
-    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
-  </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -246,7 +242,6 @@ footer {
 <div id="science" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
 
-
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -295,11 +290,6 @@ footer {
 <!-- ===== تبويب 3 ===== -->
 <div id="sports" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الرياضة و الصحة</label>
-
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
-    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
-  </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -350,11 +340,6 @@ footer {
 <div id="scout" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال العلوم و التقنية</label>
 
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
-    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
-  </div>
-
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -404,11 +389,6 @@ footer {
 <div id="family" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال النشاط الكشفي</label>
 
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
-    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
-  </div>
-
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -457,11 +437,6 @@ footer {
 <!-- ===== تبويب 6 ===== -->
 <div id="skills" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الأيام و المناسبات</label>
-
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
-    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
-  </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -573,7 +548,7 @@ function printPDF(btn){
     titleEl.textContent = dynamicTitle;
     Object.assign(titleEl.style, {
       position: 'absolute',
-      top: '39mm',        // عدِّل الموضع إذا احتجت
+      top: '49mm',        // عدِّل الموضع إذا احتجت
       left: '10mm',
       right: '10mm',
       textAlign: 'center',
