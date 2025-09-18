@@ -1,4 +1,3 @@
-# Create the full index.html file with the requested color scheme and features
 html = r"""<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -172,15 +171,6 @@ footer {
   <h1>برامج النشاط الطلابي</h1>
 </header>
 
-<!-- ✅ عنوان متغيّر (لا يطبع) -->
-<div class="no-print-title no-print">
-  <label>العنوان (متغيّر):</label>
-  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
-  <small style="display:block; color:#666; text-align:center; margin-top:4px;">
-    النص أعلاه يظهر كعنوان كبير داخل PDF باللون الأخضر الوزاري.
-  </small>
-</div>
-
 <div class="tabs">
   <button class="tab-button active" onclick="openTab('culture', event)">مجال المواطنة و الحياة</button>
   <button class="tab-button" onclick="openTab('science', event)">مجال الثقافة و الفنون</button>
@@ -188,6 +178,14 @@ footer {
   <button class="tab-button" onclick="openTab('scout', event)">مجال العلوم و التقنية</button>
   <button class="tab-button" onclick="openTab('family', event)">مجال النشاط الكشفي</button>
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
+</div>
+
+  <!-- ✅ عنوان متغيّر (لا يطبع) -->
+<div class="no-print-title no-print">
+  <label>العنوان (متغيّر):</label>
+  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
+  <small style="display:block; color:#666; text-align:center; margin-top:4px;">
+  </small>
 </div>
 
 <!-- ===== تبويب 1 ===== -->
@@ -635,7 +633,5 @@ function printPDF(btn){
 </script>
 </body>
 </html>
-"""
-with open('/mnt/data/index.html','w',encoding='utf-8') as f:
-    f.write(html)
-print("index.html is ready at /mnt/data/index.html")
+
+
