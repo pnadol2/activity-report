@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+# Create the full index.html file with the requested color scheme and features
+html = r"""<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -11,7 +12,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 <style>
-/* الخط من مجلد fonts */
+/* ===== لوحة الألوان الوزارية ===== */
+:root{
+  --moe-brown:        #B79B73;  /* البني الوزاري - الهيدر */
+  --moe-green:        #0B7D6E;  /* الأخضر الوزاري - المحدد/الأزرار المهمة */
+  --moe-green-light:  #CFE6DD;  /* أخضر فاتح - غير محدد */
+  --moe-white:        #FFFFFF;
+  --moe-text-dark:    #223;     /* نص غامق خفيف */
+}
+
+/* تحسين الطباعة للألوان */
+*{
+  -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+}
+
+/* الخط من مجلد fonts (اختياري) */
 @font-face {
   font-family: 'HelveticaNeueW23';
   src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
@@ -24,15 +40,49 @@ body, input, label, button, header, footer {
   margin:0;
   padding:0;
   background:#f9f9f9;
+  color:#111;
 }
 
-header { background:#15445a; color:white; text-align:center; padding:12px; }
-header h1 { margin:0; font-size:18px; }
+/* ===== الهيدر ===== */
+header{
+  background: var(--moe-brown);
+  color: var(--moe-white);
+  text-align:center;
+  padding:12px;
+}
+header h1{ margin:0; font-size:18px; }
 
-/* 👇 تبويباتك كما كانت */
-.tabs { display:grid; grid-template-columns:repeat(2,1fr); background:#c1b48a; }
-.tab-button { padding:10px; cursor:pointer; text-align:center; background:#c1b48a; color:white; border:none; font-size:14px; font-weight:bold; }
-.tab-button.active { background:#b36b3f; }
+/* ===== صندوق العنوان المتغيّر (لا يُطبع) ===== */
+.no-print-title{
+  padding:12px 15px;
+  background:#fff;
+  border-bottom: 1px solid #eee;
+}
+
+/* ===== التبويبات ===== */
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  background: var(--moe-green-light);
+  gap: 6px;
+  padding: 6px 8px;
+}
+.tab-button{
+  padding:10px;
+  cursor:pointer;
+  text-align:center;
+  background: var(--moe-green-light);
+  color: var(--moe-text-dark);
+  border:none;
+  font-size:14px;
+  font-weight:bold;
+  border-radius: 6px;
+}
+.tab-button.active{
+  background: var(--moe-green);
+  color: var(--moe-white);
+}
+.tab-button:hover{ filter: brightness(0.97); }
 
 .tab-content { display:none; padding:15px; background:none; }
 .tab-content.active { display:block; }
@@ -58,9 +108,9 @@ input {
   background:transparent;
 }
 
-button { 
-  background:#b36b3f; 
-  color:white; 
+button{ 
+  background: var(--moe-green);
+  color: var(--moe-white);
   border:none; 
   padding:8px 10px; 
   margin:5px 0; 
@@ -70,6 +120,7 @@ button {
   font-size:14px; 
   font-weight:bold; 
 }
+button:hover{ filter: brightness(0.97); }
 
 footer { 
   text-align:center; 
@@ -80,13 +131,10 @@ footer {
   background:#f1f1f1;
 }
 
-/* عناصر لا تُطبع */
-.no-print {}
-
+/* ===== الطباعة ===== */
 @media print {
   @page { size: A4 portrait; margin: 0; }
 
-  /* إعدادات صفحة الطباعة */
   body {
     width: 210mm;
     height: 297mm;
@@ -95,20 +143,19 @@ footer {
     font-family: 'HelveticaNeueW23', Arial, sans-serif;
   }
 
-  /* أظهر جميع التبويبات عند الطباعة إذا رغبت — أبقيناها مثل كودك */
   .tab-content { display:block !important; }
 
-  /* أخفِ ما لا نريده في الطباعة */
-  button, .tab-button, .tabs, footer, .no-print { display:none !important; }
+  /* أخفي عناصر التحكم */
+  .no-print, .no-print-title, button, .tab-button, .tabs, footer { display:none !important; }
 
-  label { font-size: 14px !important; font-weight: bold; }
+  label { font-size: 14px !important; font-weight: bold; color:#000; }
 
   input[type="text"] {
     font-size: 14px !important;
     text-align: center;
-    border-color: #aaa;
+    border-color: #A3CFC6; /* أخضر فاتح */
     background: transparent !important;
-    color: black;
+    color: #000;
   }
 
   .preview img, .tab-content img {
@@ -125,6 +172,14 @@ footer {
   <h1>برامج النشاط الطلابي</h1>
 </header>
 
+<!-- ✅ عنوان متغيّر (لا يطبع) -->
+<div class="no-print-title no-print">
+  <label>العنوان (متغيّر):</label>
+  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
+  <small style="display:block; color:#666; text-align:center; margin-top:4px;">
+    النص أعلاه يظهر كعنوان كبير داخل PDF باللون الأخضر الوزاري.
+  </small>
+</div>
 
 <div class="tabs">
   <button class="tab-button active" onclick="openTab('culture', event)">مجال المواطنة و الحياة</button>
@@ -135,11 +190,6 @@ footer {
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
 </div>
 
-  <!-- ✅ خانة العنوان المتغيّر (لا تُطبع) -->
-<div class="no-print" style="padding:12px 15px;">
-  <label>العنوان (متغيّر):</label>
-  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
-</div>
 <!-- ===== تبويب 1 ===== -->
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
@@ -474,6 +524,7 @@ function openTab(tabId, evt){
   if(evt) evt.currentTarget.classList.add('active');
 }
 
+// تخزين صور الشواهد
 function storeImages(event){
   const tabId = event.target.closest('.tab-content').id;
   const files = event.target.files;
@@ -483,13 +534,11 @@ function storeImages(event){
     event.target.value = "";
     return;
   }
-  for(let i=0;i<files.length;i++){
+  Array.from(files).forEach(file=>{
     const reader = new FileReader();
-    reader.onload = function(e){ 
-      uploadedImages[tabId].push(e.target.result); 
-    }
-    reader.readAsDataURL(files[i]);
-  }
+    reader.onload = (e)=> uploadedImages[tabId].push(e.target.result);
+    reader.readAsDataURL(file);
+  });
 }
 
 // التاريخ
@@ -499,25 +548,24 @@ setTimeout(()=>{
   });
 },500);
 
-// ======== طباعة PDF مع عنوان متغيّر أعلى القالب ========
+// طباعة PDF مع عنوان متغيّر
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
 
-  // ننسخ محتوى التبويب ونشيل عناصر لا نريدها في PDF
+  // نسخة المحتوى مع إزالة عناصر التحكم
   const content = tabContent.cloneNode(true);
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // ⛔️ لا نضيف "اسم البرنامج" تلقائيًا من input رابع—تم استبداله بعنوان متغيّر عام
-  // —— بدلاً من ذلك نقرأ العنوان من حقل العنوان المتغيّر أعلى الصفحة:
+  // عنوان متغيّر من الحقل
   const dynamicTitle = (document.getElementById('titleField')?.value || '').trim();
 
-  // الغلاف: A4 + خلفية القالب
+  // الغلاف A4 + خلفية القالب (إن وجدت)
   const wrapper = document.createElement('div');
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر في صورة الخلفية
+  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر في الخلفية إن وجدت
   wrapper.style.boxSizing='border-box';
   wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage = 'url("images/background.png")';
@@ -525,28 +573,28 @@ function printPDF(btn){
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.backgroundPosition = 'center';
 
-  // ✅ العنوان المتغيّر (خط أكبر + منخفض لتحت)
+  // العنوان المتغيّر
   if (dynamicTitle) {
     const titleEl = document.createElement('div');
     titleEl.textContent = dynamicTitle;
     Object.assign(titleEl.style, {
       position: 'absolute',
-      top: '44mm',   // نزّل/ارفع حسب القالب
+      top: '28mm',        // عدِّل الموضع إذا احتجت
       left: '10mm',
       right: '10mm',
       textAlign: 'center',
       fontWeight: '800',
-      fontSize: '22pt',
-      color: '#000',
+      fontSize: '18pt',
+      color: '#0B7D6E',   // الأخضر الوزاري
       lineHeight: '1.2'
     });
     wrapper.appendChild(titleEl);
   }
 
-  // نضيف المحتوى
+  // المحتوى
   wrapper.appendChild(content);
 
-  // ✅ إدراج صور الشواهد (حتى 4 صور)
+  // إدراج صور الشواهد (حتى 4)
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
@@ -565,7 +613,7 @@ function printPDF(btn){
       imagesWrapper.appendChild(img);
     });
 
-    // إدخاله قبل حقل رائد النشاط ومدير المدرسة إن وُجد
+    // إدخال الصور قبل رائد النشاط ومدير المدرسة إن وجد
     const activityDiv = Array.from(content.querySelectorAll('div'))
       .find(div => div.innerHTML.includes('رائد النشاط'));
     if (activityDiv) {
@@ -584,10 +632,10 @@ function printPDF(btn){
     jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
   }).from(wrapper).save();
 }
-
-// إغلاق أي منبثق (لو موجود)
-function closePopup() { const el = document.getElementById("popupOverlay"); if (el) el.style.display = "none"; }
 </script>
 </body>
 </html>
-
+"""
+with open('/mnt/data/index.html','w',encoding='utf-8') as f:
+    f.write(html)
+print("index.html is ready at /mnt/data/index.html")
