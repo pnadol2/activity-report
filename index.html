@@ -8,11 +8,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
-
-<!-- لحساب التاريخ الهجري -->
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment-with-locales.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/build/moment-hijri.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 <style>
@@ -309,7 +304,7 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- ===== تبويبات 2 → 6 (نفس البُنية) ===== -->
+<!-- ===== تبويبات 2 → 6 بنفس البنية ===== -->
 <div id="science" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -537,36 +532,19 @@ function storeImages(event){
   });
 }
 
-/* ========== التاريخ الهجري (صيغة 12-4-1447) ========== */
-function syncHijri(selectedDates, _dateStr, instance){
-  const d = (selectedDates && selectedDates[0]) || new Date();
-  const hijriText = moment(d).format('iD-iM-iYYYY'); // 12-4-1447
-  if (instance && instance.altInput) instance.altInput.value = hijriText;
-  if (instance && instance.input){
-    instance.input.value = hijriText;
-    instance.input.dataset.hijri = hijriText;
-  }
-}
-
-function initHijriPickers(){
-  moment.locale('ar'); // فقط للغة أسماء الأشهر إن احتجت
+// التاريخ — تهيئة موحّدة على الجوال والكمبيوتر (ميلادي d-m-Y)
+document.addEventListener('DOMContentLoaded', ()=>{
   document.querySelectorAll('.date').forEach(el=>{
     flatpickr(el,{
       locale:'ar',
-      dateFormat:'Y-m-d',       // داخلي (لن نعرضه)
+      dateFormat:"d-m-Y",
       altInput:true,
-      altFormat:'Y-m-d',        // سيتم استبداله بنص هجري في syncHijri
-      altInputClass:'date-inline',
-      disableMobile:true,       // توحيد الواجهة على الجوال
-      defaultDate: el.value || new Date(),
-      onReady: syncHijri,
-      onChange: syncHijri
+      altFormat:"d-m-Y",
+      disableMobile:true,          // يفرض نفس واجهة flatpickr على الموبايل
+      altInputClass:'date-inline'  // ستايل الحقل البديل
     });
   });
-}
-
-document.addEventListener('DOMContentLoaded', initHijriPickers);
-/* ============================================== */
+});
 
 // ============= إعدادات قابلة للتعديل لكل حقل =============
 // المنطقة
