@@ -13,23 +13,20 @@
 <style>
 /* ===== لوحة الألوان الوزارية ===== */
 :root{
-  --moe-brown:        #B79B73;
-  --moe-green:        #0B7D6E;
-  --moe-green-light:  #CFE6DD;
+  --moe-brown:        #B79B73;  /* البني الوزاري - الهيدر */
+  --moe-green:        #0B7D6E;  /* الأخضر الوزاري - المحدد/الأزرار المهمة */
+  --moe-green-light:  #CFE6DD;  /* أخضر فاتح - غير محدد */
   --moe-white:        #FFFFFF;
-  --moe-text-dark:    #223;
-
-  /* تحكم بحجم خط الوسم داخل الحقل */
-  --overlay-font: 13pt;
+  --moe-text-dark:    #223;     /* نص غامق خفيف */
 }
 
 /* تحسين الطباعة للألوان */
 *{
   -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+          print-color-adjust: exact;
 }
 
-/* فونت اختياري */
+/* الخط من مجلد fonts (اختياري) */
 @font-face {
   font-family: 'HelveticaNeueW23';
   src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
@@ -59,37 +56,6 @@ header h1{ margin:0; font-size:18px; }
   padding:12px 15px;
   background:#fff;
   border-bottom: 1px solid #eee;
-}
-
-/* ===== تنسيق الحقول الصغيرة أمام الإدارة/المدرسة ===== */
-.input-with-tag {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: flex-end; /* RTL: المحتوى يبدأ من اليمين */
-}
-
-.main-input {
-  width: calc(100% - 120px);
-  box-sizing: border-box;
-}
-
-.small-tag-input {
-  width: 110px;
-  min-width: 86px;
-  padding: 6px 8px;
-  border-radius: 6px;
-  background: #19455c; /* اللون المطلوب */
-  color: #fff;
-  font-weight: 700;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.06);
-  box-sizing: border-box;
-}
-
-/* عند الطباعة نخفي حقول الـ small-tag داخل المحتوى (نريد عرضها كجزء من الحقول المتموضعة داخل PDF فقط) */
-@media print {
-  .small-tag-input { display: none !important; }
 }
 
 /* ===== التبويبات ===== */
@@ -178,7 +144,7 @@ footer {
 
   .tab-content { display:block !important; }
 
-  /* أخفي عناصر التحكم غير المرغوبة */
+  /* أخفي عناصر التحكم */
   .no-print, .no-print-title, button, .tab-button, .tabs, footer { display:none !important; }
 
   label { font-size: 14px !important; font-weight: bold; color:#000; }
@@ -205,13 +171,6 @@ footer {
   <h1>برامج النشاط الطلابي</h1>
 </header>
 
-<!-- عنوان متغيّر (لا يطبع) -->
-<div class="no-print-title no-print">
-  <label>العنوان (متغيّر):</label>
-  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
-  <small style="display:block; color:#666; text-align:center; margin-top:4px;"></small>
-</div>
-
 <div class="tabs">
   <button class="tab-button active" onclick="openTab('culture', event)">مجال المواطنة و الحياة</button>
   <button class="tab-button" onclick="openTab('science', event)">مجال الثقافة و الفنون</button>
@@ -221,25 +180,21 @@ footer {
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
 </div>
 
+  <!-- ✅ عنوان متغيّر (لا يطبع) -->
+<div class="no-print-title no-print">
+  <label>العنوان (متغيّر):</label>
+  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
+  <small style="display:block; color:#666; text-align:center; margin-top:4px;">
+  </small>
+</div>
+
 <!-- ===== تبويب 1 ===== -->
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
 
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div>
-      <label>إدارة التعليم</label>
-      <div class="input-with-tag">
-        <input data-role="region" class="main-input" type="text" value="إدارة التعليم بالمدينة المنورة" readonly>
-        <input data-role="region-tag" class="small-tag-input" type="text" value="مكتب المدينة" placeholder="وصف">
-      </div>
-    </div>
-    <div>
-      <label>اسم المدرسة</label>
-      <div class="input-with-tag">
-        <input data-role="school" class="main-input" type="text" value="ابتدائية أبيار الماشي" readonly>
-        <input data-role="school-tag" class="small-tag-input" type="text" value="الفرع أ" placeholder="وصف">
-      </div>
-    </div>
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -291,22 +246,6 @@ footer {
 <div id="science" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
 
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div>
-      <label>إدارة التعليم</label>
-      <div class="input-with-tag">
-        <input data-role="region" class="main-input" type="text" value="إدارة التعليم بالمدينة المنورة" readonly>
-        <input data-role="region-tag" class="small-tag-input" type="text" value="مكتب المدينة" placeholder="وصف">
-      </div>
-    </div>
-    <div>
-      <label>اسم المدرسة</label>
-      <div class="input-with-tag">
-        <input data-role="school" class="main-input" type="text" value="ابتدائية أبيار الماشي" readonly>
-        <input data-role="school-tag" class="small-tag-input" type="text" value="الفرع أ" placeholder="وصف">
-      </div>
-    </div>
-  </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -358,20 +297,8 @@ footer {
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الرياضة و الصحة</label>
 
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div>
-      <label>إدارة التعليم</label>
-      <div class="input-with-tag">
-        <input data-role="region" class="main-input" type="text" value="إدارة التعليم بالمدينة المنورة" readonly>
-        <input data-role="region-tag" class="small-tag-input" type="text" value="مكتب المدينة" placeholder="وصف">
-      </div>
-    </div>
-    <div>
-      <label>اسم المدرسة</label>
-      <div class="input-with-tag">
-        <input data-role="school" class="main-input" type="text" value="ابتدائية أبيار الماشي" readonly>
-        <input data-role="school-tag" class="small-tag-input" type="text" value="الفرع أ" placeholder="وصف">
-      </div>
-    </div>
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -424,20 +351,8 @@ footer {
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال العلوم و التقنية</label>
 
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div>
-      <label>إدارة التعليم</label>
-      <div class="input-with-tag">
-        <input data-role="region" class="main-input" type="text" value="إدارة التعليم بالمدينة المنورة" readonly>
-        <input data-role="region-tag" class="small-tag-input" type="text" value="مكتب المدينة" placeholder="وصف">
-      </div>
-    </div>
-    <div>
-      <label>اسم المدرسة</label>
-      <div class="input-with-tag">
-        <input data-role="school" class="main-input" type="text" value="ابتدائية أبيار الماشي" readonly>
-        <input data-role="school-tag" class="small-tag-input" type="text" value="الفرع أ" placeholder="وصف">
-      </div>
-    </div>
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -490,20 +405,8 @@ footer {
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال النشاط الكشفي</label>
 
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div>
-      <label>إدارة التعليم</label>
-      <div class="input-with-tag">
-        <input data-role="region" class="main-input" type="text" value="إدارة التعليم بالمدينة المنورة" readonly>
-        <input data-role="region-tag" class="small-tag-input" type="text" value="مكتب المدينة" placeholder="وصف">
-      </div>
-    </div>
-    <div>
-      <label>اسم المدرسة</label>
-      <div class="input-with-tag">
-        <input data-role="school" class="main-input" type="text" value="ابتدائية أبيار الماشي" readonly>
-        <input data-role="school-tag" class="small-tag-input" type="text" value="الفرع أ" placeholder="وصف">
-      </div>
-    </div>
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -556,20 +459,8 @@ footer {
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الأيام و المناسبات</label>
 
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div>
-      <label>إدارة التعليم</label>
-      <div class="input-with-tag">
-        <input data-role="region" class="main-input" type="text" value="إدارة التعليم بالمدينة المنورة" readonly>
-        <input data-role="region-tag" class="small-tag-input" type="text" value="مكتب المدينة" placeholder="وصف">
-      </div>
-    </div>
-    <div>
-      <label>اسم المدرسة</label>
-      <div class="input-with-tag">
-        <input data-role="school" class="main-input" type="text" value="ابتدائية أبيار الماشي" readonly>
-        <input data-role="school-tag" class="small-tag-input" type="text" value="الفرع أ" placeholder="وصف">
-      </div>
-    </div>
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -639,31 +530,9 @@ function storeImages(event){
   }
   Array.from(files).forEach(file=>{
     const reader = new FileReader();
-    reader.onload = (e)=> {
-      uploadedImages[tabId].push(e.target.result);
-      updatePreview(tabId);
-    };
+    reader.onload = (e)=> uploadedImages[tabId].push(e.target.result);
     reader.readAsDataURL(file);
   });
-}
-
-function updatePreview(tabId){
-  const tab = document.getElementById(tabId);
-  if(!tab) return;
-  const preview = tab.querySelector('.preview');
-  const counter = tab.querySelector('.counter');
-  if(!preview) return;
-  preview.innerHTML = '';
-  const list = uploadedImages[tabId] || [];
-  list.forEach(src=>{
-    const img = document.createElement('img');
-    img.src = src;
-    img.style.width = '80px';
-    img.style.height = '80px';
-    img.style.objectFit = 'cover';
-    preview.appendChild(img);
-  });
-  if(counter) counter.textContent = `${list.length} / 4 صور مرفوعة`;
 }
 
 // التاريخ
@@ -673,7 +542,7 @@ setTimeout(()=>{
   });
 },500);
 
-/* طباعة PDF مع إضافة الوسوم الصغيرة (region-tag, school-tag) داخل الحقول العلوية */
+// طباعة PDF مع عنوان متغيّر
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
@@ -685,155 +554,41 @@ function printPDF(btn){
   // عنوان متغيّر من الحقل
   const dynamicTitle = (document.getElementById('titleField')?.value || '').trim();
 
-  // wrapper صفحة A4
+  // الغلاف A4 + خلفية القالب (إن وجدت)
   const wrapper = document.createElement('div');
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='60mm 10mm 20mm 10mm';
+  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر في الخلفية إن وجدت
   wrapper.style.boxSizing='border-box';
   wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage = 'url("images/background.png")';
   wrapper.style.backgroundSize = 'cover';
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.backgroundPosition = 'center';
-  wrapper.style.direction = 'rtl';
 
-  // إضافة العنوان المتغيّر داخل ال wrapper إذا وجد
+  // العنوان المتغيّر
   if (dynamicTitle) {
     const titleEl = document.createElement('div');
     titleEl.textContent = dynamicTitle;
     Object.assign(titleEl.style, {
       position: 'absolute',
-      top: '55mm',
+      top: '39mm',        // عدِّل الموضع إذا احتجت
       left: '10mm',
       right: '10mm',
       textAlign: 'center',
       fontWeight: '800',
       fontSize: '22pt',
-      color: '#0B7D6E',
-      lineHeight: '1.2',
-      zIndex: '4'
+      color: '#0B7D6E',   // الأخضر الوزاري
+      lineHeight: '1.2'
     });
     wrapper.appendChild(titleEl);
   }
 
-  // قراءة القيم الرئيسية والوسوم الصغيرة من نفس التبويب (إذا لم توجد تأخذ الافتراضي)
-  const regionMainEl = tabContent.querySelector('[data-role="region"]');
-  const regionTagEl  = tabContent.querySelector('[data-role="region-tag"]');
-  const schoolMainEl = tabContent.querySelector('[data-role="school"]');
-  const schoolTagEl  = tabContent.querySelector('[data-role="school-tag"]');
+  // المحتوى
+  wrapper.appendChild(content);
 
-  const regionMain = (regionMainEl?.value || '').trim() || '—';
-  const regionTag  = (regionTagEl?.value  || '').trim();
-  const schoolMain = (schoolMainEl?.value || '').trim() || '—';
-  const schoolTag  = (schoolTagEl?.value  || '').trim();
-
-  // إنشاء عنصر عرض للمنطقة (متموضع أعلى اليسار نسبياً)
-  const regionDiv = document.createElement('div');
-  Object.assign(regionDiv.style, {
-    position: 'absolute',
-    top: '12mm',
-    left: '30%',
-    transform: 'translateX(-50%)',
-    minWidth: '55mm',
-    maxWidth: '90mm',
-    padding: '1mm 2mm',
-    background: '#fff',
-    color: '#111',
-    fontWeight: '700',
-    fontSize: 'var(--overlay-font)',
-    textAlign: 'center',
-    borderRadius: '3px',
-    boxSizing: 'border-box',
-    zIndex: '6',
-    boxShadow: '0 0 0.5mm rgba(0,0,0,0.06)'
-  });
-
-  // محتوى المنطقة: النص الرئيسي ثم الوسم الصغير (لو موجود)
-  const rMain = document.createElement('div');
-  rMain.textContent = regionMain;
-  rMain.style.fontWeight = '800';
-  rMain.style.fontSize = 'var(--overlay-font)';
-  regionDiv.appendChild(rMain);
-
-  if (regionTag) {
-    const rTag = document.createElement('div');
-    rTag.textContent = regionTag;
-    Object.assign(rTag.style, {
-      display: 'inline-block',
-      marginTop: '3px',
-      padding: '2px 6px',
-      fontSize: '10pt',
-      background: '#19455c', /* اللون المطلوب */
-      color: '#fff',
-      borderRadius: '6px',
-      boxSizing: 'border-box'
-    });
-    regionDiv.appendChild(rTag);
-  }
-
-  wrapper.appendChild(regionDiv);
-
-  // إنشاء عنصر عرض للمدرسة (متموضع أعلى اليمين نسبياً)
-  const schoolDiv = document.createElement('div');
-  Object.assign(schoolDiv.style, {
-    position: 'absolute',
-    top: '12mm',
-    left: '70%',
-    transform: 'translateX(-50%)',
-    minWidth: '55mm',
-    maxWidth: '100mm',
-    padding: '1mm 2mm',
-    background: '#fff',
-    color: '#111',
-    fontWeight: '700',
-    fontSize: 'var(--overlay-font)',
-    textAlign: 'center',
-    borderRadius: '3px',
-    boxSizing: 'border-box',
-    zIndex: '6',
-    boxShadow: '0 0 0.5mm rgba(0,0,0,0.06)'
-  });
-
-  const sMain = document.createElement('div');
-  sMain.textContent = schoolMain;
-  sMain.style.fontWeight = '800';
-  sMain.style.fontSize = 'var(--overlay-font)';
-  schoolDiv.appendChild(sMain);
-
-  if (schoolTag) {
-    const sTag = document.createElement('div');
-    sTag.textContent = schoolTag;
-    Object.assign(sTag.style, {
-      display: 'inline-block',
-      marginTop: '3px',
-      padding: '2px 6px',
-      fontSize: '10pt',
-      background: '#19455c',
-      color: '#fff',
-      borderRadius: '6px',
-      boxSizing: 'border-box'
-    });
-    schoolDiv.appendChild(sTag);
-  }
-
-  wrapper.appendChild(schoolDiv);
-
-  // المحتوى (نسخة نظيفة داخل wrapper)
-  const inner = document.createElement('div');
-  inner.style.position = 'absolute';
-  inner.style.top = '40mm';
-  inner.style.left = '10mm';
-  inner.style.right = '10mm';
-  inner.style.bottom = '10mm';
-  inner.style.overflow = 'auto';
-  inner.style.boxSizing = 'border-box';
-  inner.style.zIndex = '4';
-  inner.appendChild(content);
-  wrapper.appendChild(inner);
-
-  // صور الشواهد (حتى 4) – نقرنها بالمحتوى المنسوخ (tabContent) كما سابقًا
+  // إدراج صور الشواهد (حتى 4)
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
@@ -841,21 +596,20 @@ function printPDF(btn){
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
     imagesWrapper.style.gap = '5px';
-    imagesWrapper.style.margin = '8mm 0';
-    imagesWrapper.style.zIndex = '4';
+    imagesWrapper.style.margin = '15px 0';
 
     tabImages.slice(0,4).forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.style.width = '45mm';
-      img.style.height = '45mm';
+      img.style.width = '150px';
+      img.style.height = '150px';
       img.style.objectFit = 'cover';
-      img.style.borderRadius = '2px';
       imagesWrapper.appendChild(img);
     });
 
+    // إدخال الصور قبل رائد النشاط ومدير المدرسة إن وجد
     const activityDiv = Array.from(content.querySelectorAll('div'))
-      .find(div => /رائد النشاط/.test(div.innerText || ''));
+      .find(div => div.innerHTML.includes('رائد النشاط'));
     if (activityDiv) {
       content.insertBefore(imagesWrapper, activityDiv);
     } else {
@@ -863,52 +617,20 @@ function printPDF(btn){
     }
   }
 
-  // أضف wrapper إلى DOM ثم انتظر تحميل الصور واصدر PDF
-  document.body.appendChild(wrapper);
-
-  const waitForImagesToLoad = () => {
-    const imgs = wrapper.querySelectorAll('img');
-    const promises = Array.from(imgs).map(img => {
-      if (img.complete) return Promise.resolve();
-      return new Promise((res) => { img.onload = img.onerror = res; });
-    });
-    return Promise.all(promises);
-  };
-
-  waitForImagesToLoad().then(()=> {
-    html2pdf().set({
-      margin:0,
-      filename: tabId+'-report.pdf',
-      image:{type:'jpeg',quality:0.95},
-      html2canvas:{scale:2, useCORS:true, backgroundColor:'#ffffff'},
-      jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-    }).from(wrapper).save().then(()=> {
-      setTimeout(()=> {
-        wrapper.remove();
-      }, 300);
-    }).catch((err)=>{
-      wrapper.remove();
-      console.error('html2pdf error:', err);
-      alert('حدث خطأ أثناء إنشاء الـ PDF. افتح Console (F12) وأرسل لي رسالة الخطأ.');
-    });
-  }).catch((err)=>{
-    console.warn('خطأ أثناء انتظار الصور:', err);
-    // جرب التصدير حتى لو لم تكتمل الصور
-    html2pdf().set({
-      margin:0,
-      filename: tabId+'-report.pdf',
-      image:{type:'jpeg',quality:0.95},
-      html2canvas:{scale:2, useCORS:true, backgroundColor:'#ffffff'},
-      jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-    }).from(wrapper).save().then(()=> {
-      setTimeout(()=> { wrapper.remove(); }, 300);
-    }).catch((err2)=>{
-      wrapper.remove();
-      console.error('html2pdf error fallback:', err2);
-      alert('حدث خطأ أثناء إنشاء الـ PDF. افتح Console (F12) وأرسل لي رسالة الخطأ.');
-    });
-  });
+  // تصدير PDF
+  html2pdf().set({
+    margin:0,
+    filename: tabId+'-report.pdf',
+    image:{type:'jpeg',quality:0.95},
+    html2canvas:{scale:3, useCORS:true, backgroundColor:null},
+    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+  }).from(wrapper).save();
 }
 </script>
 </body>
 </html>
+
+
+
+
+
