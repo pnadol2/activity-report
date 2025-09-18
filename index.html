@@ -58,12 +58,19 @@ header h1{ margin:0; font-size:18px; }
   border-bottom: 1px solid #eee;
 }
 
-  /* مجموعة توقيعات (رائد النشاط / مدير المدرسة) */
+/* مجموعة توقيعات (رائد النشاط / مدير المدرسة) */
 .signatures{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:5px;
   margin-top:24px;   /* نزّل/ارفع على الشاشة */
+}
+
+/* لو تبغى تنزلها أكثر وقت الطباعة فقط */
+@media print{
+  .signatures{
+    margin-top:10mm; /* عدّلها حسب القالب المطبوع */
+  }
 }
 
   /* ✅ الحقول بإطار أثناء التعبئة (على الشاشة) */
@@ -571,7 +578,7 @@ const REGION_CFG = {
 // المدرسة
 const SCHOOL_CFG = {
   topMM: 22,
-  leftPercent: 34,
+  leftPercent: 33,
   color: '#19455c',
   fontSizePt: 12,
   fontWeight: 700
