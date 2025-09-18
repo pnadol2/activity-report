@@ -13,20 +13,20 @@
 <style>
 /* ===== لوحة الألوان الوزارية ===== */
 :root{
-  --moe-brown:        #B79B73;  /* البني الوزاري - الهيدر */
-  --moe-green:        #0B7D6E;  /* الأخضر الوزاري - المحدد/الأزرار المهمة */
-  --moe-green-light:  #CFE6DD;  /* أخضر فاتح - غير محدد */
+  --moe-brown:        #B79B73;
+  --moe-green:        #0B7D6E;
+  --moe-green-light:  #CFE6DD;
   --moe-white:        #FFFFFF;
-  --moe-text-dark:    #223;     /* نص غامق خفيف */
+  --moe-text-dark:    #223;
 }
 
 /* تحسين الطباعة للألوان */
 *{
   -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-/* الخط من مجلد fonts (اختياري) */
+/* فونت اختياري */
 @font-face {
   font-family: 'HelveticaNeueW23';
   src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
@@ -56,6 +56,45 @@ header h1{ margin:0; font-size:18px; }
   padding:12px 15px;
   background:#fff;
   border-bottom: 1px solid #eee;
+}
+
+/* ---- الحقول الشفافة أمام "المنطقة" و "المدرسة" ---- */
+.title-inline-row{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:flex-end; /* RTL - المحتوى يبدأ من اليمين */
+  max-width:900px;
+  margin: 0 auto;
+}
+.title-inline {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-end; /* RTL */
+  width:100%;
+}
+.title-inline label{
+  font-weight:700;
+  font-size:13px;
+  margin:0;
+  white-space:nowrap;
+}
+.title-inline input.inline {
+  border: none;
+  background: transparent;
+  color: #19455c; /* اللون المطلوب */
+  font-weight: 800;
+  font-size: 14px;
+  text-align: center;
+  width: 260px;
+  outline: none;
+  padding: 2px 4px;
+}
+
+/* عند الطباعة نخفي صندوق الإدخال العلوي (الواجهة) لأننا ندرج القيم داخل الـPDF برمجياً */
+@media print {
+  .no-print-title { display: none !important; }
 }
 
 /* ===== التبويبات ===== */
@@ -95,14 +134,14 @@ label {
   text-align:center;
 }
 
-input {
+input[type="text"] {
   width:100%;
-  padding:4px;
+  padding:6px;
   border:1px solid #c2c1c1;
   border-radius:4px;
   margin-bottom:5px;
   box-sizing:border-box;
-  font-size:12px;
+  font-size:13px;
   text-align:center;
   background:transparent;
 }
@@ -144,8 +183,8 @@ footer {
 
   .tab-content { display:block !important; }
 
-  /* أخفي عناصر التحكم */
-  .no-print, .no-print-title, button, .tab-button, .tabs, footer { display:none !important; }
+  /* أخفي عناصر التحكم غير المرغوبة */
+  .no-print, button, .tab-button, .tabs, footer { display:none !important; }
 
   label { font-size: 14px !important; font-weight: bold; color:#000; }
 
@@ -171,6 +210,23 @@ footer {
   <h1>برامج النشاط الطلابي</h1>
 </header>
 
+<!-- واجهة الإدخال النظيفة: خانتان شفافتان أمام "المنطقة" و "المدرسة" -->
+<div class="no-print-title no-print">
+  <div class="title-inline-row">
+    <div class="title-inline">
+      <label for="uiRegion">المنطقة</label>
+      <input id="uiRegion" class="inline" type="text" value="إدارة التعليم بالمدينة المنورة" placeholder="اكتب اسم المنطقة">
+    </div>
+    <div class="title-inline">
+      <label for="uiSchool">المدرسة</label>
+      <input id="uiSchool" class="inline" type="text" value="ابتدائية أبيار الماشي" placeholder="اكتب اسم المدرسة">
+    </div>
+    <div style="margin-top:4px;">
+      <label style="font-weight:600; font-size:12px; color:#666;">القيم ستظهر في الـPDF أعلاه بدون صندوق</label>
+    </div>
+  </div>
+</div>
+
 <div class="tabs">
   <button class="tab-button active" onclick="openTab('culture', event)">مجال المواطنة و الحياة</button>
   <button class="tab-button" onclick="openTab('science', event)">مجال الثقافة و الفنون</button>
@@ -180,18 +236,9 @@ footer {
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
 </div>
 
-  <!-- ✅ عنوان متغيّر (لا يطبع) -->
-<div class="no-print-title no-print">
-  <label>العنوان (متغيّر):</label>
-  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
-  <small style="display:block; color:#666; text-align:center; margin-top:4px;">
-  </small>
-</div>
-
 <!-- ===== تبويب 1 ===== -->
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
-
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -238,7 +285,7 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- ===== تبويب 2 ===== -->
+<!-- ===== تبويبات أخرى - نفس النسق ===== -->
 <div id="science" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
 
@@ -287,7 +334,6 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- ===== تبويب 3 ===== -->
 <div id="sports" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الرياضة و الصحة</label>
 
@@ -336,7 +382,6 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- ===== تبويب 4 ===== -->
 <div id="scout" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال العلوم و التقنية</label>
 
@@ -385,7 +430,6 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- ===== تبويب 5 ===== -->
 <div id="family" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال النشاط الكشفي</label>
 
@@ -434,7 +478,6 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- ===== تبويب 6 ===== -->
 <div id="skills" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الأيام و المناسبات</label>
 
@@ -517,7 +560,7 @@ setTimeout(()=>{
   });
 },500);
 
-// طباعة PDF مع عنوان متغيّر
+// طباعة PDF مع إدراج نصي للمنطقة والمدرسة (شفافين في الواجهة، يظهران في PDF بدون صندوق)
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
@@ -526,44 +569,80 @@ function printPDF(btn){
   const content = tabContent.cloneNode(true);
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // عنوان متغيّر من الحقل
-  const dynamicTitle = (document.getElementById('titleField')?.value || '').trim();
+  // قراءة قيم الحقول الشفافة من الواجهة
+  const regionVal = (document.getElementById('uiRegion')?.value || '').trim();
+  const schoolVal = (document.getElementById('uiSchool')?.value || '').trim();
 
-  // الغلاف A4 + خلفية القالب (إن وجدت)
+  // wrapper صفحة A4
   const wrapper = document.createElement('div');
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر في الخلفية إن وجدت
+  wrapper.style.padding='20mm 10mm 10mm 10mm'; // مساحة للهيدر الخلفي إن وجدت
   wrapper.style.boxSizing='border-box';
   wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage = 'url("images/background.png")';
   wrapper.style.backgroundSize = 'cover';
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.backgroundPosition = 'center';
+  wrapper.style.direction = 'rtl';
+  wrapper.style.fontFamily = "HelveticaNeueW23, Arial, sans-serif";
 
-  // العنوان المتغيّر
-  if (dynamicTitle) {
-    const titleEl = document.createElement('div');
-    titleEl.textContent = dynamicTitle;
-    Object.assign(titleEl.style, {
+  // إضافة نص المنطقة (بدون صندوق) - يظهر أعلى الـPDF
+  if (regionVal) {
+    const r = document.createElement('div');
+    r.textContent = regionVal;
+    Object.assign(r.style, {
       position: 'absolute',
-      top: '53mm',        // عدِّل الموضع إذا احتجت
-      left: '10mm',
-      right: '10mm',
-      textAlign: 'center',
+      top: '12mm',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      color: '#19455c',
       fontWeight: '800',
-      fontSize: '22pt',
-      color: '#0B7D6E',   // الأخضر الوزاري
-      lineHeight: '1.2'
+      fontSize: '14pt',
+      textAlign: 'center',
+      zIndex: '10',
+      background: 'transparent',
+      padding: '0',
+      lineHeight: '1'
     });
-    wrapper.appendChild(titleEl);
+    wrapper.appendChild(r);
   }
 
-  // المحتوى
-  wrapper.appendChild(content);
+  // إضافة نص المدرسة تحت المنطقة
+  if (schoolVal) {
+    const s = document.createElement('div');
+    s.textContent = schoolVal;
+    Object.assign(s.style, {
+      position: 'absolute',
+      top: '20mm',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      color: '#19455c',
+      fontWeight: '700',
+      fontSize: '12.5pt',
+      textAlign: 'center',
+      zIndex: '10',
+      background: 'transparent',
+      padding: '0',
+      lineHeight: '1'
+    });
+    wrapper.appendChild(s);
+  }
 
-  // إدراج صور الشواهد (حتى 4)
+  // وضع المحتوى داخل wrapper تحت النصين
+  const inner = document.createElement('div');
+  inner.style.position = 'absolute';
+  inner.style.top = '32mm';
+  inner.style.left = '10mm';
+  inner.style.right = '10mm';
+  inner.style.bottom = '10mm';
+  inner.style.overflow = 'auto';
+  inner.style.boxSizing = 'border-box';
+  inner.appendChild(content);
+  wrapper.appendChild(inner);
+
+  // إضافة صور الشواهد إن وجدت
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
@@ -571,20 +650,21 @@ function printPDF(btn){
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
     imagesWrapper.style.gap = '5px';
-    imagesWrapper.style.margin = '15px 0';
+    imagesWrapper.style.margin = '8mm 0';
+    imagesWrapper.style.zIndex = '5';
 
     tabImages.slice(0,4).forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.style.width = '150px';
-      img.style.height = '150px';
+      img.style.width = '45mm';
+      img.style.height = '45mm';
       img.style.objectFit = 'cover';
+      img.style.borderRadius = '2px';
       imagesWrapper.appendChild(img);
     });
 
-    // إدخال الصور قبل رائد النشاط ومدير المدرسة إن وجد
     const activityDiv = Array.from(content.querySelectorAll('div'))
-      .find(div => div.innerHTML.includes('رائد النشاط'));
+      .find(div => /رائد النشاط/.test(div.innerText || ''));
     if (activityDiv) {
       content.insertBefore(imagesWrapper, activityDiv);
     } else {
@@ -592,20 +672,49 @@ function printPDF(btn){
     }
   }
 
-  // تصدير PDF
-  html2pdf().set({
-    margin:0,
-    filename: tabId+'-report.pdf',
-    image:{type:'jpeg',quality:0.95},
-    html2canvas:{scale:3, useCORS:true, backgroundColor:null},
-    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-  }).from(wrapper).save();
+  // أضف wrapper إلى الـ DOM مؤقتًا ثم اصدر PDF
+  document.body.appendChild(wrapper);
+
+  const waitForImagesToLoad = () => {
+    const imgs = wrapper.querySelectorAll('img');
+    const promises = Array.from(imgs).map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((res) => { img.onload = img.onerror = res; });
+    });
+    return Promise.all(promises);
+  };
+
+  waitForImagesToLoad().then(()=> {
+    html2pdf().set({
+      margin:0,
+      filename: tabId+'-report.pdf',
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{scale:2, useCORS:true, backgroundColor:'#ffffff'},
+      jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+    }).from(wrapper).save().then(()=> {
+      setTimeout(()=> wrapper.remove(), 400);
+    }).catch((err)=>{
+      wrapper.remove();
+      console.error('html2pdf error:', err);
+      alert('حدث خطأ أثناء إنشاء الـ PDF. افتح Console (F12) وأرسل لي رسالة الخطأ.');
+    });
+  }).catch((err)=>{
+    console.warn('خطأ أثناء انتظار الصور:', err);
+    html2pdf().set({
+      margin:0,
+      filename: tabId+'-report.pdf',
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{scale:2, useCORS:true, backgroundColor:'#ffffff'},
+      jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+    }).from(wrapper).save().then(()=> {
+      setTimeout(()=> wrapper.remove(), 400);
+    }).catch((err2)=>{
+      wrapper.remove();
+      console.error('html2pdf error fallback:', err2);
+      alert('حدث خطأ أثناء إنشاء الـ PDF. افتح Console (F12) وأرسل لي رسالة الخطأ.');
+    });
+  });
 }
 </script>
 </body>
 </html>
-
-
-
-
-
