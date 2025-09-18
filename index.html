@@ -58,6 +58,25 @@ header h1{ margin:0; font-size:18px; }
   border-bottom: 1px solid #eee;
 }
 
+/* ✅ الحقول بإطار أثناء التعبئة (على الشاشة) */
+.inline-field{
+  border:1px solid #cbd5e1;
+  background:#ffffff;
+  outline:none;
+  color:#19455c;
+  font-weight:800;
+  font-size:14px;
+  text-align:center;
+  width:320px;
+  padding:6px 8px;
+  border-radius:6px;
+}
+
+/* 🖨️ وقت الطباعة: أخفِ مجموعة المدخلات بالكامل */
+@media print{
+  #region-school-inputs{ display:none !important; }
+}
+
 /* ===== التبويبات ===== */
 .tabs{
   display:grid;
@@ -180,6 +199,20 @@ footer {
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
 </div>
 
+<!-- ✅ مدخلات المنطقة/المدرسة — واجهة فقط (لن تُطبع) -->
+<div id="region-school-inputs" class="no-print" style="display:flex; flex-direction:column; gap:8px; align-items:flex-end; margin:8px 12px;">
+  <div style="display:flex; gap:8px; align-items:center;">
+    <label for="uiRegion" style="margin:0; font-weight:700;">المنطقة</label>
+    <input id="uiRegion" type="text" class="inline-field" value="إدارة التعليم بالمدينة المنورة" placeholder="اكتب اسم المنطقة">
+  </div>
+
+  <div style="display:flex; gap:8px; align-items:center;">
+    <label for="uiSchool" style="margin:0; font-weight:700;">المدرسة</label>
+    <input id="uiSchool" type="text" class="inline-field" value="ابتدائية أبيار الماشي" placeholder="اكتب اسم المدرسة">
+  </div>
+</div>
+
+  
   <!-- ✅ عنوان متغيّر (لا يطبع) -->
 <div class="no-print-title no-print">
   <label>العنوان (متغيّر):</label>
@@ -517,6 +550,47 @@ setTimeout(()=>{
   });
 },500);
 
+// ============= إعدادات قابلة للتعديل لكل حقل =============
+// المنطقة
+const REGION_CFG = {
+  topMM: 16,           // نزّل/ارفع النص بزيادة/نقص القيمة (بوحدة mm)
+  leftPercent: 42,     // حرّك يسار/يمين بتغيير النسبة %
+  color: '#19455c',    // لون النص
+  fontSizePt: 14,      // حجم الخط بالنقطة
+  fontWeight: 800      // ثقل الخط
+};
+
+// المدرسة
+const SCHOOL_CFG = {
+  topMM: 22,
+  leftPercent: 41,
+  color: '#19455c',
+  fontSizePt: 12.5,
+  fontWeight: 700
+};
+
+  
+// دالة مساعدة لإضافة نص متموضع فوق القالب داخل الـPDF
+function addOverlay(wrapper, text, cfg){
+  if(!text) return;
+  const el = document.createElement('div');
+  el.textContent = text;
+  Object.assign(el.style, {
+    position: 'absolute',
+    top: cfg.topMM + 'mm',
+    left: cfg.leftPercent + '%',
+    color: cfg.color,
+    background: 'transparent',
+    zIndex: '30',
+    lineHeight: '1',
+    fontSize: (cfg.fontSizePt || 14) + 'pt',
+    fontWeight: String(cfg.fontWeight || '700'),
+    textAlign: 'center',
+    pointerEvents: 'none'
+  });
+  wrapper.appendChild(el);
+}
+  
 // طباعة PDF مع عنوان متغيّر
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
