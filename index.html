@@ -114,11 +114,6 @@ footer {
   <h1>برامج النشاط الطلابي</h1>
 </header>
 
-<!-- عنوان متغيّر: يظهر في PDF فقط، والخانة لا تُطبع -->
-<div class="card no-print" style="padding:12px 15px;">
-  <label>العنوان (متغيّر)</label>
-  <input id="titleField" placeholder="تعزيز الثقة بالنفس والشعور بالمسؤولية">
-</div>
 
 <div class="tabs">
   <button class="tab-button active" onclick="openTab('culture', event)">مجال المواطنة و الحياة</button>
@@ -129,6 +124,13 @@ footer {
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
 </div>
 
+  <!-- عنوان متغيّر: يظهر في PDF فقط، والخانة لا تُطبع -->
+<div class="card no-print" style="padding:12px 15px;">
+  <label>العنوان (متغيّر)</label>
+  <input id="titleField" placeholder="تعزيز الثقة بالنفس والشعور بالمسؤولية">
+</div>
+
+  
 <!-- ===== تبويب 1: المواطنة والحياة ===== -->
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
@@ -523,3 +525,4 @@ function closePopup() {
 </script>
 </body>
 </html>
+
