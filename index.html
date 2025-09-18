@@ -58,6 +58,20 @@ header h1{ margin:0; font-size:18px; }
   border-bottom: 1px solid #eee;
 }
 
+/* مجموعة توقيعات (رائد النشاط / مدير المدرسة) */
+.signatures{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:5px;
+  margin-top:50px;   /* نزّل/ارفع على الشاشة */
+}
+/* لو تبغى تنزلها أكثر وقت الطباعة فقط */
+@media print{
+  .signatures{
+    margin-top:30mm; /* عدّلها حسب القالب المطبوع */
+  }
+}
+
 /* ✅ الحقول بإطار أثناء التعبئة (على الشاشة) */
 .inline-field{
   border:1px solid #cbd5e1;
@@ -70,6 +84,28 @@ header h1{ margin:0; font-size:18px; }
   width:320px;
   padding:6px 8px;
   border-radius:6px;
+}
+
+/* 🗓️ توحيد شكل حقل التاريخ (altInput) على كل الأجهزة */
+.date-inline{
+  width:100% !important;
+  padding:4px;
+  border:1px solid #c2c1c1;
+  border-radius:4px;
+  margin-bottom:5px;
+  box-sizing:border-box;
+  font-size:12px;
+  text-align:center;
+  background:#fff;
+}
+/* احتياط للجوال: لو ظهر input.native من flatpickr */
+input.flatpickr-mobile{
+  width:100% !important;
+  height:38px;
+  padding:4px;
+  box-sizing:border-box;
+  font-size:14px;
+  text-align:center;
 }
 
 /* 🖨️ وقت الطباعة: أخفِ مجموعة المدخلات بالكامل */
@@ -212,19 +248,16 @@ footer {
   </div>
 </div>
 
-  
-  <!-- ✅ عنوان متغيّر (لا يطبع) -->
+<!-- ✅ عنوان متغيّر (لا يطبع) -->
 <div class="no-print-title no-print">
   <label>العنوان (متغيّر):</label>
   <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
-  <small style="display:block; color:#666; text-align:center; margin-top:4px;">
-  </small>
+  <small style="display:block; color:#666; text-align:center; margin-top:4px;"></small>
 </div>
 
 <!-- ===== تبويب 1 ===== -->
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
-
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -263,7 +296,7 @@ footer {
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+  <div class="signatures">
     <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
     <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
   </div>
@@ -543,33 +576,38 @@ function storeImages(event){
   });
 }
 
-// التاريخ
+// التاريخ — تهيئة موحّدة على الجوال والكمبيوتر
 setTimeout(()=>{
   document.querySelectorAll('.date').forEach(el=>{
-    flatpickr(el,{ locale:'ar', dateFormat:"d-m-Y", altInput:true, altFormat:"d-m-Y" });
+    flatpickr(el,{
+      locale:'ar',
+      dateFormat:"d-m-Y",
+      altInput:true,
+      altFormat:"d-m-Y",
+      disableMobile:true,          // يفرض نفس واجهة flatpickr على الموبايل
+      altInputClass:'date-inline'  // ستايل الحقل البديل
+    });
   });
 },500);
 
 // ============= إعدادات قابلة للتعديل لكل حقل =============
 // المنطقة
 const REGION_CFG = {
-  topMM: 16,           // نزّل/ارفع النص بزيادة/نقص القيمة (بوحدة mm)
-  leftPercent: 37,     // حرّك يسار/يمين بتغيير النسبة %
-  color: '#19455c',    // لون النص
-  fontSizePt: 12,      // حجم الخط بالنقطة
-  fontWeight: 800      // ثقل الخط
+  topMM: 16,           // نزّل/ارفع النص (mm)
+  leftPercent: 37,     // حرّك يسار/يمين (%)
+  color: '#19455c',
+  fontSizePt: 12,
+  fontWeight: 800
 };
-
 // المدرسة
 const SCHOOL_CFG = {
   topMM: 22,
-  leftPercent: 34,
+  leftPercent: 33,
   color: '#19455c',
   fontSizePt: 12,
   fontWeight: 700
 };
 
-  
 // دالة مساعدة لإضافة نص متموضع فوق القالب داخل الـPDF
 function addOverlay(wrapper, text, cfg){
   if(!text) return;
@@ -590,7 +628,6 @@ function addOverlay(wrapper, text, cfg){
   });
   wrapper.appendChild(el);
 }
-  
 
 // طباعة PDF مع عنوان متغيّر + تراكب المنطقة/المدرسة + الشواهد
 function printPDF(btn){
@@ -647,7 +684,7 @@ function printPDF(btn){
   addOverlay(wrapper, regionText, REGION_CFG);
   addOverlay(wrapper, schoolText, SCHOOL_CFG);
 
-  // ===== الشواهد (لا تغيّرناه) =====
+  // ===== الشواهد (حتى 4 صور) =====
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
