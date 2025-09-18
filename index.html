@@ -591,7 +591,8 @@ function addOverlay(wrapper, text, cfg){
   wrapper.appendChild(el);
 }
   
-// طباعة PDF مع عنوان متغيّر
+<script>
+// طباعة PDF مع عنوان متغيّر + تراكب المنطقة/المدرسة + الشواهد
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
@@ -608,7 +609,7 @@ function printPDF(btn){
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر في الخلفية إن وجدت
+  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر
   wrapper.style.boxSizing='border-box';
   wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage = 'url("images/background.png")';
@@ -616,28 +617,37 @@ function printPDF(btn){
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.backgroundPosition = 'center';
 
-  // العنوان المتغيّر
+  // أضف المحتوى مرة واحدة فقط
+  wrapper.appendChild(content);
+
+  // (اختياري) العنوان المتغيّر
   if (dynamicTitle) {
     const titleEl = document.createElement('div');
     titleEl.textContent = dynamicTitle;
     Object.assign(titleEl.style, {
       position: 'absolute',
-      top: '53mm',        // عدِّل الموضع إذا احتجت
+      top: '53mm',
       left: '10mm',
       right: '10mm',
       textAlign: 'center',
       fontWeight: '800',
       fontSize: '22pt',
-      color: '#0B7D6E',   // الأخضر الوزاري
-      lineHeight: '1.2'
+      color: '#0B7D6E',
+      lineHeight: '1.2',
+      zIndex: '40'
     });
     wrapper.appendChild(titleEl);
   }
 
-  // المحتوى
-  wrapper.appendChild(content);
+  // ✅ اجلب قيم الحقول (واجهة فقط)
+  const regionText = (document.getElementById('uiRegion')?.value || '').trim();
+  const schoolText = (document.getElementById('uiSchool')?.value || '').trim();
 
-  // إدراج صور الشواهد (حتى 4)
+  // ✅ أضف نصّ المنطقة والمدرسة كتراكب مطبوع بإحداثياتك
+  addOverlay(wrapper, regionText, REGION_CFG);
+  addOverlay(wrapper, schoolText, SCHOOL_CFG);
+
+  // ===== الشواهد (لا تغيّرناه) =====
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
