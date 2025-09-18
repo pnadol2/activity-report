@@ -250,7 +250,7 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- ===== بقية التبويبات كما هي ===== -->
+<!-- بقية التبويبات (احتفظت بها كما كانت) -->
 <div id="science" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -473,9 +473,32 @@ function storeImages(event){
   }
   Array.from(files).forEach(file=>{
     const reader = new FileReader();
-    reader.onload = (e)=> uploadedImages[tabId].push(e.target.result);
+    reader.onload = (e)=> {
+      uploadedImages[tabId].push(e.target.result);
+      // تحديث المعاينة إذا وُجدت في نفس التبويب
+      updatePreview(tabId);
+    };
     reader.readAsDataURL(file);
   });
+}
+
+function updatePreview(tabId){
+  const tab = document.getElementById(tabId);
+  if(!tab) return;
+  const preview = tab.querySelector('.preview');
+  const counter = tab.querySelector('.counter');
+  if(!preview) return;
+  preview.innerHTML = '';
+  const list = uploadedImages[tabId] || [];
+  list.forEach(src=>{
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.width = '80px';
+    img.style.height = '80px';
+    img.style.objectFit = 'cover';
+    preview.appendChild(img);
+  });
+  if(counter) counter.textContent = `${list.length} / 4 صور مرفوعة`;
 }
 
 // التاريخ
@@ -494,59 +517,95 @@ function printPDF(btn){
   const content = tabContent.cloneNode(true);
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // الغلاف A4 + خلفية القالب (إن وجدت)
+  // إعداد wrapper (نضعه في الـ DOM مؤقتًا خارج الشاشة للرندر)
   const wrapper = document.createElement('div');
-  wrapper.style.position='relative';
-  wrapper.style.width='210mm';
-  wrapper.style.height='296.5mm';
-  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر في الخلفية إن وجدت
-  wrapper.style.boxSizing='border-box';
-  wrapper.style.overflow='hidden';
+  wrapper.style.position = 'fixed';
+  wrapper.style.left = '-10000px'; // خارج الشاشة لكن في DOM ليتم التقاطه
+  wrapper.style.top = '0';
+  wrapper.style.width = '210mm';
+  wrapper.style.height = '296.5mm';
+  wrapper.style.padding = '60mm 10mm 20mm 10mm'; // مساحة للهيدر في الخلفية إن وجدت
+  wrapper.style.boxSizing = 'border-box';
+  wrapper.style.overflow = 'hidden';
   wrapper.style.backgroundImage = 'url("images/background.png")';
   wrapper.style.backgroundSize = 'cover';
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.backgroundPosition = 'center';
+  wrapper.style.direction = 'rtl'; // مهم لضبط المحاذاة في RTL
+  wrapper.style.fontFamily = "inherit";
+  wrapper.id = 'pdf-wrapper-temp';
 
   // ⬜️ الحقول البيضاء المتموضعة (من قيم الإدخال العليا)
   const regionVal = (document.getElementById('uiRegion')?.value || 'المدينة المنورة').trim();
   const schoolVal = (document.getElementById('uiSchool')?.value || 'إبتدائية ابيار الماشي').trim();
 
-  // الحقل الأول (إحداثياتك: x=-11 y=-18 w=317 h=65)
+  // --- نضع الحقول كنُقَط نسبة مئوية من العرض لتفادي حسابات mm الكبيرة ---
+  // يمكنك تعديل leftPercent لرفع/خفض أماكنهما أفقياً بسهولة
+  const regionLeftPercent = 35; // النسبة العرضية لحقل "المنطقة" (٪)
+  const schoolLeftPercent = 65; // النسبة العرضية لحقل "المدرسة" (٪)
+  const topOffsetBase = '12mm'; // ارتفاع أساسي من أعلى الغلاف (اضبط حسب القالب)
+
   const regionDiv = document.createElement('div');
   Object.assign(regionDiv.style, {
     position: 'absolute',
-    top: `calc(1.6mm + var(--region-top-adjust))`,   // كان -1.52mm؛ ضبطناه لداخل الصفحة
-    right: '184.07mm',
-    width: '26.84mm',
-    height: '5.50mm',
-    color: '#fff', fontWeight: '800',
+    top: `calc(${topOffsetBase} + var(--region-top-adjust))`,
+    left: `${regionLeftPercent}%`,
+    transform: 'translateX(-50%)',
+    width: '60mm',
+    minHeight: '7mm',
+    color: '#111',
+    fontWeight: '700',
     fontSize: 'var(--overlay-font)',
     textAlign: 'center',
     lineHeight: '1.2',
-    background: 'transparent'
+    background: '#fff',
+    borderRadius: '3px',
+    padding: '1mm 2mm',
+    boxShadow: '0 0 0.5mm rgba(0,0,0,0.08)',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    boxSizing: 'border-box'
   });
   regionDiv.textContent = regionVal;
   wrapper.appendChild(regionDiv);
 
-  // الحقل الثاني (إحداثياتك: x=51 y=-1 w=283 h=69)
   const schoolDiv = document.createElement('div');
   Object.assign(schoolDiv.style, {
     position: 'absolute',
-    top: `calc(1.6mm + var(--school-top-adjust))`,   // كان -0.085mm؛ ضبطناه لداخل الصفحة
-    right: '181.69mm',
-    width: '23.96mm',
-    height: '5.84mm',
-    color: '#fff', fontWeight: '800',
+    top: `calc(${topOffsetBase} + var(--school-top-adjust))`,
+    left: `${schoolLeftPercent}%`,
+    transform: 'translateX(-50%)',
+    width: '70mm',
+    minHeight: '7mm',
+    color: '#111',
+    fontWeight: '700',
     fontSize: 'var(--overlay-font)',
     textAlign: 'center',
     lineHeight: '1.2',
-    background: 'transparent'
+    background: '#fff',
+    borderRadius: '3px',
+    padding: '1mm 2mm',
+    boxShadow: '0 0 0.5mm rgba(0,0,0,0.08)',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    boxSizing: 'border-box'
   });
   schoolDiv.textContent = schoolVal;
   wrapper.appendChild(schoolDiv);
 
-  // المحتوى
-  wrapper.appendChild(content);
+  // المحتوى (نضعه داخل wrapper مع بعض المسافة العلوية لتجنب التداخل مع الحقول)
+  const inner = document.createElement('div');
+  inner.style.position = 'absolute';
+  inner.style.top = '40mm';
+  inner.style.left = '10mm';
+  inner.style.right = '10mm';
+  inner.style.bottom = '10mm';
+  inner.style.overflow = 'hidden';
+  inner.style.boxSizing = 'border-box';
+  inner.appendChild(content);
+  wrapper.appendChild(inner);
 
   // إدراج صور الشواهد (حتى 4)
   const tabImages = uploadedImages[tabId] || [];
@@ -556,20 +615,21 @@ function printPDF(btn){
     imagesWrapper.style.flexWrap = 'wrap';
     imagesWrapper.style.justifyContent = 'center';
     imagesWrapper.style.gap = '5px';
-    imagesWrapper.style.margin = '15px 0';
+    imagesWrapper.style.margin = '8mm 0';
 
     tabImages.slice(0,4).forEach(src => {
       const img = document.createElement('img');
       img.src = src;
-      img.style.width = '150px';
-      img.style.height = '150px';
+      img.style.width = '45mm';
+      img.style.height = '45mm';
       img.style.objectFit = 'cover';
+      img.style.borderRadius = '2px';
       imagesWrapper.appendChild(img);
     });
 
-    // إدخال الصور قبل رائد النشاط ومدير المدرسة إن وجد
+    // ضع الصور قبل قسم التواقيع (رائد النشاط)
     const activityDiv = Array.from(content.querySelectorAll('div'))
-      .find(div => div.innerHTML.includes('رائد النشاط'));
+      .find(div => /رائد النشاط/.test(div.innerText || ''));
     if (activityDiv) {
       content.insertBefore(imagesWrapper, activityDiv);
     } else {
@@ -577,14 +637,29 @@ function printPDF(btn){
     }
   }
 
-  // تصدير PDF
+  // أضف wrapper إلى الوثيقة مؤقتًا
+  document.body.appendChild(wrapper);
+
+  // تصدير PDF (عند الانتهاء نحذف الـ wrapper المؤقت)
   html2pdf().set({
     margin:0,
     filename: tabId+'-report.pdf',
     image:{type:'jpeg',quality:0.95},
     html2canvas:{scale:3, useCORS:true, backgroundColor:null},
     jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-  }).from(wrapper).save();
+  }).from(wrapper).save().then(()=> {
+    // إزالة العنصر المؤقت بعد اكتمال الحفظ
+    setTimeout(()=> {
+      const el = document.getElementById('pdf-wrapper-temp');
+      if(el) el.remove();
+    }, 300);
+  }).catch((err)=>{
+    // في حال وجود خطأ نزيل الـ wrapper أيضاً
+    const el = document.getElementById('pdf-wrapper-temp');
+    if(el) el.remove();
+    console.error(err);
+    alert('حدث خطأ أثناء إنشاء الـ PDF. جرب تغيير قيمة "Scale" أو مسح الخلفية أو إعادة تحميل الصفحة.');
+  });
 }
 </script>
 </body>
