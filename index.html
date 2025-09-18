@@ -58,7 +58,15 @@ header h1{ margin:0; font-size:18px; }
   border-bottom: 1px solid #eee;
 }
 
-/* ✅ الحقول بإطار أثناء التعبئة (على الشاشة) */
+  /* مجموعة توقيعات (رائد النشاط / مدير المدرسة) */
+.signatures{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:5px;
+  margin-top:24px;   /* نزّل/ارفع على الشاشة */
+}
+
+  /* ✅ الحقول بإطار أثناء التعبئة (على الشاشة) */
 .inline-field{
   border:1px solid #cbd5e1;
   background:#ffffff;
@@ -263,10 +271,10 @@ footer {
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
-    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
-  </div>
+<div class="signatures">
+  <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+  <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+</div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
@@ -563,7 +571,7 @@ const REGION_CFG = {
 // المدرسة
 const SCHOOL_CFG = {
   topMM: 22,
-  leftPercent: 33,
+  leftPercent: 34,
   color: '#19455c',
   fontSizePt: 12,
   fontWeight: 700
