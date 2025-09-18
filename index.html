@@ -148,7 +148,11 @@ footer {
     <div><label>اليوم</label><input type="text"></div>
     <div><label>التاريخ</label><input type="text" class="date"></div>
   </div>
-  <label>اسم البرنامج</label>
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text" class="date"></div>
   <input type="text">
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
@@ -482,4 +486,5 @@ function closePopup() { document.getElementById("popupOverlay").style.display = 
 </script>
 </body>
 </html>
+
 
