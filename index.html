@@ -84,13 +84,38 @@ footer {
     size: A4 portrait;
     margin: 0;
   }
+
+  /* إعدادات الصفحة وقت الطباعة */
   body {
     width: 210mm;
     height: 297mm;
-    margin:0;
-    background:none !important;
+    margin: 0;
+    background: none !important;
     font-family: 'HelveticaNeueW23', Arial, sans-serif;
   }
+
+  /* أخفي العناصر غير المرغوبة */
+  .no-print,
+  .tabs,
+  .tab-button,
+  button,
+  footer { 
+    display: none !important; 
+  }
+
+  /* تأكد من ظهور محتوى التبويب */
+  .tab-content { 
+    display: block !important; 
+  }
+
+  /* العنوان المتغيّر */
+  #dynamicTitle {
+    font-size: 20pt !important;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+}
 
   .tab-content { display:block !important; }
 
@@ -127,6 +152,15 @@ footer {
   <button class="tab-button" onclick="openTab('scout', event)">مجال العلوم و التقنية</button>
   <button class="tab-button" onclick="openTab('family', event)">مجال النشاط الكشفي</button>
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
+</div>
+
+<!-- مكان ظهور العنوان المتغير (يظهر في الطباعة فقط) -->
+<div id="dynamicTitle" style="text-align:center; font-weight:800; font-size:18pt; margin:10px 0;"></div>
+
+<!-- مربع إدخال العنوان (لا يطبع لأنه no-print) -->
+<div class="card no-print" style="margin:10px 0;">
+  <label>العنوان (متغيّر):</label>
+  <input id="titleField" type="text" placeholder="اكتب العنوان هنا">
 </div>
 
 <!-- ===== تبويبات الستة مع جميع الحقول والشواهد ===== -->
@@ -438,15 +472,28 @@ function openTab(tabId, evt){
   if(evt) evt.currentTarget.classList.add('active');
 }
 
+// ربط العنوان بالكتابة (آمن)
+const titleInput  = document.getElementById('titleField');
+const titleTarget = document.getElementById('dynamicTitle');
+if (titleInput && titleTarget) {
+  // اعرض القيمة الحالية لو في Placeholder/قيمة
+  titleTarget.textContent = titleInput.value;
+  titleInput.addEventListener('input', (e)=>{
+    titleTarget.textContent = e.target.value;
+  });
+}
+
 function storeImages(event){
   const tabId = event.target.closest('.tab-content').id;
   const files = event.target.files;
-  if(!uploadedImages[tabId]) uploadedImages[tabId] = [];
-  if(uploadedImages[tabId].length + files.length > 4){
+  if (!uploadedImages[tabId]) uploadedImages[tabId] = [];
+  if (uploadedImages[tabId].length + files.length > 4){
     alert("مسموح برفع 4 صور فقط لكل تقرير.");
     event.target.value = "";
     return;
   }
+  // ...
+}
   for(let i=0;i<files.length;i++){
     const reader = new FileReader();
     reader.onload = function(e){ 
@@ -537,6 +584,7 @@ function closePopup() { document.getElementById("popupOverlay").style.display = 
 </script>
 </body>
 </html>
+
 
 
 
