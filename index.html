@@ -137,6 +137,10 @@ footer {
   <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
     
   </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
+  </div>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -149,10 +153,10 @@ footer {
     <div><label>التاريخ</label><input type="text" class="date"></div>
   </div>
   <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
-    <div><label>الصف</label><input type="text"></div>
-    <div><label>الحصة</label><input type="text"></div>
-    <div><label>اليوم</label><input type="text"></div>
-    <div><label>التاريخ</label><input type="text" class="date"></div>
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text" class="date"></div>
   </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
@@ -486,5 +490,6 @@ function closePopup() { document.getElementById("popupOverlay").style.display = 
 </script>
 </body>
 </html>
+
 
 
