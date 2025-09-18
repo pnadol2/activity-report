@@ -140,6 +140,11 @@ footer {
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
 </div>
 
+  <!-- ✅ خانة العنوان المتغيّر (لا تُطبع) -->
+<div class="no-print" style="padding:12px 15px;">
+  <label>العنوان (متغيّر):</label>
+  <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
+</div>
 <!-- ===== تبويب 1 ===== -->
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
@@ -531,12 +536,12 @@ function printPDF(btn){
     titleEl.textContent = dynamicTitle;
     Object.assign(titleEl.style, {
       position: 'absolute',
-      top: '28mm',   // نزّل/ارفع حسب القالب
+      top: '44mm',   // نزّل/ارفع حسب القالب
       left: '10mm',
       right: '10mm',
       textAlign: 'center',
       fontWeight: '800',
-      fontSize: '18pt',
+      fontSize: '22pt',
       color: '#000',
       lineHeight: '1.2'
     });
