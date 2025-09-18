@@ -402,8 +402,8 @@ function printPDF(btn){
   wrapper.style.fontFamily = "HelveticaNeueW23, Arial, sans-serif";
 
   // قابل للتعديل حسب الحاجة (مم)
-  const regionTopMM = 15;   // موضع المنطقة من أعلى الصفحة بالميليمتر
-  const schoolTopMM = 23;   // موضع المدرسة من أعلى الصفحة بالميليمتر
+  const regionTopMM = 14;   // موضع المنطقة من أعلى الصفحة بالميليمتر
+  const schoolTopMM = 22;   // موضع المدرسة من أعلى الصفحة بالميليمتر
   const contentTopMM = 52;  // بداية المحتوى من أعلى الصفحة بالميليمتر
 
   // إضافة نص العنوان المتغيّر داخل الـPDF (إن وجد) فوق المحتوى
@@ -432,11 +432,11 @@ function printPDF(btn){
     Object.assign(r.style, {
       position: 'absolute',
       top: regionTopMM + 'mm',
-      left: '40%',
+      left: '42%',
       transform: 'translateX(-50%)',
       color: '#19455c',
       fontWeight: '800',
-      fontSize: '14pt',
+      fontSize: '13pt',
       textAlign: 'center',
       zIndex: '10',
       background: 'transparent',
@@ -453,7 +453,7 @@ function printPDF(btn){
     Object.assign(s.style, {
       position: 'absolute',
       top: schoolTopMM + 'mm',
-      left: '40%',
+      left: '41%',
       transform: 'translateX(-50%)',
       color: '#19455c',
       fontWeight: '700',
