@@ -29,7 +29,7 @@ body, input, label, button, header, footer {
 header { background:#15445a; color:white; text-align:center; padding:12px; }
 header h1 { margin:0; font-size:18px; }
 
-.tabs { display:grid; grid-template-columns:repeat(2,1fr); background:#c1b48a; }
+.tabs { display:grid; grid-template-columns:repeat(6,1fr); background:#c1b48a; }
 .tab-button { padding:10px; cursor:pointer; text-align:center; background:#c1b48a; color:white; border:none; font-size:14px; font-weight:bold; }
 .tab-button.active { background:#b36b3f; }
 
@@ -79,25 +79,20 @@ footer {
   background:#f1f1f1;
 }
 
+/* لا تُطبع هذه العناصر */
+.no-print{}
+
+/* طباعة عامة للمتصفح (لو استخدمتها) */
 @media print {
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
+  @page { size: A4 portrait; margin: 0; }
   body {
-    width: 210mm;
-    height: 297mm;
-    margin:0;
-    background:none !important;
+    width: 210mm; height: 297mm;
+    margin:0; background:none !important;
     font-family: 'HelveticaNeueW23', Arial, sans-serif;
   }
-
   .tab-content { display:block !important; }
-
-  button, .tab-button, .tabs, footer { display:none !important; }
-
+  button, .tab-button, .tabs, footer, .no-print { display:none !important; }
   label { font-size: 14px !important; font-weight: bold; }
-
   input[type="text"] {
     font-size: 14px !important;
     text-align: center;
@@ -105,7 +100,6 @@ footer {
     background: transparent !important;
     color: black;
   }
-
   .preview img, .tab-content img {
     max-width: 160px;
     max-height: 160px;
@@ -117,11 +111,17 @@ footer {
 <body>
 
 <header>
-<h1>برامج النشاط الطلابي</h1>
+  <h1>برامج النشاط الطلابي</h1>
 </header>
 
+<!-- عنوان متغيّر: يظهر في PDF فقط، والخانة لا تُطبع -->
+<div class="card no-print" style="padding:12px 15px;">
+  <label>العنوان (متغيّر)</label>
+  <input id="titleField" placeholder="تعزيز الثقة بالنفس والشعور بالمسؤولية">
+</div>
+
 <div class="tabs">
- <button class="tab-button active" onclick="openTab('culture', event)">مجال المواطنة و الحياة</button>
+  <button class="tab-button active" onclick="openTab('culture', event)">مجال المواطنة و الحياة</button>
   <button class="tab-button" onclick="openTab('science', event)">مجال الثقافة و الفنون</button>
   <button class="tab-button" onclick="openTab('sports', event)">مجال الرياضة و الصحة</button>
   <button class="tab-button" onclick="openTab('scout', event)">مجال العلوم و التقنية</button>
@@ -129,15 +129,10 @@ footer {
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
 </div>
 
-<!-- ===== تبويبات الستة مع جميع الحقول والشواهد ===== -->
-<!-- يمكنك نسخ التبويب الأول وتغيير النصوص لكل تبويب كما فعلنا سابقاً -->
-<!-- تبويب الثقافة والفنون -->
+<!-- ===== تبويب 1: المواطنة والحياة ===== -->
 <div id="culture" class="tab-content active">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
-  <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-    
-  </div>
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
     <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
     <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
@@ -156,18 +151,17 @@ footer {
     <div><label>اسم البرنامج</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
     <div><label>الحضور</label><input type="text"></div>
-    <div><label>الغياب</label><input type="text" class="date"></div>
+    <div><label>الغياب</label><input type="text"></div>
   </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-      </div>
+    <input type="text"><input type="text">
+  </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-
+    <input type="text"><input type="text">
   </div>
   <label>الشواهد</label>
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
@@ -180,13 +174,10 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- العلم والتقنية -->
+<!-- ===== تبويب 2: الثقافة والفنون ===== -->
 <div id="science" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
-  <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-    
-  </div>
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
     <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
     <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
@@ -205,18 +196,17 @@ footer {
     <div><label>اسم البرنامج</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
     <div><label>الحضور</label><input type="text"></div>
-    <div><label>الغياب</label><input type="text" class="date"></div>
+    <div><label>الغياب</label><input type="text"></div>
   </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-      </div>
+    <input type="text"><input type="text">
+  </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-
+    <input type="text"><input type="text">
   </div>
   <label>الشواهد</label>
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
@@ -229,13 +219,10 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- التبويب الثالث: برنامج الرياضة والصحة -->
+<!-- ===== تبويب 3: الرياضة والصحة ===== -->
 <div id="sports" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الرياضة و الصحة</label>
-  <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-    
-  </div>
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
     <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
     <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
@@ -254,18 +241,17 @@ footer {
     <div><label>اسم البرنامج</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
     <div><label>الحضور</label><input type="text"></div>
-    <div><label>الغياب</label><input type="text" class="date"></div>
+    <div><label>الغياب</label><input type="text"></div>
   </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-      </div>
+    <input type="text"><input type="text">
+  </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-
+    <input type="text"><input type="text">
   </div>
   <label>الشواهد</label>
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
@@ -278,12 +264,10 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- التبويب الرابع: برنامج التربية الكشفية -->
+<!-- ===== تبويب 4: العلوم والتقنية ===== -->
 <div id="scout" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال العلوم و التقنية</label>
-  <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-  </div>
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
     <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
     <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
@@ -302,18 +286,17 @@ footer {
     <div><label>اسم البرنامج</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
     <div><label>الحضور</label><input type="text"></div>
-    <div><label>الغياب</label><input type="text" class="date"></div>
+    <div><label>الغياب</label><input type="text"></div>
   </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-      </div>
+    <input type="text"><input type="text">
+  </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-
+    <input type="text"><input type="text">
   </div>
   <label>الشواهد</label>
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
@@ -326,13 +309,10 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- التبويب الخامس: برنامج الأسرة والمجتمع -->
+<!-- ===== تبويب 5: النشاط الكشفي ===== -->
 <div id="family" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال النشاط الكشفي</label>
-  <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-
-  </div>
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
     <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
     <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
@@ -351,18 +331,17 @@ footer {
     <div><label>اسم البرنامج</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
     <div><label>الحضور</label><input type="text"></div>
-    <div><label>الغياب</label><input type="text" class="date"></div>
+    <div><label>الغياب</label><input type="text"></div>
   </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-      </div>
+    <input type="text"><input type="text">
+  </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-
+    <input type="text"><input type="text">
   </div>
   <label>الشواهد</label>
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
@@ -375,13 +354,10 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- التبويب السادس: برنامج مهارات الحياة -->
+<!-- ===== تبويب 6: الأيام والمناسبات ===== -->
 <div id="skills" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الأيام و المناسبات</label>
-  <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-
-  </div>
-    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
     <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
     <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
   </div>
@@ -400,18 +376,17 @@ footer {
     <div><label>اسم البرنامج</label><input type="text"></div>
     <div><label>مكان التنفيذ</label><input type="text"></div>
     <div><label>الحضور</label><input type="text"></div>
-    <div><label>الغياب</label><input type="text" class="date"></div>
+    <div><label>الغياب</label><input type="text"></div>
   </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-      </div>
+    <input type="text"><input type="text">
+  </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-      <input type="text"><input type="text">
-
+    <input type="text"><input type="text">
   </div>
   <label>الشواهد</label>
   <input type="file" multiple accept="image/*" onchange="storeImages(event)">
@@ -423,10 +398,6 @@ footer {
   </div>
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
-
-<!-- يمكنك إضافة التبويبات الخمسة الأخرى بنفس الطريقة -->
-
-
 
 <script>
 let uploadedImages = {};
@@ -456,47 +427,57 @@ function storeImages(event){
   }
 }
 
-// التاريخ
+// التاريخ (flatpickr)
 setTimeout(()=>{
   document.querySelectorAll('.date').forEach(el=>{
     flatpickr(el,{ locale:'ar', dateFormat:"d-m-Y", altInput:true, altFormat:"d-m-Y" });
   });
 },500);
 
+// ======== الطباعة إلى PDF مع عنوان متغيّر فوق القالب ========
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
+
+  // ننسخ محتوى التبويب ونشيل عناصر لا نريدها في PDF
   const content = tabContent.cloneNode(true);
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // اسم البرنامج أعلى الصفحة
-  const programInput = content.querySelector('input[type="text"]:nth-of-type(4)');
-  let programName = programInput ? programInput.value : '';
-  if(programName){
-    const titleEl = document.createElement('div');
-    titleEl.textContent = programName;
-    titleEl.style.fontSize = "24px";
-    titleEl.style.fontWeight = "bold";
-    titleEl.style.textAlign = "center";
-    titleEl.style.marginBottom = "10px";
-    content.insertBefore(titleEl, content.firstChild);
-  }
-
-  // wrapper لضبط الصفحة والهامش والخلفية
+  // الغلاف: A4 + خلفية القالب
   const wrapper = document.createElement('div');
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='60mm 10mm 20mm 10mm';
+  wrapper.style.padding='60mm 10mm 20mm 10mm'; // الهامش العلوي يترك مساحة للهيدر في الصورة
   wrapper.style.boxSizing='border-box';
   wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage = 'url("images/background.png")';
   wrapper.style.backgroundSize = 'cover';
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.backgroundPosition = 'center';
+
+  // ✅ عنوان متغيّر: من الحقل أعلى الصفحة (لا يُطبع كحقل)
+  const dynamicTitle = (document.getElementById('titleField')?.value || '').trim();
+  if (dynamicTitle) {
+    const titleEl = document.createElement('div');
+    titleEl.textContent = dynamicTitle;
+    Object.assign(titleEl.style, {
+      position: 'absolute',
+      top: '24mm',   // 🔧 حرّك للأعلى/الأسفل حسب الحاجة
+      left: '10mm',
+      right: '10mm',
+      textAlign: 'center',
+      fontWeight: '800',
+      fontSize: '16pt',
+      color: '#000'
+    });
+    wrapper.appendChild(titleEl);
+  }
+
+  // نضيف المحتوى
   wrapper.appendChild(content);
 
-  // ✅ إدراج الصور فقط (بدون إطار أو كلمة الشواهد) قبل رائد النشاط ومدير المدرسة
+  // ✅ إدراج صور الشواهد (حتى 4)
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
@@ -506,7 +487,7 @@ function printPDF(btn){
     imagesWrapper.style.gap = '5px';
     imagesWrapper.style.margin = '15px 0';
 
-    tabImages.forEach(src => {
+    tabImages.slice(0,4).forEach(src => {
       const img = document.createElement('img');
       img.src = src;
       img.style.width = '150px';
@@ -515,14 +496,16 @@ function printPDF(btn){
       imagesWrapper.appendChild(img);
     });
 
-    // إدخاله قبل حقل رائد النشاط ومدير المدرسة
     const activityDiv = Array.from(content.querySelectorAll('div'))
       .find(div => div.innerHTML.includes('رائد النشاط'));
     if (activityDiv) {
       content.insertBefore(imagesWrapper, activityDiv);
+    } else {
+      content.appendChild(imagesWrapper);
     }
   }
 
+  // تصدير PDF
   html2pdf().set({
     margin:0,
     filename: tabId+'-report.pdf',
@@ -532,11 +515,11 @@ function printPDF(btn){
   }).from(wrapper).save();
 }
 
-// إغلاق التنويه
-function closePopup() { document.getElementById("popupOverlay").style.display = "none"; }
+// إغلاق التنويه (لو عندك نافذة منبثقة)
+function closePopup() { 
+  const el = document.getElementById("popupOverlay"); 
+  if (el) el.style.display = "none"; 
+}
 </script>
 </body>
 </html>
-
-
-
