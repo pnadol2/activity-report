@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>برامج النشاط الطلابي</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -13,25 +13,25 @@
 <style>
 /* ===== لوحة الألوان الوزارية ===== */
 :root{
-  --moe-brown:        #B79B73;  /* البني الوزاري - الهيدر */
-  --moe-green:        #0B7D6E;  /* الأخضر الوزاري - المحدد/الأزرار المهمة */
-  --moe-green-light:  #CFE6DD;  /* أخضر فاتح - غير محدد */
+  --moe-brown:        #B79B73;
+  --moe-green:        #0B7D6E;
+  --moe-green-light:  #CFE6DD;
   --moe-white:        #FFFFFF;
-  --moe-text-dark:    #223;     /* نص غامق خفيف */
+  --moe-text-dark:    #223;
 
-  /* ✳️ متغيّرات تحكم سريعة لحقول التراكب */
-  --overlay-font: 13pt;          /* حجم خط الحقول البيضاء */
-  --region-top-adjust: 0mm;      /* رفع/خفض المنطقة */
-  --school-top-adjust: 0mm;      /* رفع/خفض المدرسة */
+  /* متغيّرات تحكم الحقول المتموضعة */
+  --overlay-font: 13pt;
+  --region-top-adjust: 0mm;
+  --school-top-adjust: 0mm;
 }
 
-/* تحسين الطباعة للألوان */
+/* طباعة ألوان دقيقة */
 *{
   -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-/* الخط من مجلد fonts (اختياري) */
+/* فونت اختياري */
 @font-face {
   font-family: 'HelveticaNeueW23';
   src: url('fonts/HelveticaNeueW23-Regular.ttf') format('truetype');
@@ -56,7 +56,7 @@ header{
 }
 header h1{ margin:0; font-size:18px; }
 
-/* ===== صندوق إدخال القيم للحقول البيضاء (لا يُطبع) ===== */
+/* ===== صندوق إدخال القيم (لا يُطبع) ===== */
 .no-print-title{
   padding:12px 15px;
   background:#fff;
@@ -113,26 +113,26 @@ input {
   background:transparent;
 }
 
-button{ 
+button{
   background: var(--moe-green);
   color: var(--moe-white);
-  border:none; 
-  padding:8px 10px; 
-  margin:5px 0; 
-  cursor:pointer; 
-  border-radius:6px; 
-  width:100%; 
-  font-size:14px; 
-  font-weight:bold; 
+  border:none;
+  padding:8px 10px;
+  margin:5px 0;
+  cursor:pointer;
+  border-radius:6px;
+  width:100%;
+  font-size:14px;
+  font-weight:bold;
 }
 button:hover{ filter: brightness(0.97); }
 
-footer { 
-  text-align:center; 
-  padding:10px; 
-  color:#333; 
-  font-weight:bold; 
-  font-size:12px; 
+footer {
+  text-align:center;
+  padding:10px;
+  color:#333;
+  font-weight:bold;
+  font-size:12px;
   background:#f1f1f1;
 }
 
@@ -150,7 +150,6 @@ footer {
 
   .tab-content { display:block !important; }
 
-  /* أخفي عناصر التحكم */
   .no-print, .no-print-title, button, .tab-button, .tabs, footer { display:none !important; }
 
   label { font-size: 14px !important; font-weight: bold; color:#000; }
@@ -158,7 +157,7 @@ footer {
   input[type="text"] {
     font-size: 14px !important;
     text-align: center;
-    border-color: #A3CFC6; /* أخضر فاتح */
+    border-color: #A3CFC6;
     background: transparent !important;
     color: #000;
   }
@@ -177,19 +176,19 @@ footer {
   <h1>برامج النشاط الطلابي</h1>
 </header>
 
-<!-- ✅ إدخال قيم الحقول البيضاء (لا تُطبع) -->
+<!-- إدخال قيم الحقول البيضاء (لا تُطبع) -->
 <div class="no-print-title no-print">
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; align-items:end;">
     <div>
       <label style="text-align:right;">المنطقة (يظهر أبيض فوق القالب):</label>
-      <input id="uiRegion" type="text" value="المدينة المنورة" placeholder="المدينة المنورة">
+      <input id="uiRegion" type="text" value="المدينة المنورة" placeholder="المنطقة">
     </div>
     <div>
       <label style="text-align:right;">المدرسة (يظهر أبيض فوق القالب):</label>
-      <input id="uiSchool" type="text" value="إبتدائية ابيار الماشي" placeholder="إبتدائية ابيار الماشي">
+      <input id="uiSchool" type="text" value="إبتدائية ابيار الماشي" placeholder="المدرسة">
     </div>
   </div>
-  <small>يمكنك لاحقًا تعديل حجم الخط من المتغيّر <b>--overlay-font</b> في أعلى الـCSS، وتحريكهما برفع/خفض <b>--region-top-adjust</b> و <b>--school-top-adjust</b>.</small>
+  <small>لضبط موقع الحقول غيّر: <code>--region-top-adjust</code> و<code>--school-top-adjust</code> في CSS أو قيم <code>regionLeftPercent</code>, <code>schoolLeftPercent</code> داخل دالة الطباعة.</small>
 </div>
 
 <div class="tabs">
@@ -250,7 +249,7 @@ footer {
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
-<!-- بقية التبويبات (احتفظت بها كما كانت) -->
+<!-- بقية التبويبات (محفوظة كما هي) -->
 <div id="science" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
@@ -475,7 +474,6 @@ function storeImages(event){
     const reader = new FileReader();
     reader.onload = (e)=> {
       uploadedImages[tabId].push(e.target.result);
-      // تحديث المعاينة إذا وُجدت في نفس التبويب
       updatePreview(tabId);
     };
     reader.readAsDataURL(file);
@@ -508,7 +506,9 @@ setTimeout(()=>{
   });
 },500);
 
-// طباعة PDF مع عنوان متغيّر + حقول بيضاء متموضعة
+/* ==========================
+   دالة الطباعة الكاملة (بدون إخفاء wrapper خارج الشاشة)
+   ========================== */
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
@@ -517,33 +517,48 @@ function printPDF(btn){
   const content = tabContent.cloneNode(true);
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // إعداد wrapper (نضعه في الـ DOM مؤقتًا خارج الشاشة للرندر)
+  // wrapper ظاهر للـ renderer لكن مخفي للمستخدم (opacity:0)
   const wrapper = document.createElement('div');
-  wrapper.style.position = 'fixed';
-  wrapper.style.left = '-10000px'; // خارج الشاشة لكن في DOM ليتم التقاطه
+  wrapper.style.position = 'absolute';
+  wrapper.style.left = '0';
   wrapper.style.top = '0';
   wrapper.style.width = '210mm';
   wrapper.style.height = '296.5mm';
-  wrapper.style.padding = '60mm 10mm 20mm 10mm'; // مساحة للهيدر في الخلفية إن وجدت
+  wrapper.style.padding = '60mm 10mm 20mm 10mm';
   wrapper.style.boxSizing = 'border-box';
   wrapper.style.overflow = 'hidden';
-  wrapper.style.backgroundImage = 'url("images/background.png")';
-  wrapper.style.backgroundSize = 'cover';
-  wrapper.style.backgroundRepeat = 'no-repeat';
-  wrapper.style.backgroundPosition = 'center';
-  wrapper.style.direction = 'rtl'; // مهم لضبط المحاذاة في RTL
-  wrapper.style.fontFamily = "inherit";
+  wrapper.style.direction = 'rtl';
+  wrapper.style.zIndex = '99999';
+  wrapper.style.opacity = '0';          // مخفي بصريًا لكن معروض للـ renderer
+  wrapper.style.pointerEvents = 'none';
   wrapper.id = 'pdf-wrapper-temp';
+  wrapper.style.backgroundColor = 'transparent';
 
-  // ⬜️ الحقول البيضاء المتموضعة (من قيم الإدخال العليا)
+  // تحميل الخلفية كـ <img> داخل ال wrapper لتقليل مشاكل html2canvas/CORS (ضع مسار صورتك هنا)
+  const bgUrl = 'images/background.png'; // لو تريد تعطيل الخلفية اجعلها ''
+  if (bgUrl) {
+    const bgImg = document.createElement('img');
+    bgImg.src = bgUrl;
+    Object.assign(bgImg.style, {
+      position: 'absolute',
+      left: '0',
+      top: '0',
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      zIndex: '-1'
+    });
+    wrapper.appendChild(bgImg);
+  }
+
+  // قيم الحقول العلوية
   const regionVal = (document.getElementById('uiRegion')?.value || 'المدينة المنورة').trim();
   const schoolVal = (document.getElementById('uiSchool')?.value || 'إبتدائية ابيار الماشي').trim();
 
-  // --- نضع الحقول كنُقَط نسبة مئوية من العرض لتفادي حسابات mm الكبيرة ---
-  // يمكنك تعديل leftPercent لرفع/خفض أماكنهما أفقياً بسهولة
-  const regionLeftPercent = 35; // النسبة العرضية لحقل "المنطقة" (٪)
-  const schoolLeftPercent = 65; // النسبة العرضية لحقل "المدرسة" (٪)
-  const topOffsetBase = '12mm'; // ارتفاع أساسي من أعلى الغلاف (اضبط حسب القالب)
+  // إعدادات موضع الحقول (يمكن تعديلها)
+  const regionLeftPercent = 35;
+  const schoolLeftPercent = 65;
+  const topOffsetBase = '12mm';
 
   const regionDiv = document.createElement('div');
   Object.assign(regionDiv.style, {
@@ -565,7 +580,8 @@ function printPDF(btn){
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    zIndex: '2'
   });
   regionDiv.textContent = regionVal;
   wrapper.appendChild(regionDiv);
@@ -590,12 +606,13 @@ function printPDF(btn){
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    zIndex: '2'
   });
   schoolDiv.textContent = schoolVal;
   wrapper.appendChild(schoolDiv);
 
-  // المحتوى (نضعه داخل wrapper مع بعض المسافة العلوية لتجنب التداخل مع الحقول)
+  // المحتوى الداخلي داخل wrapper
   const inner = document.createElement('div');
   inner.style.position = 'absolute';
   inner.style.top = '40mm';
@@ -604,10 +621,11 @@ function printPDF(btn){
   inner.style.bottom = '10mm';
   inner.style.overflow = 'hidden';
   inner.style.boxSizing = 'border-box';
+  inner.style.zIndex = '1';
   inner.appendChild(content);
   wrapper.appendChild(inner);
 
-  // إدراج صور الشواهد (حتى 4)
+  // صور الشواهد (حتى 4)
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
@@ -616,6 +634,7 @@ function printPDF(btn){
     imagesWrapper.style.justifyContent = 'center';
     imagesWrapper.style.gap = '5px';
     imagesWrapper.style.margin = '8mm 0';
+    imagesWrapper.style.zIndex = '1';
 
     tabImages.slice(0,4).forEach(src => {
       const img = document.createElement('img');
@@ -627,7 +646,7 @@ function printPDF(btn){
       imagesWrapper.appendChild(img);
     });
 
-    // ضع الصور قبل قسم التواقيع (رائد النشاط)
+    // أدخل الصور قبل قسم التواقيع إذا وُجد
     const activityDiv = Array.from(content.querySelectorAll('div'))
       .find(div => /رائد النشاط/.test(div.innerText || ''));
     if (activityDiv) {
@@ -637,28 +656,58 @@ function printPDF(btn){
     }
   }
 
-  // أضف wrapper إلى الوثيقة مؤقتًا
+  // أضف wrapper إلى DOM
   document.body.appendChild(wrapper);
 
-  // تصدير PDF (عند الانتهاء نحذف الـ wrapper المؤقت)
-  html2pdf().set({
-    margin:0,
-    filename: tabId+'-report.pdf',
-    image:{type:'jpeg',quality:0.95},
-    html2canvas:{scale:3, useCORS:true, backgroundColor:null},
-    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
-  }).from(wrapper).save().then(()=> {
-    // إزالة العنصر المؤقت بعد اكتمال الحفظ
-    setTimeout(()=> {
+  // انتظار تحميل الصور داخل wrapper قبل التقاط ال PDF
+  const waitForImagesToLoad = () => {
+    const imgs = wrapper.querySelectorAll('img');
+    const promises = Array.from(imgs).map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((res) => { img.onload = img.onerror = res; });
+    });
+    return Promise.all(promises);
+  };
+
+  waitForImagesToLoad().then(()=> {
+    // إنشاء PDF
+    html2pdf().set({
+      margin:0,
+      filename: tabId+'-report.pdf',
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{scale:2, useCORS:true, backgroundColor:null},
+      jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+    }).from(wrapper).save().then(()=> {
+      // إزالة العنصر المؤقت بعد الحفظ
+      setTimeout(()=> {
+        const el = document.getElementById('pdf-wrapper-temp');
+        if(el) el.remove();
+      }, 300);
+    }).catch((err)=>{
       const el = document.getElementById('pdf-wrapper-temp');
       if(el) el.remove();
-    }, 300);
-  }).catch((err)=>{
-    // في حال وجود خطأ نزيل الـ wrapper أيضاً
-    const el = document.getElementById('pdf-wrapper-temp');
-    if(el) el.remove();
-    console.error(err);
-    alert('حدث خطأ أثناء إنشاء الـ PDF. جرب تغيير قيمة "Scale" أو مسح الخلفية أو إعادة تحميل الصفحة.');
+      console.error(err);
+      alert('حدث خطأ أثناء إنشاء الـ PDF. افتح Console في المطوّر للتحقق (F12).');
+    });
+  }).catch(()=> {
+    // حتى لو فشل الانتظار حاول التصدير
+    html2pdf().set({
+      margin:0,
+      filename: tabId+'-report.pdf',
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{scale:2, useCORS:true, backgroundColor:null},
+      jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+    }).from(wrapper).save().then(()=> {
+      setTimeout(()=> {
+        const el = document.getElementById('pdf-wrapper-temp');
+        if(el) el.remove();
+      }, 300);
+    }).catch((err)=>{
+      const el = document.getElementById('pdf-wrapper-temp');
+      if(el) el.remove();
+      console.error(err);
+      alert('حدث خطأ أثناء إنشاء الـ PDF. افتح Console في المطوّر للتحقق (F12).');
+    });
   });
 }
 </script>
