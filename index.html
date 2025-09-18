@@ -186,6 +186,10 @@ footer {
   <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
     
   </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
+  </div>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -197,20 +201,25 @@ footer {
     <div><label>اليوم</label><input type="text"></div>
     <div><label>التاريخ</label><input type="text" class="date"></div>
   </div>
-  <label>اسم البرنامج</label><input type="text">
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text" class="date"></div>
+  </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
       <input type="text"><input type="text">
-
-  </div>
+      </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
       <input type="text"><input type="text">
 
   </div>
-  <label>الشواهد</label><input type="file" multiple accept="image/*" onchange="storeImages(event)">
+  <label>الشواهد</label>
+  <input type="file" multiple accept="image/*" onchange="storeImages(event)">
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
@@ -226,6 +235,10 @@ footer {
   <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
     
   </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
+  </div>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -237,20 +250,25 @@ footer {
     <div><label>اليوم</label><input type="text"></div>
     <div><label>التاريخ</label><input type="text" class="date"></div>
   </div>
-  <label>اسم البرنامج</label><input type="text">
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text" class="date"></div>
+  </div>
   <label>أهداف البرنامج</label>
- <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
+    <input type="text"><input type="text">
+      <input type="text"><input type="text">
+      </div>
+  <label>الأثر الإيجابي للبرنامج</label>
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
       <input type="text"><input type="text">
 
   </div>
-  <label>الأثر الإيجابي للبرنامج</label>
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
-    <input type="text"><input type="text">
-       <input type="text"><input type="text">
-
-  </div>
-  <label>الشواهد</label><input type="file" multiple accept="image/*" onchange="storeImages(event)">
+  <label>الشواهد</label>
+  <input type="file" multiple accept="image/*" onchange="storeImages(event)">
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
@@ -264,7 +282,11 @@ footer {
 <div id="scout" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال العلوم و التقنية</label>
   <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-      </div>
+  </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
+  </div>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -276,24 +298,29 @@ footer {
     <div><label>اليوم</label><input type="text"></div>
     <div><label>التاريخ</label><input type="text" class="date"></div>
   </div>
-  <label>اسم البرنامج</label><input type="text">
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text" class="date"></div>
+  </div>
   <label>أهداف البرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-       <input type="text"><input type="text">
-
-  </div>
+      <input type="text"><input type="text">
+      </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
-       <input type="text"><input type="text">
+      <input type="text"><input type="text">
 
   </div>
-  <label>الشواهد</label><input type="file" multiple accept="image/*" onchange="storeImages(event)">
+  <label>الشواهد</label>
+  <input type="file" multiple accept="image/*" onchange="storeImages(event)">
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-   <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
     <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
   </div>
   <button onclick="printPDF(this)">طباعة التقرير</button>
@@ -303,7 +330,12 @@ footer {
 <div id="family" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال النشاط الكشفي</label>
   <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-      </div>
+
+  </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
+  </div>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -315,24 +347,29 @@ footer {
     <div><label>اليوم</label><input type="text"></div>
     <div><label>التاريخ</label><input type="text" class="date"></div>
   </div>
-  <label>اسم البرنامج</label><input type="text">
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text" class="date"></div>
+  </div>
   <label>أهداف البرنامج</label>
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
+    <input type="text"><input type="text">
+      <input type="text"><input type="text">
+      </div>
+  <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
       <input type="text"><input type="text">
 
   </div>
-  <label>الأثر الإيجابي للبرنامج</label>
-  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
-    <input type="text"><input type="text">
-       <input type="text"><input type="text">
-
-  </div>
-  <label>الشواهد</label><input type="file" multiple accept="image/*" onchange="storeImages(event)">
+  <label>الشواهد</label>
+  <input type="file" multiple accept="image/*" onchange="storeImages(event)">
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
-   <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
     <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
   </div>
   <button onclick="printPDF(this)">طباعة التقرير</button>
@@ -342,7 +379,12 @@ footer {
 <div id="skills" class="tab-content">
   <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الأيام و المناسبات</label>
   <div style="display:flex; gap:10px; justify-content:center; margin-bottom:10px;">
-      </div>
+
+  </div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
+    <div><label>إدارة التعليم</label><input type="text" value="إدارة التعليم بالمدينة المنورة" readonly></div>
+    <div><label>اسم المدرسة</label><input type="text" value="ابتدائية أبيار الماشي" readonly></div>
+  </div>
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
     <div><label>التخصص</label><input type="text"></div>
@@ -354,20 +396,25 @@ footer {
     <div><label>اليوم</label><input type="text"></div>
     <div><label>التاريخ</label><input type="text" class="date"></div>
   </div>
-  <label>اسم البرنامج</label><input type="text">
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text" class="date"></div>
+  </div>
   <label>أهداف البرنامج</label>
- <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
       <input type="text"><input type="text">
-
-  </div>
+      </div>
   <label>الأثر الإيجابي للبرنامج</label>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
     <input type="text"><input type="text">
       <input type="text"><input type="text">
 
   </div>
-  <label>الشواهد</label><input type="file" multiple accept="image/*" onchange="storeImages(event)">
+  <label>الشواهد</label>
+  <input type="file" multiple accept="image/*" onchange="storeImages(event)">
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
   <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px; margin-top:10px;">
@@ -490,6 +537,7 @@ function closePopup() { document.getElementById("popupOverlay").style.display = 
 </script>
 </body>
 </html>
+
 
 
 
