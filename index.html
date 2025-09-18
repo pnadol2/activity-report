@@ -8,16 +8,22 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+
+<!-- مكتبات الهجري -->
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/build/moment-hijri.min.js"></script>
+<script>moment.locale('ar-SA');</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 <style>
 /* ===== لوحة الألوان الوزارية ===== */
 :root{
-  --moe-brown:        #B79B73;  /* البني الوزاري - الهيدر */
-  --moe-green:        #0B7D6E;  /* الأخضر الوزاري - المحدد/الأزرار المهمة */
-  --moe-green-light:  #CFE6DD;  /* أخضر فاتح - غير محدد */
+  --moe-brown:        #B79B73;
+  --moe-green:        #0B7D6E;
+  --moe-green-light:  #CFE6DD;
   --moe-white:        #FFFFFF;
-  --moe-text-dark:    #223;     /* نص غامق خفيف */
+  --moe-text-dark:    #223;
 }
 
 /* تحسين الطباعة للألوان */
@@ -63,16 +69,13 @@ header h1{ margin:0; font-size:18px; }
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:5px;
-  margin-top:50px;   /* نزّل/ارفع على الشاشة */
+  margin-top:50px;
 }
-/* لو تبغى تنزلها أكثر وقت الطباعة فقط */
 @media print{
-  .signatures{
-    margin-top:30mm; /* عدّلها حسب القالب المطبوع */
-  }
+  .signatures{ margin-top:30mm; }
 }
 
-/* ✅ الحقول بإطار أثناء التعبئة (على الشاشة) */
+/* ✅ الحقول بإطار أثناء التعبئة */
 .inline-field{
   border:1px solid #cbd5e1;
   background:#ffffff;
@@ -98,7 +101,7 @@ header h1{ margin:0; font-size:18px; }
   text-align:center;
   background:#fff;
 }
-/* احتياط للجوال: لو ظهر input.native من flatpickr */
+/* احتياط للجوال */
 input.flatpickr-mobile{
   width:100% !important;
   height:38px;
@@ -108,7 +111,7 @@ input.flatpickr-mobile{
   text-align:center;
 }
 
-/* 🖨️ وقت الطباعة: أخفِ مجموعة المدخلات بالكامل */
+/* 🖨️ وقت الطباعة: أخفِ مدخلات المنطقة/المدرسة */
 @media print{
   #region-school-inputs{ display:none !important; }
 }
@@ -188,7 +191,6 @@ footer {
 /* ===== الطباعة ===== */
 @media print {
   @page { size: A4 portrait; margin: 0; }
-
   body {
     width: 210mm;
     height: 297mm;
@@ -196,22 +198,16 @@ footer {
     background:none !important;
     font-family: 'HelveticaNeueW23', Arial, sans-serif;
   }
-
   .tab-content { display:block !important; }
-
-  /* أخفي عناصر التحكم */
   .no-print, .no-print-title, button, .tab-button, .tabs, footer { display:none !important; }
-
   label { font-size: 14px !important; font-weight: bold; color:#000; }
-
   input[type="text"] {
     font-size: 14px !important;
     text-align: center;
-    border-color: #A3CFC6; /* أخضر فاتح */
+    border-color: #A3CFC6;
     background: transparent !important;
     color: #000;
   }
-
   .preview img, .tab-content img {
     max-width: 160px;
     max-height: 160px;
@@ -241,7 +237,6 @@ footer {
     <label for="uiRegion" style="margin:0; font-weight:700;">المنطقة</label>
     <input id="uiRegion" type="text" class="inline-field" value="المدينة المنورة" placeholder="اكتب اسم المنطقة">
   </div>
-
   <div style="display:flex; gap:8px; align-items:center;">
     <label for="uiSchool" style="margin:0; font-weight:700;">المدرسة</label>
     <input id="uiSchool" type="text" class="inline-field" value="ابتدائية أبيار الماشي" placeholder="اكتب اسم المدرسة">
@@ -576,30 +571,38 @@ function storeImages(event){
   });
 }
 
-// التاريخ — تهيئة موحّدة على الجوال والكمبيوتر
+/* ========== التاريخ الهجري فقط ========== */
 setTimeout(()=>{
   document.querySelectorAll('.date').forEach(el=>{
-    flatpickr(el,{
+    const fp = flatpickr(el,{
       locale:'ar',
-      dateFormat:"d-m-Y",
+      allowInput:true,
       altInput:true,
-      altFormat:"d-m-Y",
-      disableMobile:true,          // يفرض نفس واجهة flatpickr على الموبايل
-      altInputClass:'date-inline'  // ستايل الحقل البديل
+      altInputClass:'date-inline',
+      disableMobile:true,
+      clickOpens:true,
+      onReady: syncHijri,
+      onChange: syncHijri
     });
   });
+
+  function syncHijri(selectedDates, _dateStr, instance){
+    const d = selectedDates[0] || new Date();
+    const hijriText = moment(d).format('iDD-iMM-iYYYY'); // مثال: 10-02-1447
+    if(instance.altInput){ instance.altInput.value = hijriText; }
+    instance.input.value = hijriText;        // نحفظ الهجري نفسه
+    instance.input.dataset.hijri = hijriText;
+  }
 },500);
 
-// ============= إعدادات قابلة للتعديل لكل حقل =============
-// المنطقة
+/* ========== إعدادات تراكب المنطقة/المدرسة على PDF ========== */
 const REGION_CFG = {
-  topMM: 16,           // نزّل/ارفع النص (mm)
-  leftPercent: 37,     // حرّك يسار/يمين (%)
+  topMM: 16,
+  leftPercent: 37,
   color: '#19455c',
   fontSizePt: 12,
   fontWeight: 800
 };
-// المدرسة
 const SCHOOL_CFG = {
   topMM: 22,
   leftPercent: 33,
@@ -608,7 +611,6 @@ const SCHOOL_CFG = {
   fontWeight: 700
 };
 
-// دالة مساعدة لإضافة نص متموضع فوق القالب داخل الـPDF
 function addOverlay(wrapper, text, cfg){
   if(!text) return;
   const el = document.createElement('div');
@@ -629,7 +631,7 @@ function addOverlay(wrapper, text, cfg){
   wrapper.appendChild(el);
 }
 
-// طباعة PDF مع عنوان متغيّر + تراكب المنطقة/المدرسة + الشواهد
+/* ========== طباعة PDF ========== */
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
@@ -638,15 +640,15 @@ function printPDF(btn){
   const content = tabContent.cloneNode(true);
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
-  // عنوان متغيّر من الحقل
+  // عنوان متغيّر
   const dynamicTitle = (document.getElementById('titleField')?.value || '').trim();
 
-  // الغلاف A4 + خلفية القالب (إن وجدت)
+  // الغلاف A4 + خلفية القالب
   const wrapper = document.createElement('div');
   wrapper.style.position='relative';
   wrapper.style.width='210mm';
   wrapper.style.height='296.5mm';
-  wrapper.style.padding='60mm 10mm 20mm 10mm'; // مساحة للهيدر
+  wrapper.style.padding='60mm 10mm 20mm 10mm';
   wrapper.style.boxSizing='border-box';
   wrapper.style.overflow='hidden';
   wrapper.style.backgroundImage = 'url("images/background.png")';
@@ -654,10 +656,10 @@ function printPDF(btn){
   wrapper.style.backgroundRepeat = 'no-repeat';
   wrapper.style.backgroundPosition = 'center';
 
-  // أضف المحتوى مرة واحدة فقط
+  // المحتوى
   wrapper.appendChild(content);
 
-  // (اختياري) العنوان المتغيّر
+  // العنوان المتغيّر (اختياري)
   if (dynamicTitle) {
     const titleEl = document.createElement('div');
     titleEl.textContent = dynamicTitle;
@@ -676,15 +678,15 @@ function printPDF(btn){
     wrapper.appendChild(titleEl);
   }
 
-  // ✅ اجلب قيم الحقول (واجهة فقط)
+  // قيم المنطقة/المدرسة
   const regionText = (document.getElementById('uiRegion')?.value || '').trim();
   const schoolText = (document.getElementById('uiSchool')?.value || '').trim();
 
-  // ✅ أضف نصّ المنطقة والمدرسة كتراكب مطبوع بإحداثياتك
+  // تراكب المنطقة/المدرسة
   addOverlay(wrapper, regionText, REGION_CFG);
   addOverlay(wrapper, schoolText, SCHOOL_CFG);
 
-  // ===== الشواهد (حتى 4 صور) =====
+  // الشواهد (حتى 4 صور)
   const tabImages = uploadedImages[tabId] || [];
   if (tabImages.length > 0) {
     const imagesWrapper = document.createElement('div');
@@ -703,7 +705,6 @@ function printPDF(btn){
       imagesWrapper.appendChild(img);
     });
 
-    // إدخال الصور قبل رائد النشاط ومدير المدرسة إن وجد
     const activityDiv = Array.from(content.querySelectorAll('div'))
       .find(div => div.innerHTML.includes('رائد النشاط'));
     if (activityDiv) {
