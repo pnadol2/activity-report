@@ -162,26 +162,26 @@ input {
   background:transparent;
 }
 
-button{ 
+button{
   background: var(--moe-green);
   color: var(--moe-white);
-  border:none; 
-  padding:8px 10px; 
-  margin:5px 0; 
-  cursor:pointer; 
-  border-radius:6px; 
-  width:100%; 
-  font-size:14px; 
-  font-weight:bold; 
+  border:none;
+  padding:8px 10px;
+  margin:5px 0;
+  cursor:pointer;
+  border-radius:6px;
+  width:100%;
+  font-size:14px;
+  font-weight:bold;
 }
 button:hover{ filter: brightness(0.97); }
 
-footer { 
-  text-align:center; 
-  padding:10px; 
-  color:#333; 
-  font-weight:bold; 
-  font-size:12px; 
+footer {
+  text-align:center;
+  padding:10px;
+  color:#333;
+  font-weight:bold;
+  font-size:12px;
   background:#f1f1f1;
 }
 
@@ -233,6 +233,7 @@ footer {
   <button class="tab-button" onclick="openTab('scout', event)">مجال العلوم و التقنية</button>
   <button class="tab-button" onclick="openTab('family', event)">مجال النشاط الكشفي</button>
   <button class="tab-button" onclick="openTab('skills', event)">مجال الأيام و المناسبات</button>
+  <button class="tab-button" onclick="openTab('custom', event)">مجال مخصّص</button>
 </div>
 
 <!-- ✅ مدخلات المنطقة/المدرسة — واجهة فقط (لن تُطبع) -->
@@ -252,12 +253,19 @@ footer {
 <div class="no-print-title no-print">
   <label>العنوان (متغيّر):</label>
   <input id="titleField" type="text" placeholder="اكتب العنوان هنا (مثال: تعزيز الثقة بالنفس والشعور بالمسؤولية)">
+
+  <!-- 🆕 اسم المجال المخصّص (لا يطبع) -->
+  <div style="margin-top:8px;">
+    <label for="customField">اسم المجال (للتبويب المخصّص فقط):</label>
+    <input id="customField" type="text" placeholder="مثال: مجال الخدمة المجتمعية">
+  </div>
+
   <small style="display:block; color:#666; text-align:center; margin-top:4px;"></small>
 </div>
 
 <!-- ===== تبويب 1 ===== -->
 <div id="culture" class="tab-content active">
-  <label style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
+  <label class="section-title" style="font-size:16px; font-weight:bold; text-align:center;">مجال المواطنة و الحياة</label>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -306,7 +314,7 @@ footer {
 
 <!-- ===== تبويب 2 ===== -->
 <div id="science" class="tab-content">
-  <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
+  <label class="section-title" style="font-size:16px; font-weight:bold; text-align:center;">مجال الثقافة و الفنون</label>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -345,18 +353,17 @@ footer {
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-<div class="signatures">
-  <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
-  <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
-</div>
-
+  <div class="signatures">
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+  </div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
 <!-- ===== تبويب 3 ===== -->
 <div id="sports" class="tab-content">
-  <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الرياضة و الصحة</label>
+  <label class="section-title" style="font-size:16px; font-weight:bold; text-align:center;">مجال الرياضة و الصحة</label>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -395,18 +402,17 @@ footer {
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-<div class="signatures">
-  <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
-  <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
-</div>
-
+  <div class="signatures">
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+  </div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
 <!-- ===== تبويب 4 ===== -->
 <div id="scout" class="tab-content">
-  <label style="font-size:16px; font-weight:bold; text-align:center;">مجال العلوم و التقنية</label>
+  <label class="section-title" style="font-size:16px; font-weight:bold; text-align:center;">مجال العلوم و التقنية</label>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -445,17 +451,17 @@ footer {
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-<div class="signatures">
-  <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
-  <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
-</div>
+  <div class="signatures">
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+  </div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
 <!-- ===== تبويب 5 ===== -->
 <div id="family" class="tab-content">
-  <label style="font-size:16px; font-weight:bold; text-align:center;">مجال النشاط الكشفي</label>
+  <label class="section-title" style="font-size:16px; font-weight:bold; text-align:center;">مجال النشاط الكشفي</label>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -494,18 +500,17 @@ footer {
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-<div class="signatures">
-  <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
-  <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
-</div>
-
+  <div class="signatures">
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+  </div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
 
 <!-- ===== تبويب 6 ===== -->
 <div id="skills" class="tab-content">
-  <label style="font-size:16px; font-weight:bold; text-align:center;">مجال الأيام و المناسبات</label>
+  <label class="section-title" style="font-size:16px; font-weight:bold; text-align:center;">مجال الأيام و المناسبات</label>
 
   <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
     <div><label>اسم المعلم</label><input type="text"></div>
@@ -544,10 +549,60 @@ footer {
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-<div class="signatures">
-  <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
-  <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+  <div class="signatures">
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+  </div>
+
+  <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
+
+<!-- ===== تبويب 7 (مجال مخصص) ===== -->
+<div id="custom" class="tab-content">
+  <!-- عنوان القسم يتغير حسب customField -->
+  <label class="section-title" style="font-size:16px; font-weight:bold; text-align:center;">مجال مخصّص</label>
+
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:5px;">
+    <div><label>اسم المعلم</label><input type="text"></div>
+    <div><label>التخصص</label><input type="text"></div>
+    <div><label>الفصل الدراسي</label><input type="text"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>الصف</label><input type="text"></div>
+    <div><label>الحصة</label><input type="text"></div>
+    <div><label>اليوم</label><input type="text"></div>
+    <div><label>التاريخ</label><input type="text" class="date"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:5px;">
+    <div><label>اسم البرنامج</label><input type="text"></div>
+    <div><label>مكان التنفيذ</label><input type="text"></div>
+    <div><label>الحضور</label><input type="text"></div>
+    <div><label>الغياب</label><input type="text"></div>
+  </div>
+
+  <label>أهداف البرنامج</label>
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
+    <input type="text"><input type="text">
+    <input type="text"><input type="text">
+  </div>
+
+  <label>الأثر الإيجابي للبرنامج</label>
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:5px;">
+    <input type="text"><input type="text">
+    <input type="text"><input type="text">
+  </div>
+
+  <label>الشواهد</label>
+  <input type="file" multiple accept="image/*" onchange="storeImages(event)">
+  <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
+  <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
+
+  <div class="signatures">
+    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
+    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
+  </div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
@@ -560,6 +615,13 @@ function openTab(tabId, evt){
   document.querySelectorAll('.tab-button').forEach(el=>el.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
   if(evt) evt.currentTarget.classList.add('active');
+
+  // تحديث عنوان تبويب المجال المخصص على الشاشة
+  if (tabId === 'custom') {
+    const val = (document.getElementById('customField')?.value || '').trim();
+    const target = document.querySelector('#custom .section-title');
+    target.textContent = val || 'مجال مخصّص';
+  }
 }
 
 // تخزين صور الشواهد
@@ -592,6 +654,17 @@ setTimeout(()=>{
     });
   });
 },500);
+
+// ربط خانة المجال المخصّص بالتبويب السابع مباشرة (على الشاشة)
+document.addEventListener('DOMContentLoaded', ()=>{
+  const cf = document.getElementById('customField');
+  if (cf) {
+    cf.addEventListener('input', ()=>{
+      const target = document.querySelector('#custom .section-title');
+      if (target) target.textContent = (cf.value || '').trim() || 'مجال مخصّص';
+    });
+  }
+});
 
 // ============= إعدادات قابلة للتعديل لكل حقل =============
 // المنطقة
@@ -643,6 +716,13 @@ function printPDF(btn){
 
   // عنوان متغيّر من الحقل
   const dynamicTitle = (document.getElementById('titleField')?.value || '').trim();
+
+  // ✅ لو التبويب مخصّص: حدّث عنوان القسم داخلياً بما كُتب في الحقل المخصص (لا يطبع الحقل نفسه لأنه خارج المحتوى وno-print)
+  if (tabId === 'custom') {
+    const customTitle = (document.getElementById('customField')?.value || '').trim() || 'مجال مخصّص';
+    const titleLabel = content.querySelector('.section-title');
+    if (titleLabel) titleLabel.textContent = customTitle;
+  }
 
   // الغلاف A4 + خلفية القالب (إن وجدت)
   const wrapper = document.createElement('div');
