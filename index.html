@@ -33,13 +33,16 @@ header h1{ margin:0; font-size:18px; }
 /* Title bar (not printed) */
 .no-print-title{ padding:12px 15px; background:#fff; border-bottom:1px solid #eee; }
 
-/* ==== Signatures: عرضي على الشاشة + يتحسّن عند الطباعة ==== */
+/* ===== Signatures: أكبر حقول ومنزلين للأسفل (شاشة + طباعة) ===== */
 .signatures{
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:18px;
-  align-items:start;
-  margin-top:40px; /* غيّر الرقم لإنزال أكثر/أقل */
+  grid-template-columns: 1fr 1fr; /* عمودان */
+  gap:24px;
+  align-items:center;
+  margin-top:50px;      /* ظاهرية على الصفحة — نزّل/ارفَع حسب الحاجة */
+  width:100%;
+  box-sizing:border-box;
+  padding:0 40px;       /* توسيط داخلي من الجانبين */
 }
 
 /* كل خانة توقيع */
@@ -47,33 +50,53 @@ header h1{ margin:0; font-size:18px; }
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding-top:6px;
 }
 
-/* وضع الرائد يمين والمدير يسار */
+/* رائد على اليمين، مدير على اليسار */
 .signatures .raed{ justify-self:end; }
 .signatures .principal{ justify-self:start; }
 
-.signatures .sig label{ font-weight:700; margin-bottom:6px; text-align:center; }
-.signatures .sig input{ width:100%; box-sizing:border-box; text-align:center; }
-
-/* استجابة */
-@media (max-width:600px){
-  .signatures{ grid-template-columns: 1fr; margin-top:18px; }
-  .signatures .raed, .signatures .principal { justify-self:center; }
+/* الحقول أعرض وأطول مثل المثال */
+.signatures .sig input{
+  width:92%;           /* داخل العمود: اجعل الحقل واسع */
+  max-width:520px;     /* لا يكبر أكثر من كذا */
+  padding:10px 14px;
+  font-size:14px;
+  border-radius:8px;
+  background:#fff;
+  box-shadow:none;
+  box-sizing:border-box;
+  text-align:center;
+  border:1px solid #d6d6d6;
 }
 
-/* للطباعة: نزّل التواقيع إلى أسفل الصفحة (مسافة قابلة للتعديل) */
+/* محاذاة العنوان داخل كل خانة */
+.signatures .sig label{ font-weight:700; margin-bottom:8px; text-align:center; }
+
+/* استجابة: على شاشات صغيرة نجعلهم عمود */
+@media (max-width:800px){
+  .signatures{ grid-template-columns: 1fr; margin-top:24px; padding:0 14px; gap:12px; }
+  .signatures .raed, .signatures .principal{ justify-self:center; }
+  .signatures .sig input{ width:94%; max-width:600px; }
+}
+
+/* ===== للطباعة: اجعل التواقيع ثابتة في أسفل صفحة A4 ===== */
 @media print{
   .signatures{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:18px;
     position: absolute;
     left: 10mm;
     right: 10mm;
-    bottom: 25mm; /* <-- غيّر هذا لو تبي أنزّل أو أرفع*/
+    bottom: 22mm;      /* غيّر الرقم لو تريد أنزل أو ارفع */
     margin-top: 0;
+    padding: 0 10mm;
+    gap:18px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .signatures .sig input{
+    width:90%;
+    max-width:520px;
+    padding:8px 10px;
+    font-size:13px;
   }
 }
 
@@ -213,13 +236,16 @@ footer{ text-align:center; padding:10px; color:#333; font-weight:bold; font-size
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-<div>
-  <label>رائد النشاط</label>
-  <input type="text" class="signature-name" placeholder="أ.عمر سعيد الصاعدي" data-default="أ.عمر سعيد الصاعدي">
-</div>
-<div>
-  <label>مدير المدرسة</label>
-  <input type="text" class="signature-name" placeholder="أ.عبدالعزيز عوض العلوي" data-default="أ.عبدالعزيز عوض العلوي">
+<div class="signatures">
+  <div class="sig raed">
+    <label>رائد النشاط</label>
+    <input type="text" class="signature-name" placeholder="أ.عمر سعيد الصاعدي" data-default="أ.عمر سعيد الصاعدي">
+  </div>
+
+  <div class="sig principal">
+    <label>مدير المدرسة</label>
+    <input type="text" class="signature-name" placeholder="أ.عبدالعزيز عوض العلوي" data-default="أ.عبدالعزيز عوض العلوي">
+  </div>
 </div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
