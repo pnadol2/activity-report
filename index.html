@@ -175,10 +175,14 @@ footer{ text-align:center; padding:10px; color:#333; font-weight:bold; font-size
   <div class="counter" style="font-size:12px; color:#5b3a29; font-weight:bold;"></div>
   <div class="preview" style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;"></div>
 
-  <div class="signatures">
-    <div><label>رائد النشاط</label><input type="text" value="أ.عمر سعيد الصاعدي" readonly></div>
-    <div><label>مدير المدرسة</label><input type="text" value="أ.عبدالعزيز عوض العلوي" readonly></div>
-  </div>
+<div>
+  <label>رائد النشاط</label>
+  <input type="text" class="signature-name" placeholder="أ.عمر سعيد الصاعدي" data-default="أ.عمر سعيد الصاعدي">
+</div>
+<div>
+  <label>مدير المدرسة</label>
+  <input type="text" class="signature-name" placeholder="أ.عبدالعزيز عوض العلوي" data-default="أ.عبدالعزيز عوض العلوي">
+</div>
 
   <button onclick="printPDF(this)">طباعة التقرير</button>
 </div>
@@ -480,25 +484,23 @@ footer{ text-align:center; padding:10px; color:#333; font-weight:bold; font-size
 <script>
 let uploadedImages = {};
 
+// فتح التبويب
 function openTab(tabId, evt){
-  // تبديل التبويبات
   document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.tab-button').forEach(el=>el.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
   if(evt) evt.currentTarget.classList.add('active');
 
-  // إظهار/إخفاء خانة المجال المخصص فقط عند تبويب custom
   const customCtl = document.getElementById('customControl');
   if (customCtl){
     if (tabId === 'custom'){ customCtl.classList.remove('hidden'); }
     else { customCtl.classList.add('hidden'); }
   }
 
-  // تحديث عنوان تبويب المجال المخصص على الشاشة
   if (tabId === 'custom') {
     const val = (document.getElementById('customField')?.value || '').trim();
     const target = document.querySelector('#custom .section-title');
-    target.textContent = val || 'مجال مخصّص';
+    if (target) target.textContent = val || 'مجال مخصّص';
   }
 }
 
@@ -535,6 +537,23 @@ setTimeout(()=>{
 
 // ربط خانة المجال المخصّص بالتبويب السابع مباشرة (على الشاشة)
 document.addEventListener('DOMContentLoaded', ()=>{
+  // 1) اجعل حقول التواقيع قابلة للتحرير وتحوّل القيم الافتراضية إلى data-default + placeholder
+  document.querySelectorAll('.signatures input[type="text"]').forEach(input=>{
+    // لو الحقل الآن readonly وخُزّن اسم ضمن value، نحوّله تلقائياً إلى placeholder قابل للتحرير
+    if (input.readOnly) {
+      const def = input.value || input.getAttribute('placeholder') || '';
+      input.dataset.default = def;
+      input.placeholder = def;
+      input.value = '';
+      input.readOnly = false;
+      input.classList.add('signature-name');
+    }
+  });
+
+  // 2) تهيئة سلوك الحقول التي لها الصنف signature-name
+  initSignatureFields();
+
+  // 3) ربط تحديث عنوان المجال المخصص
   const cf = document.getElementById('customField');
   if (cf) {
     cf.addEventListener('input', ()=>{
@@ -542,6 +561,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
       if (target) target.textContent = (cf.value || '').trim() || 'مجال مخصّص';
     });
   }
+
+  // تأكد إخفاء تحكم المجال المخصص في البداية
+  const customCtl = document.getElementById('customControl');
+  if (customCtl) customCtl.classList.add('hidden');
 });
 
 // إعدادات تراكب المنطقة/المدرسة
@@ -562,13 +585,82 @@ function addOverlay(wrapper, text, cfg){
   wrapper.appendChild(el);
 }
 
-// الطباعة إلى PDF
+// تهيئة سلوك الحقول الافتراضية القابلة للتعديل
+function initSignatureFields(){
+  document.querySelectorAll('.signature-name').forEach(input=>{
+    // اترك قيمة الحقل فارغة مبدئياً ليظهر placeholder
+    if (!input.hasAttribute('data-initialized')) {
+      input.value = input.value || '';
+      input._edited = false;
+
+      input.addEventListener('focus', ()=>{
+        input._edited = false;
+        if(!input.value){
+          input.value = input.dataset.default || input.placeholder || '';
+          // حدّد النص كله حتى يكتب فوقه المستخدم مباشرة
+          try { input.setSelectionRange(0, input.value.length); } catch(e){}
+        } else {
+          // حدّد كل النص الحالي لسهولة استبداله
+          try { input.setSelectionRange(0, input.value.length); } catch(e){}
+        }
+      });
+
+      input.addEventListener('input', ()=> {
+        input._edited = true;
+      });
+
+      input.addEventListener('blur', ()=> {
+        if(!input._edited){
+          // لو لم يغيّر المستخدم ارجع القيمة فارغة ليبقى placeholder مرئي
+          input.value = '';
+        }
+      });
+
+      input.setAttribute('data-initialized','1');
+    }
+  });
+}
+
+// تحضير القيم للطباعة: تنسخ القيم أو الافتراضات إلى سمات value داخل العنصر الأصلي
+function prepareValuesForPrint(tabContent){
+  tabContent.querySelectorAll('input, textarea').forEach(el=>{
+    if (el.type === 'file') return;
+
+    if (el.tagName.toLowerCase() === 'textarea') {
+      el.setAttribute('data-current-text', el.value || '');
+    } else {
+      // سلوك خاص لحقول التوقيع: استخدم القيمة المكتوبة أو data-default أو placeholder
+      if (el.classList.contains('signature-name')) {
+        const printable = (el.value && String(el.value).trim()) ? String(el.value).trim()
+                           : (el.dataset.default || el.placeholder || '');
+        el.setAttribute('value', printable);
+      } else {
+        el.setAttribute('value', el.value || '');
+      }
+    }
+  });
+}
+
+// الطباعة إلى PDF (مُحدّثة لاستخدام prepareValuesForPrint قبل النسخ)
 function printPDF(btn){
   const tabContent = btn.closest('.tab-content');
   const tabId = tabContent.id;
 
-  // نسخة المحتوى بدون عناصر التحكم
+  // تأكد من تحضير القيم في العنصر الأصلي
+  prepareValuesForPrint(tabContent);
+
+  // الآن انسخ المحتوى (يحتوي على سمات value المحدثة)
   const content = tabContent.cloneNode(true);
+
+  // إذا كان هناك textarea في النسخة: ضع نصها من data-current-text
+  content.querySelectorAll('textarea').forEach((el, idx)=>{
+    const origTextareas = tabContent.querySelectorAll('textarea');
+    if (origTextareas && origTextareas[idx]) {
+      el.textContent = origTextareas[idx].value || '';
+    }
+  });
+
+  // إزالة عناصر التحكم غير المرغوب بها
   content.querySelectorAll('button,input[type="file"],.counter,.preview').forEach(el=>el.remove());
 
   // لو التبويب مخصّص: حدّث العنوان الداخلي بما في customField
@@ -641,12 +733,6 @@ function printPDF(btn){
     jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
   }).from(wrapper).save();
 }
-
-// تأكد أن خانة المجال المخصّص مخفية عند التحميل الأول (لأن التبويب الافتراضي ليس custom)
-document.addEventListener('DOMContentLoaded', ()=>{
-  const customCtl = document.getElementById('customControl');
-  if (customCtl) customCtl.classList.add('hidden');
-});
 </script>
 </body>
 </html>
