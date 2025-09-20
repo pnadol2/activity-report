@@ -33,36 +33,48 @@ header h1{ margin:0; font-size:18px; }
 /* Title bar (not printed) */
 .no-print-title{ padding:12px 15px; background:#fff; border-bottom:1px solid #eee; }
 
-/* Signatures: صفان ثابتان - مناسب لتوقيعين */
+/* ==== Signatures: عرضي على الشاشة + يتحسّن عند الطباعة ==== */
 .signatures{
   display:grid;
-  grid-template-columns: 1fr 1fr; /* عمودان متساويان */
-  gap:10px;
+  grid-template-columns: 1fr 1fr;
+  gap:18px;
   align-items:start;
-  margin-top:18px; /* بدّل الهامش لو تحب */
+  margin-top:40px; /* غيّر الرقم لإنزال أكثر/أقل */
 }
 
-/* بناء داخلي لكل خانة توقيع */
+/* كل خانة توقيع */
 .signatures .sig{
   display:flex;
   flex-direction:column;
   align-items:center;
+  padding-top:6px;
 }
 
-/* ضع الرائد في العمود الثاني (يمين) والمدير في العمود الأول (يسار) */
-.signatures .raed{ grid-column: 2; }       /* الرائد -> يمين */
-.signatures .principal{ grid-column: 1; }  /* المدير -> يسار */
+/* وضع الرائد يمين والمدير يسار */
+.signatures .raed{ justify-self:end; }
+.signatures .principal{ justify-self:start; }
 
 .signatures .sig label{ font-weight:700; margin-bottom:6px; text-align:center; }
 .signatures .sig input{ width:100%; box-sizing:border-box; text-align:center; }
 
-/* طباعة / موبايل: ترتيب عمودي */
+/* استجابة */
 @media (max-width:600px){
-  .signatures{ grid-template-columns: 1fr; }
-  .signatures .raed, .signatures .principal { grid-column: auto; }
+  .signatures{ grid-template-columns: 1fr; margin-top:18px; }
+  .signatures .raed, .signatures .principal { justify-self:center; }
 }
+
+/* للطباعة: نزّل التواقيع إلى أسفل الصفحة (مسافة قابلة للتعديل) */
 @media print{
-  .signatures{ margin-top:30mm; }
+  .signatures{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:18px;
+    position: absolute;
+    left: 10mm;
+    right: 10mm;
+    bottom: 25mm; /* <-- غيّر هذا لو تبي أنزّل أو أرفع*/
+    margin-top: 0;
+  }
 }
 
 /* Inline fields (top controls) */
