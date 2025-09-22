@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>تقرير تنفيذ إستراتيجية تعلم</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+<style>
+:root{
+  --moe-brown:#B79B73; --moe-green:#0B7D6E; --moe-green-light:#CFE6DD;
+  --moe-white:#fff; --moe-text:#223;
+}
+*{ -webkit-print-color-adjust:exact; print-color-adjust:exact; box-sizing:border-box; }
+body{ font-family:Arial, "Tahoma", sans-serif; margin:0; background:#f9f9f9; color:#111; }
+
+header{ background:var(--moe-brown); color:#fff; text-align:center; padding:12px 10px }
+header h1{ margin:0; font-size:18px }
+
+.wrapper{ max-width:900px; margin:14px auto; padding:10px }
+.section{ background:#fff; border:1px solid #e6e6e6; border-radius:8px; padding:12px; margin-bottom:10px }
+.section h3{ margin:0 0 8px; font-size:15px; color:#0B7D6E }
+
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px }
+.grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px }
+.grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px }
+.grid-1{ display:grid; grid-template-columns:1fr; gap:8px }
+
+label{ display:block; font-weight:700; font-size:12px; text-align:right; margin-bottom:4px }
+input[type="text"],input[type="number"],input[type="url"],.fake-input,textarea,select{
+  width:100%; padding:8px; border:1px solid #cfcfcf; border-radius:6px; background:#fff; text-align:right; font-size:13px
+}
+textarea{ min-height:80px; resize:vertical }
+
+.tools{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px }
+.tools label{ font-weight:500; display:flex; align-items:center; gap:6px }
+.counter{ font-size:12px; color:#5b3a29; font-weight:bold; margin-top:4px }
+.preview{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px }
+.preview img{ width:120px; height:120px; object-fit:cover; border:1px solid #ddd; border-radius:6px }
+
+.actions{ display:flex; gap:10px; margin-top:10px }
+button{ background:var(--moe-green); color:#fff; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer }
+button:hover{ filter:brightness(.97) }
+
+.signatures{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px }
+
+/* تاريخ موحّد على الجوال */
+input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
+
+/* للطباعة */
+@media print{
+  @page{ size:A4 portrait; margin:0 }
+  body{ background:none }
+  .no-print, .actions{ display:none !important }
+  .wrapper{ width:210mm; padding:20mm 12mm 18mm }
+  .section{ border:none; padding:0; margin:0 0 6mm }
+  header{ display:none }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>تقرير تنفيذ إستراتيجية تعلم</h1>
+</header>
+
+<div class="wrapper" id="page">
+
+  <!-- الجهة / المنطقة / المكتب -->
+  <div class="section">
+    <h3>الجهة التعليمية</h3>
+    <div class="grid-3">
+      <div>
+        <label>إدارة/جهة التعليم</label>
+        <input id="eduAuthority" type="text" placeholder="مثال: الإدارة العامة للتعليم بالمدينة المنورة">
+      </div>
+      <div>
+        <label>المنطقة</label>
+        <input id="region" type="text" placeholder="مثال: المدينة المنورة">
+      </div>
+      <div>
+        <label>مكتب التعليم</label>
+        <input id="office" type="text" placeholder="مثال: مكتب غرب المدينة">
+      </div>
+    </div>
+  </div>
+
+  <!-- المدرسة / التاريخ / المادة -->
+  <div class="section">
+    <h3>بيانات أساسية</h3>
+    <div class="grid-3">
+      <div>
+        <label>اسم المدرسة</label>
+        <input id="school" type="text" placeholder="اسم المدرسة">
+      </div>
+      <div>
+        <label>تاريخ التنفيذ</label>
+        <input id="date" type="text" placeholder="اليوم-الشهر-السنة" class="date">
+      </div>
+      <div>
+        <label>المادة</label>
+        <input id="subject" type="text" placeholder="المادة">
+      </div>
+    </div>
+  </div>
+
+  <!-- الإستراتيجية / المستفيدون / المرحلة / الفصل -->
+  <div class="section">
+    <h3>تفاصيل الدرس</h3>
+    <div class="grid-2">
+      <div>
+        <label>إستراتيجية التعلم</label>
+        <input id="strategy" type="text" placeholder="مثال: التعلم التعاوني / العصف الذهني">
+      </div>
+      <div>
+        <label>عدد المستفيدين</label>
+        <input id="beneficiaries" type="number" min="0" placeholder="عدد الطلاب/الطالبات">
+      </div>
+    </div>
+    <div class="grid-3" style="margin-top:8px">
+      <div>
+        <label>المرحلة الدراسية</label>
+        <input id="stage" type="text" placeholder="ابتدائي / متوسط / ثانوي">
+      </div>
+      <div>
+        <label>الفصل</label>
+        <input id="className" type="text" placeholder="مثال: 4/أ">
+      </div>
+      <div>
+        <label>اسم الدرس</label>
+        <input id="lesson" type="text" placeholder="عنوان الدرس">
+      </div>
+    </div>
+  </div>
+
+  <!-- الأهداف -->
+  <div class="section">
+    <h3>الأهداف التعليمية</h3>
+    <div class="grid-1">
+      <textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea>
+    </div>
+  </div>
+
+  <!-- المعلم/المدير/تويتر -->
+  <div class="section">
+    <h3>بيانات المسؤولين</h3>
+    <div class="grid-3">
+      <div>
+        <label>اسم المعلم</label>
+        <input id="teacher" type="text" placeholder="اسم المعلم (يمكن أكثر من اسم مفصول بفواصل)">
+      </div>
+      <div>
+        <label>مدير المدرسة</label>
+        <input id="principal" type="text" placeholder="اسم المدير">
+      </div>
+      <div>
+        <label>حساب تويتر (اختياري)</label>
+        <input id="twitter" type="url" placeholder="https://x.com/username">
+      </div>
+    </div>
+  </div>
+
+  <!-- الوسائل التعليمية -->
+  <div class="section">
+    <h3>الوسائل التعليمية المستخدمة</h3>
+    <div class="tools">
+      <label><input type="checkbox" class="tool" value="جهاز عرض"> جهاز عرض</label>
+      <label><input type="checkbox" class="tool" value="حاسب آلي"> جهاز حاسب</label>
+      <label><input type="checkbox" class="tool" value="صورة توضيحية"> صورة توضيحية</label>
+      <label><input type="checkbox" class="tool" value="أدوات رياضية"> أدوات رياضية</label>
+      <label><input type="checkbox" class="tool" value="كتاب"> كتاب</label>
+      <label><input type="checkbox" class="tool" value="سبورة تقليدية"> سبورة تقليدية</label>
+      <label><input type="checkbox" class="tool" value="سبورة ذكية"> سبورة ذكية</label>
+      <label><input type="checkbox" class="tool" value="بطاقات تعليمية"> بطاقات تعليمية</label>
+      <label><input type="checkbox" class="tool" value="أوراق عمل"> أوراق عمل</label>
+      <label><input type="checkbox" class="tool" value="عرض تقديمي"> عرض تقديمي</label>
+    </div>
+  </div>
+
+  <!-- الشواهد -->
+  <div class="section">
+    <h3>صور الشواهد</h3>
+    <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
+    <div class="counter">مسموح حتى 4 صور كحد أقصى</div>
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <!-- توقيعات -->
+  <div class="section">
+    <h3>التوقيعات</h3>
+    <div class="signatures">
+      <div>
+        <label>توقيع المعلم</label>
+        <input type="text" placeholder="اسم المعلم/التوقيع">
+      </div>
+      <div>
+        <label>توقيع مدير المدرسة</label>
+        <input type="text" placeholder="اسم المدير/التوقيع">
+      </div>
+    </div>
+  </div>
+
+  <div class="actions no-print">
+    <button onclick="printReport()">طباعة التقرير PDF</button>
+  </div>
+
+</div>
+
+<script>
+const imgs = [];
+const input = document.getElementById('imagesInput');
+const preview = document.getElementById('preview');
+
+if(input){
+  input.addEventListener('change', (e)=>{
+    const files = Array.from(e.target.files || []);
+    if(imgs.length + files.length > 4){
+      alert('مسموح برفع 4 صور فقط.');
+      return;
+    }
+    files.forEach(f=>{
+      const reader = new FileReader();
+      reader.onload = (ev)=>{
+        imgs.push(ev.target.result);
+        const im = new Image();
+        im.src = ev.target.result;
+        preview.appendChild(im);
+      };
+      reader.readAsDataURL(f);
+    });
+    input.value = '';
+  });
+}
+
+function printReport(){
+  // ننسخ الصفحة بدون أزرار
+  const page = document.getElementById('page').cloneNode(true);
+  page.querySelectorAll('.actions,.no-print,input[type="file"]').forEach(n=>n.remove());
+
+  // إدراج الصور داخل النسخة المعدّة للطباعة
+  const p = page.querySelector('#preview');
+  if(p){
+    p.innerHTML = '';
+    imgs.slice(0,4).forEach(src=>{
+      const im = new Image();
+      im.src = src;
+      im.style.width = '120px';
+      im.style.height = '120px';
+      im.style.objectFit = 'cover';
+      im.style.border = '1px solid #ddd';
+      im.style.borderRadius = '6px';
+      im.style.margin = '3px';
+      p.appendChild(im);
+    });
+  }
+
+  // غلاف A4 بسيط (اختياري) — يمكنك استبداله بخلفية صورتك
+  const wrapper = document.createElement('div');
+  Object.assign(wrapper.style, {
+    width:'210mm', minHeight:'297mm', padding:'20mm 12mm 18mm', background:'#fff'
+  });
+  wrapper.appendChild(page);
+
+  html2pdf().set({
+    margin:0,
+    filename:'strategy-report.pdf',
+    image:{ type:'jpeg', quality:0.95 },
+    html2canvas:{ scale:2, useCORS:true, backgroundColor:null },
+    jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }
+  }).from(wrapper).save();
+}
+
+// تهيئة التاريخ
+flatpickr('.date', { locale:'ar', dateFormat:'d-m-Y', altInput:true, altFormat:'d-m-Y', disableMobile:true });
+</script>
+
+</body>
+</html>
