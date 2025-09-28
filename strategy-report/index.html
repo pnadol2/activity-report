@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>تقرير تنفيذ إستراتيجية تعلم</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -12,52 +12,55 @@
 
 <style>
 :root{
-  --moe-brown:#B79B73; --moe-green:#0B7D6E; --moe-green-light:#CFE6DD;
-  --moe-white:#fff; --moe-text:#223;
+  --moe-brown:#B79B73;
+  --moe-green:#0B7D6E;
+  --bg:#f9f9f9;
+  --card:#fff;
+  --text:#222;
 }
-*{ -webkit-print-color-adjust:exact; print-color-adjust:exact; box-sizing:border-box; }
-body{ font-family:Arial, "Tahoma", sans-serif; margin:0; background:#f9f9f9; color:#111; }
+*{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+body{ font-family:Arial, "Tahoma", sans-serif; margin:0; background:var(--bg); color:var(--text); }
 
-header{ background:var(--moe-brown); color:#fff; text-align:center; padding:12px 10px }
+/* Header */
+header{ background:var(--moe-brown); color:#fff; text-align:center; padding:12px 10px; }
 header h1{ margin:0; font-size:18px }
 
-/* مكان لعرض الجهة التعليمية أعلى القالب عند الطباعة */
-.edu-top{
-  text-align:right; direction:rtl; padding:8px 0; font-weight:700; font-size:13px; color:#333;
+/* top inputs (region & school) - like activity template */
+#region-school-inputs{ display:flex; flex-direction:column; gap:8px; align-items:flex-end; margin:12px auto; max-width:920px; padding:0 10px; }
+.inline-field{
+  border:1px solid #cbd5e1; background:#fff; color:#19455c;
+  font-weight:800; font-size:14px; text-align:center; width:320px; padding:6px 8px; border-radius:6px;
 }
 
-/* محتوى الصفحة */
-.wrapper{ max-width:900px; margin:14px auto; padding:10px }
-.section{ background:#fff; border:1px solid #e6e6e6; border-radius:8px; padding:12px; margin-bottom:10px }
-.section h3{ margin:0 0 8px; font-size:15px; color:#0B7D6E }
+/* page wrapper */
+.wrapper{ max-width:920px; margin:14px auto; padding:10px; }
+.section{ background:var(--card); border:1px solid #e6e6e6; border-radius:8px; padding:12px; margin-bottom:10px }
+.section h3{ margin:0 0 8px; font-size:15px; color:var(--moe-green) }
 
 .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px }
 .grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px }
-.grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px }
 .grid-1{ display:grid; grid-template-columns:1fr; gap:8px }
 
 label{ display:block; font-weight:700; font-size:12px; text-align:right; margin-bottom:4px }
-input[type="text"],input[type="number"],input[type="url"],.fake-input,textarea,select{
+input[type="text"], input[type="number"], input[type="url"], .fake-input, textarea, select{
   width:100%; padding:8px; border:1px solid #cfcfcf; border-radius:6px; background:#fff; text-align:right; font-size:13px
 }
 textarea{ min-height:80px; resize:vertical }
 
 .tools{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px }
 .tools label{ font-weight:500; display:flex; align-items:center; gap:6px }
+
 .counter{ font-size:12px; color:#5b3a29; font-weight:bold; margin-top:4px }
 .preview{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px }
 .preview img{ width:120px; height:120px; object-fit:cover; border:1px solid #ddd; border-radius:6px }
 
-.actions{ display:flex; gap:10px; margin-top:10px }
+.actions{ display:flex; gap:10px; margin-top:10px; justify-content:flex-end }
 button{ background:var(--moe-green); color:#fff; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer }
 button:hover{ filter:brightness(.97) }
 
 .signatures{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px }
 
-/* تاريخ موحّد على الجوال */
-input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
-
-/* للطباعة */
+/* printing */
 @media print{
   @page{ size:A4 portrait; margin:0 }
   body{ background:none }
@@ -65,7 +68,15 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
   .wrapper{ width:210mm; padding:20mm 12mm 18mm }
   .section{ border:none; padding:0; margin:0 0 6mm }
   header{ display:none }
+  label{ font-weight:700; color:#000 }
+  input, textarea{ border:none; background:transparent; color:#000 }
+  .preview img{ width:120px; height:120px; object-fit:cover; }
 }
+
+/* helper */
+.no-print{ }
+.hidden{ display:none !important; }
+
 </style>
 </head>
 <body>
@@ -74,50 +85,24 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
   <h1>تقرير تنفيذ إستراتيجية تعلم</h1>
 </header>
 
+<!-- المنطقة و اسم المدرسة - شاشة فقط (لا تُطبع) -->
+<div id="region-school-inputs" class="no-print" style="max-width:920px; margin:10px auto;">
+  <div style="display:flex; gap:8px; align-items:center; justify-content:flex-end;">
+    <label for="uiRegion" style="margin:0 6px 0 0; font-weight:700;">المنطقة</label>
+    <input id="uiRegion" class="inline-field" type="text" placeholder="مثال: المدينة المنورة" value="">
+  </div>
+  <div style="display:flex; gap:8px; align-items:center; justify-content:flex-end;">
+    <label for="uiSchool" style="margin:0 6px 0 0; font-weight:700;">المدرسة</label>
+    <input id="uiSchool" class="inline-field" type="text" placeholder="مثال: ابتدائية رياض النور" value="">
+  </div>
+</div>
+
 <div class="wrapper" id="page">
 
-  <!-- الجهة / المنطقة / المكتب -->
-  <div class="section">
-    <h3>الجهة التعليمية</h3>
-    <div class="grid-3">
-      <div>
-        <label>إدارة/جهة التعليم</label>
-        <input id="eduAuthority" type="text" placeholder="مثال: الإدارة العامة للتعليم بالمدينة المنورة">
-      </div>
-      <div>
-        <label>المنطقة</label>
-        <input id="region" type="text" placeholder="مثال: المدينة المنورة">
-      </div>
-      <div>
-        <label>مكتب التعليم</label>
-        <input id="office" type="text" placeholder="مثال: مكتب غرب المدينة">
-      </div>
-    </div>
-  </div>
-
-  <!-- المدرسة / التاريخ / المادة -->
-  <div class="section">
-    <h3>بيانات أساسية</h3>
-    <div class="grid-3">
-      <div>
-        <label>اسم المدرسة</label>
-        <input id="school" type="text" placeholder="اسم المدرسة">
-      </div>
-      <div>
-        <label>تاريخ التنفيذ</label>
-        <input id="date" type="text" placeholder="اليوم-الشهر-السنة" class="date">
-      </div>
-      <div>
-        <label>المادة</label>
-        <input id="subject" type="text" placeholder="المادة">
-      </div>
-    </div>
-  </div>
-
-  <!-- الإستراتيجية / المستفيدون / المرحلة / الفصل -->
+  <!-- تفاصيل الدرس: قمنا بنقل 'تاريخ التنفيذ' و 'المادة' هنا -->
   <div class="section">
     <h3>تفاصيل الدرس</h3>
-    <div class="grid-2">
+    <div class="grid-3">
       <div>
         <label>إستراتيجية التعلم</label>
         <input id="strategy" type="text" placeholder="مثال: التعلم التعاوني / العصف الذهني">
@@ -126,7 +111,12 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
         <label>عدد المستفيدين</label>
         <input id="beneficiaries" type="number" min="0" placeholder="عدد الطلاب/الطالبات">
       </div>
+      <div>
+        <label>المادة</label>
+        <input id="subject" type="text" placeholder="المادة">
+      </div>
     </div>
+
     <div class="grid-3" style="margin-top:8px">
       <div>
         <label>المرحلة الدراسية</label>
@@ -137,9 +127,14 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
         <input id="className" type="text" placeholder="مثال: 4/أ">
       </div>
       <div>
-        <label>اسم الدرس</label>
-        <input id="lesson" type="text" placeholder="عنوان الدرس">
+        <label>تاريخ التنفيذ</label>
+        <input id="date" type="text" placeholder="اليوم-الشهر-السنة" class="date">
       </div>
+    </div>
+
+    <div style="margin-top:8px">
+      <label>اسم الدرس</label>
+      <input id="lesson" type="text" placeholder="عنوان الدرس">
     </div>
   </div>
 
@@ -150,8 +145,6 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
       <textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea>
     </div>
   </div>
-
-  <!-- ملاحظة: تمت إزالة قسم 'بيانات المسؤولين' النهائي كما طُلب -->
 
   <!-- الوسائل التعليمية -->
   <div class="section">
@@ -170,7 +163,7 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
     </div>
   </div>
 
-  <!-- الشواهد -->
+  <!-- صور الشواهد -->
   <div class="section">
     <h3>صور الشواهد</h3>
     <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
@@ -178,7 +171,7 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
     <div class="preview" id="preview"></div>
   </div>
 
-  <!-- توقيعات (تم تعديلها: أسماء فقط بدون توقيع) -->
+  <!-- أسماء المسؤولين (بدون توقيع) -->
   <div class="section">
     <h3>أسماء المسؤولين (بدون توقيع)</h3>
     <div class="signatures">
@@ -200,6 +193,7 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
 </div>
 
 <script>
+/* تخزين الصور محلياً للمعاينة والطباعة */
 const imgs = [];
 const input = document.getElementById('imagesInput');
 const preview = document.getElementById('preview');
@@ -209,6 +203,7 @@ if(input){
     const files = Array.from(e.target.files || []);
     if(imgs.length + files.length > 4){
       alert('مسموح برفع 4 صور فقط.');
+      e.target.value = '';
       return;
     }
     files.forEach(f=>{
@@ -217,146 +212,107 @@ if(input){
         imgs.push(ev.target.result);
         const im = new Image();
         im.src = ev.target.result;
+        im.style.width='120px';
+        im.style.height='120px';
+        im.style.objectFit='cover';
+        im.style.border='1px solid #ddd';
+        im.style.borderRadius='6px';
+        im.style.margin='3px';
         preview.appendChild(im);
       };
       reader.readAsDataURL(f);
     });
-    input.value = '';
+    e.target.value = '';
   });
 }
 
-/**
- * تحويل نموذج الصفحة إلى نسخة للطباعة:
- * - ننسخ الصفحة
- * - ندرج بيانات الجهة التعليمية فوق القالب (كما طُلب)
- * - نستبدل جميع عناصر الإدخال (<input>, <textarea>, <select>) بنصوص تحتوي القيم حتى يخرج التقرير بدون حقول
- * - نعرض الوسائل المختارة كنص
- * - ندرج الصور المختارة
- */
+/* تهيئة التاريخ */
+flatpickr('.date', { locale:'ar', dateFormat:'d-m-Y', altInput:true, altFormat:'d-m-Y', disableMobile:true });
+
+/* إضافة نص متموضع (overlay) على قالب الـ PDF مشابه للطريقة في كود النشاط */
+const REGION_CFG = { topMM:20, leftPercent:35, color:'#19455c', fontSizePt:12, fontWeight:800 };
+const SCHOOL_CFG = { topMM:26, leftPercent:33, color:'#19455c', fontSizePt:12, fontWeight:700 };
+
+function addOverlay(wrapper, text, cfg){
+  if(!text) return;
+  const el = document.createElement('div');
+  el.textContent = text;
+  Object.assign(el.style, {
+    position:'absolute',
+    top: cfg.topMM + 'mm',
+    left: cfg.leftPercent + '%',
+    color: cfg.color,
+    background:'transparent',
+    zIndex: 40,
+    lineHeight: '1',
+    fontSize: (cfg.fontSizePt||14) + 'pt',
+    fontWeight: String(cfg.fontWeight||'700'),
+    textAlign: 'center',
+    pointerEvents: 'none'
+  });
+  wrapper.appendChild(el);
+}
+
+/* استبدال عناصر الإدخال في نسخة الطباعة بنصوص */
+function replaceInputsWithText(rootClone){
+  // نصوص الحقول النصية
+  rootClone.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(el=>{
+    const id = el.id;
+    let val = '';
+    if(id){
+      const orig = document.getElementById(id);
+      if(orig) val = orig.value || '';
+    } else {
+      val = el.value || '';
+    }
+    const span = document.createElement('div');
+    span.style.padding = '6px 0';
+    span.textContent = val || '-';
+    el.parentNode.replaceChild(span, el);
+  });
+
+  // textarea
+  rootClone.querySelectorAll('textarea').forEach(el=>{
+    const id = el.id;
+    let val = '';
+    if(id){
+      const orig = document.getElementById(id);
+      if(orig) val = orig.value || '';
+    } else {
+      val = el.value || '';
+    }
+    const span = document.createElement('div');
+    span.style.whiteSpace = 'pre-wrap';
+    span.style.padding = '6px 0';
+    span.textContent = val || '-';
+    el.parentNode.replaceChild(span, el);
+  });
+
+  // الأدوات (checkboxes) -> نجمع من الوثيقة الأصلية القيم المختارة
+  const chosen = Array.from(document.querySelectorAll('.tools input[type="checkbox"]:checked')).map(i=>i.value);
+  rootClone.querySelectorAll('.tools').forEach(el=>{
+    const container = document.createElement('div');
+    container.style.padding = '6px 0';
+    container.textContent = chosen.length ? chosen.join('، ') : '-';
+    el.parentNode.replaceChild(container, el);
+  });
+
+  // حذف أي أزرار/مدخلات ملفات متبقية
+  rootClone.querySelectorAll('button,input[type="file"],.no-print').forEach(n=>n.remove());
+}
+
+/* توليد PDF */
 function printReport(){
-  // ننسخ الصفحة بدون أزرار بعض العناصر
+  // نسخة من الصفحة
   const page = document.getElementById('page').cloneNode(true);
 
-  // نحذف عناصر التحكم الغير مرغوب بها في الطباعة
-  page.querySelectorAll('.actions,.no-print,input[type="file"]').forEach(n=>n.remove());
+  // اجعل النسخة نظيفة من عناصر التحكم غير المرغوب بها
+  page.querySelectorAll('.actions,.no-print').forEach(n=>n.remove());
 
-  // -------------------
-  // 1) إدراج جهة التعليم أعلى القالب (كمطلوب: "يكتب بالقالب فوق")
-  // -------------------
-  const eduAuthority = document.getElementById('eduAuthority').value.trim();
-  const region = document.getElementById('region').value.trim();
-  const office = document.getElementById('office').value.trim();
-
-  const eduTopDiv = document.createElement('div');
-  eduTopDiv.className = 'edu-top';
-  // ننسق النص: نعرض الإدارة أولاً ثم المنطقة ثم المكتب إن وُجدوا
-  const parts = [];
-  if(eduAuthority) parts.push(eduAuthority);
-  if(region) parts.push(region);
-  if(office) parts.push(office);
-  eduTopDiv.textContent = parts.join(' — '); // يفصل بينها شرطة طويلة
-  // نضعها في بداية الصفحة المطبوعة (داخل الغلاف لاحقاً)
-  page.insertBefore(eduTopDiv, page.firstChild);
-
-  // -------------------
-  // 2) استبدال الحقول بقيمها النصية في النسخة المطبوعة
-  // -------------------
-  // دالة مساعدة لتحويل عنصر إدخال إلى عنصر نصي في النسخة
-  function replaceInputsWithText(cloneRoot){
-    // نصوص الحقول النصية
-    cloneRoot.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(el=>{
-      // نبحث عن العنصر الأصل في الوثيقة الحالية بنفس الـ id إن وُجد للحصول على القيمة الحالية الحقيقية
-      const id = el.id;
-      let val = '';
-      if(id){
-        const orig = document.getElementById(id);
-        if(orig) val = orig.value || '';
-      } else {
-        val = el.value || '';
-      }
-      const span = document.createElement('div');
-      span.style.padding = '6px 0';
-      span.textContent = val;
-      el.parentNode.replaceChild(span, el);
-    });
-
-    // نصوص textarea
-    cloneRoot.querySelectorAll('textarea').forEach(el=>{
-      const id = el.id;
-      let val = '';
-      if(id){
-        const orig = document.getElementById(id);
-        if(orig) val = orig.value || '';
-      } else {
-        val = el.value || '';
-      }
-      const span = document.createElement('div');
-      span.style.whiteSpace = 'pre-wrap';
-      span.style.padding = '6px 0';
-      span.textContent = val;
-      el.parentNode.replaceChild(span, el);
-    });
-
-    // استبدال عناصر الاختيار (checkboxes) بنص الوسائل المختارة
-    // في المستند الأصلي نجمع القيم المختارة ثم نضعها في المكان الذي يملك نفس الفئة .tools
-    const origTools = Array.from(document.querySelectorAll('.tools input[type="checkbox"]:checked')).map(i=>i.value);
-    cloneRoot.querySelectorAll('.tools').forEach(el=>{
-      const container = document.createElement('div');
-      container.style.padding = '6px 0';
-      container.textContent = origTools.length ? origTools.join('، ') : '-';
-      el.parentNode.replaceChild(container, el);
-    });
-
-    // استبدال عناصر select (لو وُجدت)
-    cloneRoot.querySelectorAll('select').forEach(el=>{
-      const id = el.id;
-      let val = '';
-      if(id){
-        const orig = document.getElementById(id);
-        if(orig) val = orig.options[orig.selectedIndex] ? orig.options[orig.selectedIndex].text : '';
-      } else {
-        val = el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : '';
-      }
-      const span = document.createElement('div');
-      span.style.padding = '6px 0';
-      span.textContent = val;
-      el.parentNode.replaceChild(span, el);
-    });
-
-    // استبدال عناصر التاريخ (input.date) بقيمها
-    cloneRoot.querySelectorAll('input.date').forEach(el=>{
-      const id = el.id;
-      let val = '';
-      if(id){
-        const orig = document.getElementById(id);
-        if(orig) val = orig.value || '';
-      } else {
-        val = el.value || '';
-      }
-      const span = document.createElement('div');
-      span.style.padding = '6px 0';
-      span.textContent = val;
-      el.parentNode.replaceChild(span, el);
-    });
-
-    // استبدال أية عناصر إدخال أخرى غير مهمة
-    cloneRoot.querySelectorAll('input').forEach(el=>{
-      if(el.type && ['checkbox','radio','file','hidden','button','submit'].includes(el.type)) return;
-      // العناصر النصية مُعالَجة أعلاه، لكن كحماية إضافية:
-      if(el.parentNode){
-        const span = document.createElement('div');
-        span.style.padding = '6px 0';
-        span.textContent = el.value || '';
-        el.parentNode.replaceChild(span, el);
-      }
-    });
-  }
-
+  // استبدال الحقول بقيمها
   replaceInputsWithText(page);
 
-  // -------------------
-  // 3) إدراج الصور (نقل الصور المختارة من المصفوفة imgs)
-  // -------------------
+  // إدراج الصور في النسخة
   const p = page.querySelector('#preview');
   if(p){
     p.innerHTML = '';
@@ -372,22 +328,31 @@ function printReport(){
       p.appendChild(im);
     });
     if(imgs.length === 0){
-      // إن لم توجد صور، نعرض خطاً أو إشارة
       const noImg = document.createElement('div');
       noImg.textContent = '-';
       p.appendChild(noImg);
     }
   }
 
-  // -------------------
-  // 4) غلاف A4 وتهيئة html2pdf
-  // -------------------
+  // غلاف A4
   const wrapper = document.createElement('div');
   Object.assign(wrapper.style, {
-    width:'210mm', minHeight:'297mm', padding:'20mm 12mm 18mm', background:'#fff'
+    position:'relative',
+    width:'210mm',
+    minHeight:'297mm',
+    padding:'20mm 12mm 18mm',
+    boxSizing:'border-box',
+    background:'#fff'
   });
   wrapper.appendChild(page);
 
+  // جلب نص المنطقة والمدرسة من الواجهة (inputs العليا)
+  const regionText = (document.getElementById('uiRegion')?.value || '').trim();
+  const schoolText = (document.getElementById('uiSchool')?.value || '').trim();
+  addOverlay(wrapper, regionText, REGION_CFG);
+  addOverlay(wrapper, schoolText, SCHOOL_CFG);
+
+  // إعداد html2pdf وتشغيله
   html2pdf().set({
     margin:0,
     filename:'strategy-report.pdf',
@@ -396,9 +361,6 @@ function printReport(){
     jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }
   }).from(wrapper).save();
 }
-
-// تهيئة التاريخ
-flatpickr('.date', { locale:'ar', dateFormat:'d-m-Y', altInput:true, altFormat:'d-m-Y', disableMobile:true });
 </script>
 
 </body>
