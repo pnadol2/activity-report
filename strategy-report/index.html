@@ -34,7 +34,7 @@ header h1{ margin:0; font-size:18px }
 
 /* page wrapper */
 .wrapper{ max-width:920px; margin:14px auto; padding:10px; }
-.section{ background:var(--card); border:1px solid #e6e6e6; border-radius:8px; padding:12px; margin-bottom:10px }
+.section{ background:var(--card); /* outer section background kept for screen */ border-radius:8px; padding:12px; margin-bottom:10px }
 .section h3{ margin:0 0 8px; font-size:15px; color:var(--moe-green) }
 
 .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px }
@@ -60,17 +60,59 @@ button:hover{ filter:brightness(.97) }
 
 .signatures{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px }
 
-/* printing */
+/* -------------------- PRINT STYLES (important) -------------------- */
 @media print{
-  @page{ size:A4 portrait; margin:0 }
-  body{ background:none }
+  @page{ size:A4 portrait; margin:8mm } /* small margin to avoid overflow */
+  body{ background:none; color:#000 }
   .no-print, .actions{ display:none !important }
-  .wrapper{ width:210mm; padding:20mm 12mm 18mm }
-  .section{ border:none; padding:0; margin:0 0 6mm }
   header{ display:none }
-  label{ font-weight:700; color:#000 }
-  input, textarea{ border:none; background:transparent; color:#000 }
-  .preview img{ width:120px; height:120px; object-fit:cover; }
+
+  /* wrapper: make width match A4 minus margins, height auto (avoid forced min-height that causes extra blank pages) */
+  .wrapper{ width:calc(210mm - 16mm); padding:0; margin:0 auto; box-sizing:border-box }
+
+  /* Outer sections: remove heavy screen borders but keep spacing */
+  .section{ border:none; padding:6mm 6mm 8mm 6mm; margin:0 0 6mm; background:transparent }
+
+  /* ===== MAKE EACH FIELD BOX VISIBLE IN PRINT =====
+     Target the direct children that contain label+input inside sections.
+     This will draw a rounded box for each "cell" just like your on-screen boxes.
+  */
+  /* For grid-3 / grid-2 / grid-1 cells */
+  .section .grid-3 > div,
+  .section .grid-2 > div,
+  .section .grid-1 > div,
+  .section > div > .signatures > div,
+  .section .signatures > div,
+  .section .preview,
+  .section .counter {
+    background:#fff;
+    border:1px solid #E6E6E6;
+    border-radius:8px;
+    padding:8px 10px;
+    margin:0 0 8px 0;
+    box-shadow:none;
+    page-break-inside:avoid; /* keep each box together */
+  }
+
+  /* label style inside box */
+  .section .grid-3 > div label,
+  .section .grid-2 > div label,
+  .section .grid-1 > div label,
+  .section .signatures label {
+    color: #0B7D6E;
+    font-weight:700;
+    display:block;
+    margin-bottom:6px;
+  }
+
+  /* Hide original input borders (we replace them with text) */
+  input, textarea, select { border: none; background: transparent; color: #000; padding:0; margin:0; box-shadow:none; }
+
+  /* Ensure preview images a proper size when printed */
+  .preview img{ width:120px; height:120px; object-fit:cover; border-radius:6px; border:1px solid #ddd; }
+
+  /* If a section has a big textarea (goals) ensure space */
+  .section .grid-1 > div { min-height:30mm; /* makes the goals box taller on print */ }
 }
 
 /* helper */
@@ -99,7 +141,7 @@ button:hover{ filter:brightness(.97) }
 
 <div class="wrapper" id="page">
 
-  <!-- تفاصيل الدرس: قمنا بنقل 'تاريخ التنفيذ' و 'المادة' هنا -->
+  <!-- تفاصيل الدرس: 'تاريخ التنفيذ' و 'المادة' هنا -->
   <div class="section">
     <h3>تفاصيل الدرس</h3>
     <div class="grid-3">
@@ -133,8 +175,10 @@ button:hover{ filter:brightness(.97) }
     </div>
 
     <div style="margin-top:8px">
-      <label>اسم الدرس</label>
-      <input id="lesson" type="text" placeholder="عنوان الدرس">
+      <div>
+        <label>اسم الدرس</label>
+        <input id="lesson" type="text" placeholder="عنوان الدرس">
+      </div>
     </div>
   </div>
 
@@ -142,7 +186,9 @@ button:hover{ filter:brightness(.97) }
   <div class="section">
     <h3>الأهداف التعليمية</h3>
     <div class="grid-1">
-      <textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea>
+      <div>
+        <textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea>
+      </div>
     </div>
   </div>
 
@@ -166,9 +212,11 @@ button:hover{ filter:brightness(.97) }
   <!-- صور الشواهد -->
   <div class="section">
     <h3>صور الشواهد</h3>
-    <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
-    <div class="counter">مسموح حتى 4 صور كحد أقصى</div>
-    <div class="preview" id="preview"></div>
+    <div>
+      <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
+      <div class="counter">مسموح حتى 4 صور كحد أقصى</div>
+      <div class="preview" id="preview"></div>
+    </div>
   </div>
 
   <!-- أسماء المسؤولين (بدون توقيع) -->
@@ -229,7 +277,7 @@ if(input){
 /* تهيئة التاريخ */
 flatpickr('.date', { locale:'ar', dateFormat:'d-m-Y', altInput:true, altFormat:'d-m-Y', disableMobile:true });
 
-/* إضافة نص متموضع (overlay) على قالب الـ PDF مشابه للطريقة في كود النشاط */
+/* نص متموضع (overlay) للمنطقة/المدرسة داخل PDF */
 const REGION_CFG = { topMM:20, leftPercent:35, color:'#19455c', fontSizePt:12, fontWeight:800 };
 const SCHOOL_CFG = { topMM:26, leftPercent:33, color:'#19455c', fontSizePt:12, fontWeight:700 };
 
@@ -253,9 +301,9 @@ function addOverlay(wrapper, text, cfg){
   wrapper.appendChild(el);
 }
 
-/* استبدال عناصر الإدخال في نسخة الطباعة بنصوص */
+/* استبدال عناصر الإدخال في نسخة الطباعة بقيمها النصية (نترك الحاويات لتظهر كصناديق) */
 function replaceInputsWithText(rootClone){
-  // نصوص الحقول النصية
+  // inputs & numbers & urls
   rootClone.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(el=>{
     const id = el.id;
     let val = '';
@@ -266,7 +314,7 @@ function replaceInputsWithText(rootClone){
       val = el.value || '';
     }
     const span = document.createElement('div');
-    span.style.padding = '6px 0';
+    span.style.padding = '2px 0';
     span.textContent = val || '-';
     el.parentNode.replaceChild(span, el);
   });
@@ -283,41 +331,26 @@ function replaceInputsWithText(rootClone){
     }
     const span = document.createElement('div');
     span.style.whiteSpace = 'pre-wrap';
-    span.style.padding = '6px 0';
+    span.style.padding = '2px 0';
     span.textContent = val || '-';
     el.parentNode.replaceChild(span, el);
   });
 
-  // الأدوات (checkboxes) -> نجمع من الوثيقة الأصلية القيم المختارة
+  // tools (checkboxes)
   const chosen = Array.from(document.querySelectorAll('.tools input[type="checkbox"]:checked')).map(i=>i.value);
   rootClone.querySelectorAll('.tools').forEach(el=>{
     const container = document.createElement('div');
-    container.style.padding = '6px 0';
+    container.style.padding = '2px 0';
     container.textContent = chosen.length ? chosen.join('، ') : '-';
     el.parentNode.replaceChild(container, el);
   });
 
-  // حذف أي أزرار/مدخلات ملفات متبقية
-  rootClone.querySelectorAll('button,input[type="file"],.no-print').forEach(n=>n.remove());
-}
-
-/* توليد PDF */
-function printReport(){
-  // نسخة من الصفحة
-  const page = document.getElementById('page').cloneNode(true);
-
-  // اجعل النسخة نظيفة من عناصر التحكم غير المرغوب بها
-  page.querySelectorAll('.actions,.no-print').forEach(n=>n.remove());
-
-  // استبدال الحقول بقيمها
-  replaceInputsWithText(page);
-
-  // إدراج الصور في النسخة
-  const p = page.querySelector('#preview');
-  if(p){
-    p.innerHTML = '';
+  // images preview (copy images)
+  const previewClone = rootClone.querySelector('#preview');
+  if(previewClone){
+    previewClone.innerHTML = '';
     imgs.slice(0,4).forEach(src=>{
-      const im = new Image();
+      const im = document.createElement('img');
       im.src = src;
       im.style.width = '120px';
       im.style.height = '120px';
@@ -325,36 +358,53 @@ function printReport(){
       im.style.border = '1px solid #ddd';
       im.style.borderRadius = '6px';
       im.style.margin = '3px';
-      p.appendChild(im);
+      previewClone.appendChild(im);
     });
     if(imgs.length === 0){
       const noImg = document.createElement('div');
       noImg.textContent = '-';
-      p.appendChild(noImg);
+      previewClone.appendChild(noImg);
     }
   }
 
-  // غلاف A4
+  // remove control elements leftover
+  rootClone.querySelectorAll('button,input[type="file"],.no-print').forEach(n=>n.remove());
+}
+
+/* توليد PDF */
+function printReport(){
+  // clone page
+  const page = document.getElementById('page').cloneNode(true);
+
+  // remove interactive controls from clone
+  page.querySelectorAll('.actions,.no-print').forEach(n=>n.remove());
+
+  // replace inputs with text inside clone, keeping containers (so boxes remain)
+  replaceInputsWithText(page);
+
+  // create wrapper matching A4 width minus margins (avoid forcing page height)
   const wrapper = document.createElement('div');
   Object.assign(wrapper.style, {
     position:'relative',
-    width:'210mm',
-    minHeight:'297mm',
-    padding:'20mm 12mm 18mm',
-    boxSizing:'border-box',
+    width: '210mm',
+    height: 'auto',
+    padding: '8mm', // small padding inside page
+    boxSizing: 'border-box',
     background:'#fff'
   });
+
+  // append cloned content inside wrapper
   wrapper.appendChild(page);
 
-  // جلب نص المنطقة والمدرسة من الواجهة (inputs العليا)
+  // overlays (region / school)
   const regionText = (document.getElementById('uiRegion')?.value || '').trim();
   const schoolText = (document.getElementById('uiSchool')?.value || '').trim();
   addOverlay(wrapper, regionText, REGION_CFG);
   addOverlay(wrapper, schoolText, SCHOOL_CFG);
 
-  // إعداد html2pdf وتشغيله
+  // html2pdf options: small margin to avoid overflow generating blank extra page
   html2pdf().set({
-    margin:0,
+    margin:8,                       // mm
     filename:'strategy-report.pdf',
     image:{ type:'jpeg', quality:0.95 },
     html2canvas:{ scale:2, useCORS:true, backgroundColor:null },
