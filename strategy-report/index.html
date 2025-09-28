@@ -12,224 +12,231 @@
 
 <style>
 :root{
-  --moe-brown:#B79B73;
-  --moe-green:#0B7D6E;
+  --accent:#0B7D6E;
   --bg:#f9f9f9;
   --card:#fff;
+  --muted:#9aa5a1;
   --text:#222;
 }
 *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 body{ font-family:Arial, "Tahoma", sans-serif; margin:0; background:var(--bg); color:var(--text); }
 
 /* Header */
-header{ background:var(--moe-brown); color:#fff; text-align:center; padding:12px 10px; }
+header{ background:#B79B73; color:#fff; text-align:center; padding:12px 10px; }
 header h1{ margin:0; font-size:18px }
 
-/* top inputs (region & school) - like activity template */
-#region-school-inputs{ display:flex; flex-direction:column; gap:8px; align-items:flex-end; margin:12px auto; max-width:920px; padding:0 10px; }
-.inline-field{
-  border:1px solid #cbd5e1; background:#fff; color:#19455c;
-  font-weight:800; font-size:14px; text-align:center; width:320px; padding:6px 8px; border-radius:6px;
+/* region/school inputs (no-print) */
+#region-school-inputs{ display:flex; gap:12px; justify-content:flex-end; padding:10px 14px; max-width:920px; margin:8px auto; }
+.inline-field{ width:280px; padding:6px 8px; border-radius:6px; border:1px solid #d6e0dc; text-align:center; }
+
+/* page */
+.wrapper{ max-width:920px; margin:10px auto 30px; padding:0 10px; }
+.section-title{ color:var(--accent); font-weight:800; margin-bottom:6px; }
+
+/* grid helpers */
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.grid-1{ display:grid; grid-template-columns:1fr; gap:10px; }
+
+/* field-box: each field has its own wrapper (important) */
+.field-box{
+  background:var(--card);
+  border-radius:8px;
+  padding:8px;
+  min-height:44px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:6px;
+  box-shadow:0 0 0 1px transparent; /* no shadow by default */
 }
 
-/* page wrapper */
-.wrapper{ max-width:920px; margin:14px auto; padding:10px; }
-.section{ background:var(--card); /* outer section background kept for screen */ border-radius:8px; padding:12px; margin-bottom:10px }
-.section h3{ margin:0 0 8px; font-size:15px; color:var(--moe-green) }
-
-.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px }
-.grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px }
-.grid-1{ display:grid; grid-template-columns:1fr; gap:8px }
-
-label{ display:block; font-weight:700; font-size:12px; text-align:right; margin-bottom:4px }
-input[type="text"], input[type="number"], input[type="url"], .fake-input, textarea, select{
-  width:100%; padding:8px; border:1px solid #cfcfcf; border-radius:6px; background:#fff; text-align:right; font-size:13px
+/* on-screen label & input */
+.field-box label{ font-weight:700; color:var(--accent); text-align:right; font-size:13px; }
+.field-box .value input[type="text"],
+.field-box .value input[type="number"],
+.field-box .value textarea,
+.field-box .value input[type="url"]{
+  width:100%; padding:8px; border:1px solid #cfcfcf; border-radius:6px; font-size:13px; text-align:right;
 }
-textarea{ min-height:80px; resize:vertical }
+.field-box .value textarea{ min-height:70px; resize:vertical; }
 
-.tools{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px }
-.tools label{ font-weight:500; display:flex; align-items:center; gap:6px }
+/* tools (checkbox list) */
+.tools{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.tools label{ display:flex; gap:6px; align-items:center; font-weight:500; }
 
-.counter{ font-size:12px; color:#5b3a29; font-weight:bold; margin-top:4px }
-.preview{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px }
-.preview img{ width:120px; height:120px; object-fit:cover; border:1px solid #ddd; border-radius:6px }
+/* preview */
+.preview{ display:flex; flex-wrap:wrap; gap:8px; }
+.preview img{ width:120px; height:120px; object-fit:cover; border-radius:6px; border:1px solid #ddd; }
 
-.actions{ display:flex; gap:10px; margin-top:10px; justify-content:flex-end }
-button{ background:var(--moe-green); color:#fff; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer }
-button:hover{ filter:brightness(.97) }
+/* actions */
+.actions{ display:flex; justify-content:flex-end; gap:12px; margin-top:12px; }
+button{ background:var(--accent); color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700; }
 
-.signatures{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px }
-
-/* -------------------- PRINT STYLES (important) -------------------- */
+/* PRINT STYLES: make sure each .field-box shows border and stays together */
 @media print{
-  @page{ size:A4 portrait; margin:8mm } /* small margin to avoid overflow */
-  body{ background:none; color:#000 }
-  .no-print, .actions{ display:none !important }
-  header{ display:none }
+  @page{ size:A4 portrait; margin:10mm } /* small margin to avoid overflow */
+  body{ background:none; color:#000; }
+  header, #region-school-inputs, .actions{ display:none !important; }
 
-  /* wrapper: make width match A4 minus margins, height auto (avoid forced min-height that causes extra blank pages) */
-  .wrapper{ width:calc(210mm - 16mm); padding:0; margin:0 auto; box-sizing:border-box }
+  /* wrapper width matches print area */
+  .wrapper{ width:calc(210mm - 20mm); margin:0 auto; padding:0; }
 
-  /* Outer sections: remove heavy screen borders but keep spacing */
-  .section{ border:none; padding:6mm 6mm 8mm 6mm; margin:0 0 6mm; background:transparent }
-
-  /* ===== MAKE EACH FIELD BOX VISIBLE IN PRINT =====
-     Target the direct children that contain label+input inside sections.
-     This will draw a rounded box for each "cell" just like your on-screen boxes.
-  */
-  /* For grid-3 / grid-2 / grid-1 cells */
-  .section .grid-3 > div,
-  .section .grid-2 > div,
-  .section .grid-1 > div,
-  .section > div > .signatures > div,
-  .section .signatures > div,
-  .section .preview,
-  .section .counter {
-    background:#fff;
-    border:1px solid #E6E6E6;
-    border-radius:8px;
-    padding:8px 10px;
-    margin:0 0 8px 0;
-    box-shadow:none;
-    page-break-inside:avoid; /* keep each box together */
+  /* make each field-box visible as bordered card */
+  .field-box{
+    background:#fff !important;
+    border:1px solid #E6E6E6 !important;
+    box-shadow:none !important;
+    padding:6mm !important;
+    border-radius:6px !important;
+    page-break-inside:avoid; /* keep box together on a single page */
+    margin:0 0 6mm 0 !important;
   }
 
-  /* label style inside box */
-  .section .grid-3 > div label,
-  .section .grid-2 > div label,
-  .section .grid-1 > div label,
-  .section .signatures label {
-    color: #0B7D6E;
-    font-weight:700;
-    display:block;
-    margin-bottom:6px;
-  }
+  /* ensure label shows and inputs are replaced by plain text (we replace them in JS) */
+  .field-box label{ color: #0B7D6E !important; font-weight:800; display:block; margin-bottom:4px; }
 
-  /* Hide original input borders (we replace them with text) */
-  input, textarea, select { border: none; background: transparent; color: #000; padding:0; margin:0; box-shadow:none; }
+  /* hide input chrome (we replace inputs with text nodes in JS, but this is defensive) */
+  input, textarea, select { border:none !important; background:transparent !important; padding:0 !important; margin:0 !important; color:#000 !important; }
 
-  /* Ensure preview images a proper size when printed */
+  /* images size for print */
   .preview img{ width:120px; height:120px; object-fit:cover; border-radius:6px; border:1px solid #ddd; }
 
-  /* If a section has a big textarea (goals) ensure space */
-  .section .grid-1 > div { min-height:30mm; /* makes the goals box taller on print */ }
+  /* make textarea boxes taller if needed on print */
+  .grid-1 .field-box { min-height:30mm; }
 }
 
-/* helper */
-.no-print{ }
-.hidden{ display:none !important; }
-
+/* small screens */
+@media (max-width:760px){
+  .grid-3, .grid-2{ grid-template-columns:1fr; }
+  #region-school-inputs{ flex-direction:column; align-items:flex-end; }
+}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>تقرير تنفيذ إستراتيجية تعلم</h1>
-</header>
+<header><h1>تقرير تنفيذ إستراتيجية تعلم</h1></header>
 
-<!-- المنطقة و اسم المدرسة - شاشة فقط (لا تُطبع) -->
-<div id="region-school-inputs" class="no-print" style="max-width:920px; margin:10px auto;">
-  <div style="display:flex; gap:8px; align-items:center; justify-content:flex-end;">
-    <label for="uiRegion" style="margin:0 6px 0 0; font-weight:700;">المنطقة</label>
+<!-- region & school (no-print) -->
+<div id="region-school-inputs" class="no-print">
+  <div>
+    <label style="display:block; text-align:right; font-weight:700; margin-bottom:4px;">المنطقة</label>
     <input id="uiRegion" class="inline-field" type="text" placeholder="مثال: المدينة المنورة" value="">
   </div>
-  <div style="display:flex; gap:8px; align-items:center; justify-content:flex-end;">
-    <label for="uiSchool" style="margin:0 6px 0 0; font-weight:700;">المدرسة</label>
+  <div>
+    <label style="display:block; text-align:right; font-weight:700; margin-bottom:4px;">المدرسة</label>
     <input id="uiSchool" class="inline-field" type="text" placeholder="مثال: ابتدائية رياض النور" value="">
   </div>
 </div>
 
 <div class="wrapper" id="page">
 
-  <!-- تفاصيل الدرس: 'تاريخ التنفيذ' و 'المادة' هنا -->
+  <!-- تفاصيل الدرس -->
   <div class="section">
-    <h3>تفاصيل الدرس</h3>
+    <div class="section-title">تفاصيل الدرس</div>
+
     <div class="grid-3">
-      <div>
+      <div class="field-box">
         <label>إستراتيجية التعلم</label>
-        <input id="strategy" type="text" placeholder="مثال: التعلم التعاوني / العصف الذهني">
+        <div class="value"><input id="strategy" type="text" placeholder="مثال: التعلم التعاوني / العصف الذهني"></div>
       </div>
-      <div>
+
+      <div class="field-box">
         <label>عدد المستفيدين</label>
-        <input id="beneficiaries" type="number" min="0" placeholder="عدد الطلاب/الطالبات">
+        <div class="value"><input id="beneficiaries" type="number" min="0" placeholder="عدد الطلاب/الطالبات"></div>
       </div>
-      <div>
+
+      <div class="field-box">
         <label>المادة</label>
-        <input id="subject" type="text" placeholder="المادة">
+        <div class="value"><input id="subject" type="text" placeholder="المادة"></div>
       </div>
     </div>
 
-    <div class="grid-3" style="margin-top:8px">
-      <div>
+    <div class="grid-3" style="margin-top:10px;">
+      <div class="field-box">
         <label>المرحلة الدراسية</label>
-        <input id="stage" type="text" placeholder="ابتدائي / متوسط / ثانوي">
+        <div class="value"><input id="stage" type="text" placeholder="ابتدائي / متوسط / ثانوي"></div>
       </div>
-      <div>
+
+      <div class="field-box">
         <label>الفصل</label>
-        <input id="className" type="text" placeholder="مثال: 4/أ">
+        <div class="value"><input id="className" type="text" placeholder="مثال: 4/أ"></div>
       </div>
-      <div>
+
+      <div class="field-box">
         <label>تاريخ التنفيذ</label>
-        <input id="date" type="text" placeholder="اليوم-الشهر-السنة" class="date">
+        <div class="value"><input id="date" type="text" class="date" placeholder="اليوم-الشهر-السنة"></div>
       </div>
     </div>
 
-    <div style="margin-top:8px">
-      <div>
+    <div style="margin-top:10px;">
+      <div class="field-box">
         <label>اسم الدرس</label>
-        <input id="lesson" type="text" placeholder="عنوان الدرس">
+        <div class="value"><input id="lesson" type="text" placeholder="عنوان الدرس"></div>
       </div>
     </div>
   </div>
 
   <!-- الأهداف -->
   <div class="section">
-    <h3>الأهداف التعليمية</h3>
+    <div class="section-title">الأهداف التعليمية</div>
     <div class="grid-1">
-      <div>
-        <textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea>
+      <div class="field-box">
+        <label>الأهداف</label>
+        <div class="value"><textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea></div>
       </div>
     </div>
   </div>
 
-  <!-- الوسائل التعليمية -->
+  <!-- الوسائل -->
   <div class="section">
-    <h3>الوسائل التعليمية المستخدمة</h3>
-    <div class="tools">
-      <label><input type="checkbox" class="tool" value="جهاز عرض"> جهاز عرض</label>
-      <label><input type="checkbox" class="tool" value="حاسب آلي"> جهاز حاسب</label>
-      <label><input type="checkbox" class="tool" value="صورة توضيحية"> صورة توضيحية</label>
-      <label><input type="checkbox" class="tool" value="أدوات رياضية"> أدوات رياضية</label>
-      <label><input type="checkbox" class="tool" value="كتاب"> كتاب</label>
-      <label><input type="checkbox" class="tool" value="سبورة تقليدية"> سبورة تقليدية</label>
-      <label><input type="checkbox" class="tool" value="سبورة ذكية"> سبورة ذكية</label>
-      <label><input type="checkbox" class="tool" value="بطاقات تعليمية"> بطاقات تعليمية</label>
-      <label><input type="checkbox" class="tool" value="أوراق عمل"> أوراق عمل</label>
-      <label><input type="checkbox" class="tool" value="عرض تقديمي"> عرض تقديمي</label>
+    <div class="section-title">الوسائل التعليمية المستخدمة</div>
+    <div class="grid-1">
+      <div class="field-box">
+        <label>الوسائل</label>
+        <div class="value">
+          <div class="tools">
+            <label><input type="checkbox" class="tool" value="جهاز عرض"> جهاز عرض</label>
+            <label><input type="checkbox" class="tool" value="حاسب آلي"> جهاز حاسب</label>
+            <label><input type="checkbox" class="tool" value="صورة توضيحية"> صورة توضيحية</label>
+            <label><input type="checkbox" class="tool" value="أدوات رياضية"> أدوات رياضية</label>
+            <label><input type="checkbox" class="tool" value="كتاب"> كتاب</label>
+            <label><input type="checkbox" class="tool" value="سبورة تقليدية"> سبورة تقليدية</label>
+            <label><input type="checkbox" class="tool" value="سبورة ذكية"> سبورة ذكية</label>
+            <label><input type="checkbox" class="tool" value="بطاقات تعليمية"> بطاقات تعليمية</label>
+            <label><input type="checkbox" class="tool" value="أوراق عمل"> أوراق عمل</label>
+            <label><input type="checkbox" class="tool" value="عرض تقديمي"> عرض تقديمي</label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- صور الشواهد -->
   <div class="section">
-    <h3>صور الشواهد</h3>
-    <div>
-      <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
-      <div class="counter">مسموح حتى 4 صور كحد أقصى</div>
-      <div class="preview" id="preview"></div>
+    <div class="section-title">صور الشواهد</div>
+    <div class="grid-1">
+      <div class="field-box">
+        <label>الشواهد (مسموح حتى 4 صور)</label>
+        <div class="value">
+          <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
+          <div class="preview" id="preview"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- أسماء المسؤولين (بدون توقيع) -->
+  <!-- أسماء المسؤولين -->
   <div class="section">
-    <h3>أسماء المسؤولين (بدون توقيع)</h3>
-    <div class="signatures">
-      <div>
+    <div class="section-title">أسماء المسؤولين (بدون توقيع)</div>
+    <div class="grid-2">
+      <div class="field-box">
         <label>اسم المعلم</label>
-        <input id="teacher" type="text" placeholder="اكتب اسم المعلم هنا">
+        <div class="value"><input id="teacher" type="text" placeholder="اسم المعلم"></div>
       </div>
-      <div>
+      <div class="field-box">
         <label>اسم المدير</label>
-        <input id="principal" type="text" placeholder="اكتب اسم المدير هنا">
+        <div class="value"><input id="principal" type="text" placeholder="اسم المدير"></div>
       </div>
     </div>
   </div>
@@ -237,11 +244,10 @@ button:hover{ filter:brightness(.97) }
   <div class="actions no-print">
     <button onclick="printReport()">طباعة التقرير PDF</button>
   </div>
-
 </div>
 
 <script>
-/* تخزين الصور محلياً للمعاينة والطباعة */
+/* معاينة الصور */
 const imgs = [];
 const input = document.getElementById('imagesInput');
 const preview = document.getElementById('preview');
@@ -258,14 +264,8 @@ if(input){
       const reader = new FileReader();
       reader.onload = (ev)=>{
         imgs.push(ev.target.result);
-        const im = new Image();
+        const im = document.createElement('img');
         im.src = ev.target.result;
-        im.style.width='120px';
-        im.style.height='120px';
-        im.style.objectFit='cover';
-        im.style.border='1px solid #ddd';
-        im.style.borderRadius='6px';
-        im.style.margin='3px';
         preview.appendChild(im);
       };
       reader.readAsDataURL(f);
@@ -277,10 +277,67 @@ if(input){
 /* تهيئة التاريخ */
 flatpickr('.date', { locale:'ar', dateFormat:'d-m-Y', altInput:true, altFormat:'d-m-Y', disableMobile:true });
 
-/* نص متموضع (overlay) للمنطقة/المدرسة داخل PDF */
-const REGION_CFG = { topMM:20, leftPercent:35, color:'#19455c', fontSizePt:12, fontWeight:800 };
-const SCHOOL_CFG = { topMM:26, leftPercent:33, color:'#19455c', fontSizePt:12, fontWeight:700 };
+/* استبدال الإدخالات بالنص في نسخة الطباعة (نترك .field-box موجودة حتى يبقى الصندوق) */
+function replaceInputsWithText(root){
+  // inputs
+  root.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(el=>{
+    const id = el.id;
+    let val = '';
+    if(id){
+      const orig = document.getElementById(id);
+      if(orig) val = orig.value || '';
+    } else val = el.value || '';
+    const span = document.createElement('div');
+    span.textContent = val || '-';
+    el.parentNode.replaceChild(span, el);
+  });
 
+  // textarea
+  root.querySelectorAll('textarea').forEach(el=>{
+    const id = el.id;
+    let val = '';
+    if(id){
+      const orig = document.getElementById(id);
+      if(orig) val = orig.value || '';
+    } else val = el.value || '';
+    const span = document.createElement('div');
+    span.style.whiteSpace = 'pre-wrap';
+    span.textContent = val || '-';
+    el.parentNode.replaceChild(span, el);
+  });
+
+  // tools (checkboxes)
+  root.querySelectorAll('.tools').forEach(container=>{
+    const chosen = Array.from(document.querySelectorAll('.tools input[type="checkbox"]:checked')).map(i=>i.value);
+    const span = document.createElement('div');
+    span.textContent = chosen.length ? chosen.join('، ') : '-';
+    container.parentNode.replaceChild(span, container);
+  });
+
+  // preview images: clone selected images into print node
+  const previewNode = root.querySelector('#preview');
+  if(previewNode){
+    previewNode.innerHTML = '';
+    imgs.slice(0,4).forEach(src=>{
+      const im = document.createElement('img');
+      im.src = src;
+      im.style.width='120px';
+      im.style.height='120px';
+      im.style.objectFit='cover';
+      im.style.borderRadius='6px';
+      im.style.border='1px solid #ddd';
+      im.style.margin='3px';
+      previewNode.appendChild(im);
+    });
+    if(imgs.length === 0){
+      previewNode.textContent = '-';
+    }
+  }
+}
+
+/* overlay region/school in PDF similar to template */
+const REGION_CFG = { topMM:16, leftPercent:35, color:'#19455c', fontSizePt:13, fontWeight:800 };
+const SCHOOL_CFG = { topMM:22, leftPercent:33, color:'#19455c', fontSizePt:13, fontWeight:700 };
 function addOverlay(wrapper, text, cfg){
   if(!text) return;
   const el = document.createElement('div');
@@ -290,125 +347,49 @@ function addOverlay(wrapper, text, cfg){
     top: cfg.topMM + 'mm',
     left: cfg.leftPercent + '%',
     color: cfg.color,
-    background:'transparent',
-    zIndex: 40,
-    lineHeight: '1',
-    fontSize: (cfg.fontSizePt||14) + 'pt',
+    fontSize: (cfg.fontSizePt||13) + 'pt',
     fontWeight: String(cfg.fontWeight||'700'),
-    textAlign: 'center',
-    pointerEvents: 'none'
+    textAlign:'center',
+    pointerEvents:'none',
+    width:'40%'
   });
   wrapper.appendChild(el);
 }
 
-/* استبدال عناصر الإدخال في نسخة الطباعة بقيمها النصية (نترك الحاويات لتظهر كصناديق) */
-function replaceInputsWithText(rootClone){
-  // inputs & numbers & urls
-  rootClone.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(el=>{
-    const id = el.id;
-    let val = '';
-    if(id){
-      const orig = document.getElementById(id);
-      if(orig) val = orig.value || '';
-    } else {
-      val = el.value || '';
-    }
-    const span = document.createElement('div');
-    span.style.padding = '2px 0';
-    span.textContent = val || '-';
-    el.parentNode.replaceChild(span, el);
-  });
-
-  // textarea
-  rootClone.querySelectorAll('textarea').forEach(el=>{
-    const id = el.id;
-    let val = '';
-    if(id){
-      const orig = document.getElementById(id);
-      if(orig) val = orig.value || '';
-    } else {
-      val = el.value || '';
-    }
-    const span = document.createElement('div');
-    span.style.whiteSpace = 'pre-wrap';
-    span.style.padding = '2px 0';
-    span.textContent = val || '-';
-    el.parentNode.replaceChild(span, el);
-  });
-
-  // tools (checkboxes)
-  const chosen = Array.from(document.querySelectorAll('.tools input[type="checkbox"]:checked')).map(i=>i.value);
-  rootClone.querySelectorAll('.tools').forEach(el=>{
-    const container = document.createElement('div');
-    container.style.padding = '2px 0';
-    container.textContent = chosen.length ? chosen.join('، ') : '-';
-    el.parentNode.replaceChild(container, el);
-  });
-
-  // images preview (copy images)
-  const previewClone = rootClone.querySelector('#preview');
-  if(previewClone){
-    previewClone.innerHTML = '';
-    imgs.slice(0,4).forEach(src=>{
-      const im = document.createElement('img');
-      im.src = src;
-      im.style.width = '120px';
-      im.style.height = '120px';
-      im.style.objectFit = 'cover';
-      im.style.border = '1px solid #ddd';
-      im.style.borderRadius = '6px';
-      im.style.margin = '3px';
-      previewClone.appendChild(im);
-    });
-    if(imgs.length === 0){
-      const noImg = document.createElement('div');
-      noImg.textContent = '-';
-      previewClone.appendChild(noImg);
-    }
-  }
-
-  // remove control elements leftover
-  rootClone.querySelectorAll('button,input[type="file"],.no-print').forEach(n=>n.remove());
-}
-
-/* توليد PDF */
+/* main print function */
 function printReport(){
-  // clone page
-  const page = document.getElementById('page').cloneNode(true);
+  const pageClone = document.getElementById('page').cloneNode(true);
+  // remove non-print bits (controls)
+  pageClone.querySelectorAll('.no-print, .actions').forEach(n=>n.remove());
 
-  // remove interactive controls from clone
-  page.querySelectorAll('.actions,.no-print').forEach(n=>n.remove());
+  // replace inputs with text inside clone (keep field-box wrappers)
+  replaceInputsWithText(pageClone);
 
-  // replace inputs with text inside clone, keeping containers (so boxes remain)
-  replaceInputsWithText(page);
-
-  // create wrapper matching A4 width minus margins (avoid forcing page height)
+  // package into wrapper sized to A4 (avoid forcing full-height)
   const wrapper = document.createElement('div');
   Object.assign(wrapper.style, {
     position:'relative',
-    width: '210mm',
-    height: 'auto',
-    padding: '8mm', // small padding inside page
-    boxSizing: 'border-box',
+    width:'210mm',
+    height:'auto',
+    padding:'0',
+    boxSizing:'border-box',
     background:'#fff'
   });
+  wrapper.appendChild(pageClone);
 
-  // append cloned content inside wrapper
-  wrapper.appendChild(page);
-
-  // overlays (region / school)
+  // add region/school overlays
   const regionText = (document.getElementById('uiRegion')?.value || '').trim();
   const schoolText = (document.getElementById('uiSchool')?.value || '').trim();
   addOverlay(wrapper, regionText, REGION_CFG);
   addOverlay(wrapper, schoolText, SCHOOL_CFG);
 
-  // html2pdf options: small margin to avoid overflow generating blank extra page
+  // html2pdf - careful with margins/scale to avoid extra blank page
   html2pdf().set({
-    margin:8,                       // mm
+    margin:10, // mm
     filename:'strategy-report.pdf',
-    image:{ type:'jpeg', quality:0.95 },
-    html2canvas:{ scale:2, useCORS:true, backgroundColor:null },
-    jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }
+    image:{type:'jpeg', quality:0.95},
+    html2canvas:{scale:2, useCORS:true, backgroundColor:null},
+    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
   }).from(wrapper).save();
 }
 </script>
