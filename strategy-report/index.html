@@ -21,6 +21,12 @@ body{ font-family:Arial, "Tahoma", sans-serif; margin:0; background:#f9f9f9; col
 header{ background:var(--moe-brown); color:#fff; text-align:center; padding:12px 10px }
 header h1{ margin:0; font-size:18px }
 
+/* مكان لعرض الجهة التعليمية أعلى القالب عند الطباعة */
+.edu-top{
+  text-align:right; direction:rtl; padding:8px 0; font-weight:700; font-size:13px; color:#333;
+}
+
+/* محتوى الصفحة */
 .wrapper{ max-width:900px; margin:14px auto; padding:10px }
 .section{ background:#fff; border:1px solid #e6e6e6; border-radius:8px; padding:12px; margin-bottom:10px }
 .section h3{ margin:0 0 8px; font-size:15px; color:#0B7D6E }
@@ -145,24 +151,7 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
     </div>
   </div>
 
-  <!-- المعلم/المدير/تويتر -->
-  <div class="section">
-    <h3>بيانات المسؤولين</h3>
-    <div class="grid-3">
-      <div>
-        <label>اسم المعلم</label>
-        <input id="teacher" type="text" placeholder="اسم المعلم (يمكن أكثر من اسم مفصول بفواصل)">
-      </div>
-      <div>
-        <label>مدير المدرسة</label>
-        <input id="principal" type="text" placeholder="اسم المدير">
-      </div>
-      <div>
-        <label>حساب تويتر (اختياري)</label>
-        <input id="twitter" type="url" placeholder="https://x.com/username">
-      </div>
-    </div>
-  </div>
+  <!-- ملاحظة: تمت إزالة قسم 'بيانات المسؤولين' النهائي كما طُلب -->
 
   <!-- الوسائل التعليمية -->
   <div class="section">
@@ -189,17 +178,17 @@ input.flatpickr-mobile{ height:40px; font-size:14px; text-align:center }
     <div class="preview" id="preview"></div>
   </div>
 
-  <!-- توقيعات -->
+  <!-- توقيعات (تم تعديلها: أسماء فقط بدون توقيع) -->
   <div class="section">
-    <h3>التوقيعات</h3>
+    <h3>أسماء المسؤولين (بدون توقيع)</h3>
     <div class="signatures">
       <div>
-        <label>توقيع المعلم</label>
-        <input type="text" placeholder="اسم المعلم/التوقيع">
+        <label>اسم المعلم</label>
+        <input id="teacher" type="text" placeholder="اكتب اسم المعلم هنا">
       </div>
       <div>
-        <label>توقيع مدير المدرسة</label>
-        <input type="text" placeholder="اسم المدير/التوقيع">
+        <label>اسم المدير</label>
+        <input id="principal" type="text" placeholder="اكتب اسم المدير هنا">
       </div>
     </div>
   </div>
@@ -236,12 +225,138 @@ if(input){
   });
 }
 
+/**
+ * تحويل نموذج الصفحة إلى نسخة للطباعة:
+ * - ننسخ الصفحة
+ * - ندرج بيانات الجهة التعليمية فوق القالب (كما طُلب)
+ * - نستبدل جميع عناصر الإدخال (<input>, <textarea>, <select>) بنصوص تحتوي القيم حتى يخرج التقرير بدون حقول
+ * - نعرض الوسائل المختارة كنص
+ * - ندرج الصور المختارة
+ */
 function printReport(){
-  // ننسخ الصفحة بدون أزرار
+  // ننسخ الصفحة بدون أزرار بعض العناصر
   const page = document.getElementById('page').cloneNode(true);
+
+  // نحذف عناصر التحكم الغير مرغوب بها في الطباعة
   page.querySelectorAll('.actions,.no-print,input[type="file"]').forEach(n=>n.remove());
 
-  // إدراج الصور داخل النسخة المعدّة للطباعة
+  // -------------------
+  // 1) إدراج جهة التعليم أعلى القالب (كمطلوب: "يكتب بالقالب فوق")
+  // -------------------
+  const eduAuthority = document.getElementById('eduAuthority').value.trim();
+  const region = document.getElementById('region').value.trim();
+  const office = document.getElementById('office').value.trim();
+
+  const eduTopDiv = document.createElement('div');
+  eduTopDiv.className = 'edu-top';
+  // ننسق النص: نعرض الإدارة أولاً ثم المنطقة ثم المكتب إن وُجدوا
+  const parts = [];
+  if(eduAuthority) parts.push(eduAuthority);
+  if(region) parts.push(region);
+  if(office) parts.push(office);
+  eduTopDiv.textContent = parts.join(' — '); // يفصل بينها شرطة طويلة
+  // نضعها في بداية الصفحة المطبوعة (داخل الغلاف لاحقاً)
+  page.insertBefore(eduTopDiv, page.firstChild);
+
+  // -------------------
+  // 2) استبدال الحقول بقيمها النصية في النسخة المطبوعة
+  // -------------------
+  // دالة مساعدة لتحويل عنصر إدخال إلى عنصر نصي في النسخة
+  function replaceInputsWithText(cloneRoot){
+    // نصوص الحقول النصية
+    cloneRoot.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(el=>{
+      // نبحث عن العنصر الأصل في الوثيقة الحالية بنفس الـ id إن وُجد للحصول على القيمة الحالية الحقيقية
+      const id = el.id;
+      let val = '';
+      if(id){
+        const orig = document.getElementById(id);
+        if(orig) val = orig.value || '';
+      } else {
+        val = el.value || '';
+      }
+      const span = document.createElement('div');
+      span.style.padding = '6px 0';
+      span.textContent = val;
+      el.parentNode.replaceChild(span, el);
+    });
+
+    // نصوص textarea
+    cloneRoot.querySelectorAll('textarea').forEach(el=>{
+      const id = el.id;
+      let val = '';
+      if(id){
+        const orig = document.getElementById(id);
+        if(orig) val = orig.value || '';
+      } else {
+        val = el.value || '';
+      }
+      const span = document.createElement('div');
+      span.style.whiteSpace = 'pre-wrap';
+      span.style.padding = '6px 0';
+      span.textContent = val;
+      el.parentNode.replaceChild(span, el);
+    });
+
+    // استبدال عناصر الاختيار (checkboxes) بنص الوسائل المختارة
+    // في المستند الأصلي نجمع القيم المختارة ثم نضعها في المكان الذي يملك نفس الفئة .tools
+    const origTools = Array.from(document.querySelectorAll('.tools input[type="checkbox"]:checked')).map(i=>i.value);
+    cloneRoot.querySelectorAll('.tools').forEach(el=>{
+      const container = document.createElement('div');
+      container.style.padding = '6px 0';
+      container.textContent = origTools.length ? origTools.join('، ') : '-';
+      el.parentNode.replaceChild(container, el);
+    });
+
+    // استبدال عناصر select (لو وُجدت)
+    cloneRoot.querySelectorAll('select').forEach(el=>{
+      const id = el.id;
+      let val = '';
+      if(id){
+        const orig = document.getElementById(id);
+        if(orig) val = orig.options[orig.selectedIndex] ? orig.options[orig.selectedIndex].text : '';
+      } else {
+        val = el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : '';
+      }
+      const span = document.createElement('div');
+      span.style.padding = '6px 0';
+      span.textContent = val;
+      el.parentNode.replaceChild(span, el);
+    });
+
+    // استبدال عناصر التاريخ (input.date) بقيمها
+    cloneRoot.querySelectorAll('input.date').forEach(el=>{
+      const id = el.id;
+      let val = '';
+      if(id){
+        const orig = document.getElementById(id);
+        if(orig) val = orig.value || '';
+      } else {
+        val = el.value || '';
+      }
+      const span = document.createElement('div');
+      span.style.padding = '6px 0';
+      span.textContent = val;
+      el.parentNode.replaceChild(span, el);
+    });
+
+    // استبدال أية عناصر إدخال أخرى غير مهمة
+    cloneRoot.querySelectorAll('input').forEach(el=>{
+      if(el.type && ['checkbox','radio','file','hidden','button','submit'].includes(el.type)) return;
+      // العناصر النصية مُعالَجة أعلاه، لكن كحماية إضافية:
+      if(el.parentNode){
+        const span = document.createElement('div');
+        span.style.padding = '6px 0';
+        span.textContent = el.value || '';
+        el.parentNode.replaceChild(span, el);
+      }
+    });
+  }
+
+  replaceInputsWithText(page);
+
+  // -------------------
+  // 3) إدراج الصور (نقل الصور المختارة من المصفوفة imgs)
+  // -------------------
   const p = page.querySelector('#preview');
   if(p){
     p.innerHTML = '';
@@ -256,9 +371,17 @@ function printReport(){
       im.style.margin = '3px';
       p.appendChild(im);
     });
+    if(imgs.length === 0){
+      // إن لم توجد صور، نعرض خطاً أو إشارة
+      const noImg = document.createElement('div');
+      noImg.textContent = '-';
+      p.appendChild(noImg);
+    }
   }
 
-  // غلاف A4 بسيط (اختياري) — يمكنك استبداله بخلفية صورتك
+  // -------------------
+  // 4) غلاف A4 وتهيئة html2pdf
+  // -------------------
   const wrapper = document.createElement('div');
   Object.assign(wrapper.style, {
     width:'210mm', minHeight:'297mm', padding:'20mm 12mm 18mm', background:'#fff'
