@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>تقرير تنفيذ إستراتيجية تعلم</title>
+<title>تقرير تنفيذ إستراتيجية تعلم — بصناديق لكل حقل</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -14,69 +14,98 @@
 :root{
   --moe-brown:#B79B73;
   --moe-green:#0B7D6E;
-  --bg:#f9f9f9;
+  --bg:#f6f7f8;
   --card:#fff;
+  --muted:#9aa5a1;
   --text:#222;
 }
+
+/* عام */
 *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 body{ font-family:Arial, "Tahoma", sans-serif; margin:0; background:var(--bg); color:var(--text); }
-
-/* Header */
 header{ background:var(--moe-brown); color:#fff; text-align:center; padding:12px 10px; }
 header h1{ margin:0; font-size:18px }
 
-/* top inputs (region & school) - like activity template */
+/* inputs أعلى (المنطقة والمدرسة) */
 #region-school-inputs{ display:flex; flex-direction:column; gap:8px; align-items:flex-end; margin:12px auto; max-width:920px; padding:0 10px; }
 .inline-field{
   border:1px solid #cbd5e1; background:#fff; color:#19455c;
   font-weight:800; font-size:14px; text-align:center; width:320px; padding:6px 8px; border-radius:6px;
 }
 
-/* page wrapper */
+/* الصفحة العامة */
 .wrapper{ max-width:920px; margin:14px auto; padding:10px; }
-.section{ background:var(--card); border:1px solid #e6e6e6; border-radius:8px; padding:12px; margin-bottom:10px }
-.section h3{ margin:0 0 8px; font-size:15px; color:var(--moe-green) }
 
-.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px }
-.grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px }
-.grid-1{ display:grid; grid-template-columns:1fr; gap:8px }
+/* قسم (مجموعة حقلية) */
+.section{ margin-bottom:12px; }
 
-label{ display:block; font-weight:700; font-size:12px; text-align:right; margin-bottom:4px }
-input[type="text"], input[type="number"], input[type="url"], .fake-input, textarea, select{
-  width:100%; padding:8px; border:1px solid #cfcfcf; border-radius:6px; background:#fff; text-align:right; font-size:13px
+/* كل حقل في صندوق */
+.field{
+  background:var(--card);
+  border:1px solid #e6e6e6;
+  border-radius:10px;
+  padding:10px;
+  margin-bottom:10px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  justify-content:space-between;
 }
-textarea{ min-height:80px; resize:vertical }
+.field label{ font-weight:800; font-size:13px; min-width:150px; text-align:right; color:var(--moe-green) }
+.field .value{ flex:1; text-align:right; }
 
-.tools{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px }
-.tools label{ font-weight:500; display:flex; align-items:center; gap:6px }
+/* داخلية الحقول: input/textarea */
+.field .value input[type="text"],
+.field .value input[type="number"],
+.field .value input[type="url"],
+.field .value .fake-input,
+.field .value textarea,
+.field .value select{
+  width:100%; padding:8px; border:1px solid #cfcfcf; border-radius:6px; background:#fff; font-size:13px; text-align:right;
+}
+.field .value textarea{ min-height:70px; resize:vertical }
 
-.counter{ font-size:12px; color:#5b3a29; font-weight:bold; margin-top:4px }
-.preview{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px }
+/* أدوات (checkbox list) داخل صندوق واحد */
+.tools-list{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+
+/* صور الشواهد (معاينة) */
+.preview{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
 .preview img{ width:120px; height:120px; object-fit:cover; border:1px solid #ddd; border-radius:6px }
 
+/* توقيع/أسماء */
+.signatures{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:6px }
+
+/* أزرار */
 .actions{ display:flex; gap:10px; margin-top:10px; justify-content:flex-end }
 button{ background:var(--moe-green); color:#fff; border:none; padding:10px 14px; border-radius:8px; font-weight:bold; cursor:pointer }
-button:hover{ filter:brightness(.97) }
 
-.signatures{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px }
+/* للعرض داخل الشاشة */
+@media screen{
+  .field label{ color:var(--moe-green); }
+}
 
-/* printing */
+/* للطباعة: نجعل الصناديق واضحة */
 @media print{
   @page{ size:A4 portrait; margin:0 }
   body{ background:none }
-  .no-print, .actions{ display:none !important }
-  .wrapper{ width:210mm; padding:20mm 12mm 18mm }
-  .section{ border:none; padding:0; margin:0 0 6mm }
   header{ display:none }
-  label{ font-weight:700; color:#000 }
-  input, textarea{ border:none; background:transparent; color:#000 }
-  .preview img{ width:120px; height:120px; object-fit:cover; }
+  .no-print, .actions, #region-school-inputs{ display:none !important }
+  .wrapper{ width:210mm; padding:20mm 12mm 18mm; margin:0 auto }
+  /* نؤكد الحدود واللون الخلفي للصناديق */
+  .field{
+    background:var(--card);
+    border:1px solid #cfd8d6;
+    box-shadow:none;
+    page-break-inside:avoid;
+  }
+  label{ font-weight:800; color:#0B7D6E }
+  input, textarea { border:none; background:transparent; color:#000 }
+  .preview img{ width:120px; height:120px; object-fit:cover }
 }
 
-/* helper */
+/* مساعدة */
 .no-print{ }
 .hidden{ display:none !important; }
-
 </style>
 </head>
 <body>
@@ -85,7 +114,7 @@ button:hover{ filter:brightness(.97) }
   <h1>تقرير تنفيذ إستراتيجية تعلم</h1>
 </header>
 
-<!-- المنطقة و اسم المدرسة - شاشة فقط (لا تُطبع) -->
+<!-- المنطقة و اسم المدرسة — واجهة (لا تُطبع) -->
 <div id="region-school-inputs" class="no-print" style="max-width:920px; margin:10px auto;">
   <div style="display:flex; gap:8px; align-items:center; justify-content:flex-end;">
     <label for="uiRegion" style="margin:0 6px 0 0; font-weight:700;">المنطقة</label>
@@ -99,89 +128,112 @@ button:hover{ filter:brightness(.97) }
 
 <div class="wrapper" id="page">
 
-  <!-- تفاصيل الدرس: قمنا بنقل 'تاريخ التنفيذ' و 'المادة' هنا -->
+  <!-- تفاصيل الدرس (بها المادة والتاريخ الآن) -->
   <div class="section">
-    <h3>تفاصيل الدرس</h3>
-    <div class="grid-3">
-      <div>
-        <label>إستراتيجية التعلم</label>
-        <input id="strategy" type="text" placeholder="مثال: التعلم التعاوني / العصف الذهني">
-      </div>
-      <div>
-        <label>عدد المستفيدين</label>
-        <input id="beneficiaries" type="number" min="0" placeholder="عدد الطلاب/الطالبات">
-      </div>
-      <div>
-        <label>المادة</label>
-        <input id="subject" type="text" placeholder="المادة">
-      </div>
-    </div>
+    <div class="field">
+      <label>تفاصيل الدرس</label>
+      <div class="value">
+        <!-- داخلي: شبكة ثلاثية الحقول -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">إستراتيجية التعلم</label>
+            <div class="value"><input id="strategy" type="text" placeholder="مثال: التعلم التعاوني / العصف الذهني"></div>
+          </div>
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">عدد المستفيدين</label>
+            <div class="value"><input id="beneficiaries" type="number" min="0" placeholder="عدد الطلاب/الطالبات"></div>
+          </div>
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">المادة</label>
+            <div class="value"><input id="subject" type="text" placeholder="المادة"></div>
+          </div>
+        </div>
 
-    <div class="grid-3" style="margin-top:8px">
-      <div>
-        <label>المرحلة الدراسية</label>
-        <input id="stage" type="text" placeholder="ابتدائي / متوسط / ثانوي">
-      </div>
-      <div>
-        <label>الفصل</label>
-        <input id="className" type="text" placeholder="مثال: 4/أ">
-      </div>
-      <div>
-        <label>تاريخ التنفيذ</label>
-        <input id="date" type="text" placeholder="اليوم-الشهر-السنة" class="date">
-      </div>
-    </div>
+        <!-- شبكة ثانية: المرحلة / الفصل / التاريخ -->
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:8px;">
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">المرحلة الدراسية</label>
+            <div class="value"><input id="stage" type="text" placeholder="ابتدائي / متوسط / ثانوي"></div>
+          </div>
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">الفصل</label>
+            <div class="value"><input id="className" type="text" placeholder="مثال: 4/أ"></div>
+          </div>
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">تاريخ التنفيذ</label>
+            <div class="value"><input id="date" type="text" placeholder="اليوم-الشهر-السنة" class="date"></div>
+          </div>
+        </div>
 
-    <div style="margin-top:8px">
-      <label>اسم الدرس</label>
-      <input id="lesson" type="text" placeholder="عنوان الدرس">
+        <!-- اسم الدرس -->
+        <div style="margin-top:8px;">
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">اسم الدرس</label>
+            <div class="value"><input id="lesson" type="text" placeholder="عنوان الدرس"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- الأهداف -->
   <div class="section">
-    <h3>الأهداف التعليمية</h3>
-    <div class="grid-1">
-      <textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea>
-    </div>
-  </div>
-
-  <!-- الوسائل التعليمية -->
-  <div class="section">
-    <h3>الوسائل التعليمية المستخدمة</h3>
-    <div class="tools">
-      <label><input type="checkbox" class="tool" value="جهاز عرض"> جهاز عرض</label>
-      <label><input type="checkbox" class="tool" value="حاسب آلي"> جهاز حاسب</label>
-      <label><input type="checkbox" class="tool" value="صورة توضيحية"> صورة توضيحية</label>
-      <label><input type="checkbox" class="tool" value="أدوات رياضية"> أدوات رياضية</label>
-      <label><input type="checkbox" class="tool" value="كتاب"> كتاب</label>
-      <label><input type="checkbox" class="tool" value="سبورة تقليدية"> سبورة تقليدية</label>
-      <label><input type="checkbox" class="tool" value="سبورة ذكية"> سبورة ذكية</label>
-      <label><input type="checkbox" class="tool" value="بطاقات تعليمية"> بطاقات تعليمية</label>
-      <label><input type="checkbox" class="tool" value="أوراق عمل"> أوراق عمل</label>
-      <label><input type="checkbox" class="tool" value="عرض تقديمي"> عرض تقديمي</label>
-    </div>
-  </div>
-
-  <!-- صور الشواهد -->
-  <div class="section">
-    <h3>صور الشواهد</h3>
-    <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
-    <div class="counter">مسموح حتى 4 صور كحد أقصى</div>
-    <div class="preview" id="preview"></div>
-  </div>
-
-  <!-- أسماء المسؤولين (بدون توقيع) -->
-  <div class="section">
-    <h3>أسماء المسؤولين (بدون توقيع)</h3>
-    <div class="signatures">
-      <div>
-        <label>اسم المعلم</label>
-        <input id="teacher" type="text" placeholder="اكتب اسم المعلم هنا">
+    <div class="field">
+      <label>الأهداف التعليمية</label>
+      <div class="value">
+        <textarea id="goals" placeholder="اكتب الأهداف بنقاط (يفضل كل هدف في سطر)"></textarea>
       </div>
-      <div>
-        <label>اسم المدير</label>
-        <input id="principal" type="text" placeholder="اكتب اسم المدير هنا">
+    </div>
+  </div>
+
+  <!-- الوسائل -->
+  <div class="section">
+    <div class="field">
+      <label>الوسائل التعليمية المستخدمة</label>
+      <div class="value">
+        <div class="tools-list">
+          <label><input type="checkbox" class="tool" value="جهاز عرض"> جهاز عرض</label>
+          <label><input type="checkbox" class="tool" value="حاسب آلي"> جهاز حاسب</label>
+          <label><input type="checkbox" class="tool" value="صورة توضيحية"> صورة توضيحية</label>
+          <label><input type="checkbox" class="tool" value="أدوات رياضية"> أدوات رياضية</label>
+          <label><input type="checkbox" class="tool" value="كتاب"> كتاب</label>
+          <label><input type="checkbox" class="tool" value="سبورة تقليدية"> سبورة تقليدية</label>
+          <label><input type="checkbox" class="tool" value="سبورة ذكية"> سبورة ذكية</label>
+          <label><input type="checkbox" class="tool" value="بطاقات تعليمية"> بطاقات تعليمية</label>
+          <label><input type="checkbox" class="tool" value="أوراق عمل"> أوراق عمل</label>
+          <label><input type="checkbox" class="tool" value="عرض تقديمي"> عرض تقديمي</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- الشواهد (صور) -->
+  <div class="section">
+    <div class="field">
+      <label>صور الشواهد</label>
+      <div class="value">
+        <input id="imagesInput" type="file" accept="image/*" multiple class="no-print">
+        <div class="counter">مسموح حتى 4 صور كحد أقصى</div>
+        <div class="preview" id="preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- أسماء المسؤولين بدون توقيع -->
+  <div class="section">
+    <div class="field">
+      <label>أسماء المسؤولين (بدون توقيع)</label>
+      <div class="value">
+        <div class="signatures">
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">اسم المعلم</label>
+            <div class="value"><input id="teacher" type="text" placeholder="اكتب اسم المعلم هنا"></div>
+          </div>
+          <div class="field" style="flex-direction:column; align-items:stretch;">
+            <label style="min-width:unset; text-align:right;">اسم المدير</label>
+            <div class="value"><input id="principal" type="text" placeholder="اكتب اسم المدير هنا"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -193,7 +245,7 @@ button:hover{ filter:brightness(.97) }
 </div>
 
 <script>
-/* تخزين الصور محلياً للمعاينة والطباعة */
+/* صور المعاينة محلياً */
 const imgs = [];
 const input = document.getElementById('imagesInput');
 const preview = document.getElementById('preview');
@@ -226,12 +278,12 @@ if(input){
   });
 }
 
-/* تهيئة التاريخ */
+/* تهيئة تقويم */
 flatpickr('.date', { locale:'ar', dateFormat:'d-m-Y', altInput:true, altFormat:'d-m-Y', disableMobile:true });
 
-/* إضافة نص متموضع (overlay) على قالب الـ PDF مشابه للطريقة في كود النشاط */
-const REGION_CFG = { topMM:20, leftPercent:35, color:'#19455c', fontSizePt:12, fontWeight:800 };
-const SCHOOL_CFG = { topMM:26, leftPercent:33, color:'#19455c', fontSizePt:12, fontWeight:700 };
+/* إعدادات overlay للمنطقة/المدرسة في PDF */
+const REGION_CFG = { topMM:18, leftPercent:35, color:'#19455c', fontSizePt:13, fontWeight:800 };
+const SCHOOL_CFG = { topMM:24, leftPercent:33, color:'#19455c', fontSizePt:13, fontWeight:700 };
 
 function addOverlay(wrapper, text, cfg){
   if(!text) return;
@@ -248,93 +300,99 @@ function addOverlay(wrapper, text, cfg){
     fontSize: (cfg.fontSizePt||14) + 'pt',
     fontWeight: String(cfg.fontWeight||'700'),
     textAlign: 'center',
-    pointerEvents: 'none'
+    pointerEvents: 'none',
+    width: '40%'
   });
   wrapper.appendChild(el);
 }
 
-/* استبدال عناصر الإدخال في نسخة الطباعة بنصوص */
+/* استبدال الإدخالات بقيم نصية داخل حاوية .value مع الإبقاء على .field (حتى تبقى الحدود) */
 function replaceInputsWithText(rootClone){
-  // نصوص الحقول النصية
-  rootClone.querySelectorAll('input[type="text"], input[type="number"], input[type="url"]').forEach(el=>{
-    const id = el.id;
-    let val = '';
-    if(id){
-      const orig = document.getElementById(id);
-      if(orig) val = orig.value || '';
+  // لكل عنصر .field داخل النسخة: ابحث عن input/textarea/select داخله ثم اعرض قيمته داخل نفس .value
+  rootClone.querySelectorAll('.field').forEach(field=>{
+    const valueContainer = field.querySelector('.value');
+    if(!valueContainer) return;
+
+    // إذا بداخله inputs/textarea/select -> استخرج قيمتها من الوثيقة الأصلية بواسطة id إن وجدت
+    const inp = valueContainer.querySelector('input, textarea, select');
+    if(inp){
+      const id = inp.id;
+      let val = '';
+      if(id){
+        const orig = document.getElementById(id);
+        if(orig) {
+          if(orig.type === 'checkbox' || orig.type === 'radio') {
+            val = orig.checked ? (orig.value || '✓') : '-';
+          } else {
+            val = orig.value || '-';
+          }
+        }
+      } else {
+        // لا id: نأخذ القيمة المحلية
+        if(inp.type === 'file') {
+          val = '-';
+        } else if(inp.type === 'checkbox' || inp.type === 'radio'){
+          val = inp.checked ? (inp.value || '✓') : '-';
+        } else {
+          val = inp.value || '-';
+        }
+      }
+
+      // إنشاء عنصر نصي يُعرض داخل valueContainer (بدلاً من الحقل)، مع الحفاظ على تنسيق multi-line
+      const textEl = document.createElement('div');
+      textEl.style.whiteSpace = 'pre-wrap';
+      textEl.style.padding = '6px 0';
+      textEl.textContent = val;
+      // استبدال العنصر الأصلي داخل valueContainer
+      inp.parentNode.replaceChild(textEl, inp);
     } else {
-      val = el.value || '';
+      // إذا لا يوجد input، قد يكون العنصر أدوات (checkbox list) أو preview
+      // تعامل مع .tools-list: جمع المحدد من الوثيقة الأصلية
+      const toolsList = valueContainer.querySelector('.tools-list');
+      if(toolsList){
+        const chosen = Array.from(document.querySelectorAll('.tools-list input[type="checkbox"]:checked')).map(i=>i.value);
+        const txt = document.createElement('div');
+        txt.style.padding = '6px 0';
+        txt.textContent = chosen.length ? chosen.join('، ') : '-';
+        toolsList.parentNode.replaceChild(txt, toolsList);
+      }
+      // تعامل مع .preview داخل valueContainer
+      const previewEl = valueContainer.querySelector('.preview');
+      if(previewEl){
+        previewEl.innerHTML = '';
+        imgs.slice(0,4).forEach(src=>{
+          const im = new Image();
+          im.src = src;
+          im.style.width = '120px';
+          im.style.height = '120px';
+          im.style.objectFit = 'cover';
+          im.style.border = '1px solid #ddd';
+          im.style.borderRadius = '6px';
+          im.style.margin = '3px';
+          previewEl.appendChild(im);
+        });
+        if(imgs.length === 0){
+          const noImg = document.createElement('div');
+          noImg.textContent = '-';
+          previewEl.appendChild(noImg);
+        }
+      }
     }
-    const span = document.createElement('div');
-    span.style.padding = '6px 0';
-    span.textContent = val || '-';
-    el.parentNode.replaceChild(span, el);
   });
-
-  // textarea
-  rootClone.querySelectorAll('textarea').forEach(el=>{
-    const id = el.id;
-    let val = '';
-    if(id){
-      const orig = document.getElementById(id);
-      if(orig) val = orig.value || '';
-    } else {
-      val = el.value || '';
-    }
-    const span = document.createElement('div');
-    span.style.whiteSpace = 'pre-wrap';
-    span.style.padding = '6px 0';
-    span.textContent = val || '-';
-    el.parentNode.replaceChild(span, el);
-  });
-
-  // الأدوات (checkboxes) -> نجمع من الوثيقة الأصلية القيم المختارة
-  const chosen = Array.from(document.querySelectorAll('.tools input[type="checkbox"]:checked')).map(i=>i.value);
-  rootClone.querySelectorAll('.tools').forEach(el=>{
-    const container = document.createElement('div');
-    container.style.padding = '6px 0';
-    container.textContent = chosen.length ? chosen.join('، ') : '-';
-    el.parentNode.replaceChild(container, el);
-  });
-
-  // حذف أي أزرار/مدخلات ملفات متبقية
-  rootClone.querySelectorAll('button,input[type="file"],.no-print').forEach(n=>n.remove());
 }
 
 /* توليد PDF */
 function printReport(){
-  // نسخة من الصفحة
-  const page = document.getElementById('page').cloneNode(true);
+  // انسخ صفحة العمل
+  const pageClone = document.getElementById('page').cloneNode(true);
 
-  // اجعل النسخة نظيفة من عناصر التحكم غير المرغوب بها
-  page.querySelectorAll('.actions,.no-print').forEach(n=>n.remove());
+  // احذف عناصر التحكم التي لا نريدها داخل النسخة
+  pageClone.querySelectorAll('.no-print, .actions, input[type="file"]').forEach(el=>el.remove());
 
-  // استبدال الحقول بقيمها
-  replaceInputsWithText(page);
+  // استبدل الحقول بقيمها النصية داخل النسخة (مع الحفاظ على الصناديق)
+  replaceInputsWithText(pageClone);
 
-  // إدراج الصور في النسخة
-  const p = page.querySelector('#preview');
-  if(p){
-    p.innerHTML = '';
-    imgs.slice(0,4).forEach(src=>{
-      const im = new Image();
-      im.src = src;
-      im.style.width = '120px';
-      im.style.height = '120px';
-      im.style.objectFit = 'cover';
-      im.style.border = '1px solid #ddd';
-      im.style.borderRadius = '6px';
-      im.style.margin = '3px';
-      p.appendChild(im);
-    });
-    if(imgs.length === 0){
-      const noImg = document.createElement('div');
-      noImg.textContent = '-';
-      p.appendChild(noImg);
-    }
-  }
-
-  // غلاف A4
+  // غلاف / wrapper (A4)
   const wrapper = document.createElement('div');
   Object.assign(wrapper.style, {
     position:'relative',
@@ -344,15 +402,15 @@ function printReport(){
     boxSizing:'border-box',
     background:'#fff'
   });
-  wrapper.appendChild(page);
+  wrapper.appendChild(pageClone);
 
-  // جلب نص المنطقة والمدرسة من الواجهة (inputs العليا)
+  // أضف نص المنطقة والمدرسة متموضعاً في الغلاف
   const regionText = (document.getElementById('uiRegion')?.value || '').trim();
   const schoolText = (document.getElementById('uiSchool')?.value || '').trim();
   addOverlay(wrapper, regionText, REGION_CFG);
   addOverlay(wrapper, schoolText, SCHOOL_CFG);
 
-  // إعداد html2pdf وتشغيله
+  // توليد الملف
   html2pdf().set({
     margin:0,
     filename:'strategy-report.pdf',
